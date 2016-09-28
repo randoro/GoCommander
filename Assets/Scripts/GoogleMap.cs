@@ -14,7 +14,8 @@ public class GoogleMap : MonoBehaviour {
 
 
     public bool loadOnStart = true;
-    public bool autoLocateCenter = true;
+    public bool autoLocateCenter = false;
+    public bool usePhoneLocation = false;
     public GoogleMapLocation centerLocation;
     public int zoom = 13;
     public MapType mapType;
@@ -34,6 +35,7 @@ public class GoogleMap : MonoBehaviour {
         {
             Debug.LogError("Auto Center will only work if paths or markers are used.");
         }
+        StopCoroutine(_Refresh());
         StartCoroutine(_Refresh());
     }
 
@@ -41,6 +43,7 @@ public class GoogleMap : MonoBehaviour {
     {
         var url = "http://maps.googleapis.com/maps/api/staticmap";
         var qs = "";
+        
         if (!autoLocateCenter)
         {
             if (centerLocation.address != "")
