@@ -22,7 +22,6 @@ public class GPSController : MonoBehaviour
         if (autoRefresh)
 	    {
             StartCoroutine(RefreshLoop(refreshDelay));
-            //StartCoroutine(FetchLocation());
         }
 	}
 
