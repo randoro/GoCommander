@@ -29,9 +29,9 @@ public class GPSController : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(waitTime);
             StopCoroutine(FetchLocation());
             StartCoroutine(FetchLocation());
+            yield return new WaitForSeconds(waitTime);
         }
     }
 
@@ -45,6 +45,7 @@ public class GPSController : MonoBehaviour
         }
 
         // Start service before querying location
+        if(Input.location.status != LocationServiceStatus.Running)
         Input.location.Start();
 
         // Wait until service initializes
@@ -65,7 +66,7 @@ public class GPSController : MonoBehaviour
         // Connection has failed
         if (Input.location.status == LocationServiceStatus.Failed)
         {
-            Debug.LogError("Unable to determine device location");
+            Debug.LogError("Unable to determine device location, come back to Earth please.");
             yield break;
         }
         else
@@ -82,6 +83,6 @@ public class GPSController : MonoBehaviour
         }
 
         // Stop service if there is no need to query location updates continuously
-        Input.location.Stop();
+        //Input.location.Stop();
     }
 }
