@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class TreasureSpawn : MonoBehaviour {
 
     private string[] nav;
-    private List<TreasureList> listTreasure = new List<TreasureList>();
+    public List<TreasureList> listTreasure = new List<TreasureList>();
 
     // Use this for initialization
     void Start () {

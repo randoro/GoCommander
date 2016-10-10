@@ -8,7 +8,8 @@ public class GPSController : MonoBehaviour
 
     public bool autoRefresh = true;
     public int refreshDelay = 20;
-
+    public static float latitude;
+    public static float longitude;
     private GoogleMap map;
 
 
@@ -77,8 +78,12 @@ public class GPSController : MonoBehaviour
                   Input.location.lastData.timestamp);
 
             map.centerLocation.address = "";
+            latitude = Input.location.lastData.latitude;
+            longitude = Input.location.lastData.longitude;
             map.centerLocation.latitude = Input.location.lastData.latitude;
             map.centerLocation.longitude = Input.location.lastData.longitude;
+            print("lat:"+latitude+" long:"+longitude);
+
             map.Refresh();
         }
 

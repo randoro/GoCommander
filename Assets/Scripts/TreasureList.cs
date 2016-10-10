@@ -7,13 +7,13 @@ public class TreasureList
 {
 
     public int id;
-    public double lat;
-    public double lng;
+    public float lat;
+    public float lng;
 
     public TreasureList(int id, double lat, double lng)
     {
         this.id = id;
-        this.lat = lat;
-        this.lng = lng;
+        this.lat = (float)lat;
+        this.lng = (float)lng;
     }
 }
