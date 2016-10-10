@@ -69,9 +69,10 @@ public class TreasureSpawner : MonoBehaviour {
         foreach (Vector2 v in fetchedList)
         {
             //adding the new
-            Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Meshes/TreasureChest.prefab", typeof(GameObject));
-            GameObject newPlayer = (GameObject)Instantiate(prefab, new Vector3(v.x, 0.86f, v.y), Quaternion.identity);
+            Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Meshes/TreasureChest.fbx", typeof(GameObject));
+            GameObject newPlayer = (GameObject)Instantiate(prefab, new Vector3(v.x, 0.0f, v.y), Quaternion.Euler(new Vector3(0, Random.value * 360, 0)));
             newPlayer.transform.parent = gameObject.transform;
+            newPlayer.transform.localScale = new Vector3(6, 6, 6);
             treasureList.Add(newPlayer);
 
         }
