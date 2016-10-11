@@ -1,23 +1,33 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 public class TreasureSpawner : MonoBehaviour {
 
 
     public bool autoRefresh = true;
     public int refreshDelay = 20;
+    public GameObject prefab;
+
+
 
     private string[] nav;
     public List<GameObject> treasureList;
-    List<TreasureList> fetchedList;
+    List<Treasure> fetchedList;
+    private GameObject map;
+    private GoogleMap gMap;
 
     // Use this for initialization
     void Start () {
 
+        map = GameObject.FindGameObjectWithTag("Map");
+        gMap = map.GetComponent<GoogleMap>();
+
         treasureList = new List<GameObject>();
-        fetchedList = new List<TreasureList>();
+        fetchedList = new List<Treasure>();
 
         if (autoRefresh)
         {
@@ -52,11 +62,15 @@ public class TreasureSpawner : MonoBehaviour {
 
         StartCoroutine(GetTreasures());
 
-
+        print(fetchedList.Count);
 
         for (int i = treasureList.Count; i-- > 0;)
         {
-            if (!fetchedList.Exists(x => x.lat == treasureList[i].gameObject.transform.position.x && x.lng == treasureList[i].gameObject.transform.position.z))
+
+            TreasureHolder tempTres = treasureList[i].gameObject.GetComponent<TreasureHolder>();
+            print("x => x.lat.Equals("+tempTres.treasure.lat+") && x.lng.Equals("+tempTres.treasure.lng+"))");
+
+            if (!fetchedList.Exists(x => x.lat.Equals(tempTres.treasure.lat) && x.lng.Equals(tempTres.treasure.lng)))
             {
                 //removing old objects
                 Destroy(treasureList[i].gameObject);
@@ -66,31 +80,51 @@ public class TreasureSpawner : MonoBehaviour {
             else
             {
                 //removing copies
-                fetchedList.Remove(fetchedList.Find(x => x.lat == treasureList[i].gameObject.transform.position.x && x.lng == treasureList[i].gameObject.transform.position.z));
+                fetchedList.Remove(fetchedList.Find(x => x.lat.Equals(tempTres.treasure.lat) && x.lng.Equals(tempTres.treasure.lng)));
             }
         }
+        //print(coordScaleToGameScale(180));
+        
 
-
-        foreach (TreasureList v in fetchedList)
+        foreach (Treasure v in fetchedList)
         {
             //adding the new
-            Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Meshes/TreasureChest.fbx", typeof(GameObject));
-            GameObject newPlayer = (GameObject)Instantiate(prefab, new Vector3(v.lat - GPSController.latitude, 0.0f, v.lng - GPSController.longitude), Quaternion.Euler(new Vector3(0, Random.value * 360, 0)));
+
+            print("v.lat "+v.lat+" latitude"+ gMap.centerLocation.latitude);
+            print("v.lng " + v.lng + " longitude" + gMap.centerLocation.longitude);
+
+            GameObject newPlayer = (GameObject)Instantiate(prefab, new Vector3(coordScaleToGameScale(v.lng - gMap.centerLocation.longitude), 0.0f, coordScaleToGameScale(v.lat - gMap.centerLocation.latitude)), Quaternion.Euler(new Vector3(0, Random.value * 360, 0)));
             newPlayer.transform.parent = gameObject.transform;
             newPlayer.transform.localScale = new Vector3(6, 6, 6);
+            newPlayer.gameObject.GetComponent<TreasureHolder>().treasure = v;
             treasureList.Add(newPlayer);
 
         }
 
 
 
-
+        
 
 
 
         yield return null;
     }
 
+
+
+
+
+    private float coordScaleToGameScale(float inFloat)
+    {
+        float returnfloat = (inFloat/180.0f) * (32.0f * (float)Math.Pow(2, gMap.zoom));
+        return returnfloat;
+    }
+
+
+    static double NthRoot(double A, int N)
+    {
+        return Math.Pow(A, 1.0 / N);
+    }
 
 
     IEnumerator GetTreasures()
@@ -112,9 +146,9 @@ public class TreasureSpawner : MonoBehaviour {
             double lat = double.Parse(GetDataValue(nav[i], "Latitude:"));
             double lng = double.Parse(GetDataValue(nav[i], "Longitude:"));
 
-            fetchedList.Add(new TreasureList(id, lat, lng));
+            fetchedList.Add(new Treasure(id, lat, lng));
         }
-        print(fetchedList.Count);
+        //print(fetchedList.Count);
     }
 
     string GetDataValue(string data, string index)

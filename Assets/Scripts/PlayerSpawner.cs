@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 
 public class PlayerSpawner : MonoBehaviour {
 
@@ -9,6 +8,7 @@ public class PlayerSpawner : MonoBehaviour {
     public bool autoRefresh = true;
     public int refreshDelay = 20;
 
+    public GameObject prefab;
     public List<GameObject> playerList;
 
     // Use this for initialization
@@ -69,7 +69,7 @@ public class PlayerSpawner : MonoBehaviour {
         foreach (Vector2 v in fetchedList)
         {
             //adding the new
-            Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Prefabs/player.prefab", typeof(GameObject));
+            //Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Prefabs/player.prefab", typeof(GameObject));
             GameObject newPlayer = (GameObject)Instantiate(prefab, new Vector3(v.x, 0.86f, v.y), Quaternion.identity);
             newPlayer.transform.parent = gameObject.transform;
             playerList.Add(newPlayer);
