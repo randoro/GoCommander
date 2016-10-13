@@ -25,11 +25,13 @@ public class CircleControl : MonoBehaviour
     float speedRadius = 0;
     bool isDragging = false;
     bool canMove = true;
-    public int amountofMoves = 5;
+    float maxAmountOfMoves = 2;
+    public int amountofMoves;
     int x, y;
 
     void Start()
     {
+        amountofMoves = CalcMoveAmount(1.0f - transform.localScale.x);
         moveDirection = new Vector3(0, 0, 0);
         noScale = new Vector3(0, 0, 0);
         tilePosition = transform.position;
@@ -40,6 +42,11 @@ public class CircleControl : MonoBehaviour
 
         x = (int)transform.position.x;
         y = (int)transform.position.y;
+    }
+    int CalcMoveAmount(float scaleDifference)
+    {
+        int scaleToInt = 5;
+        return (int)(maxAmountOfMoves - (scaleDifference * scaleToInt));
     }
 
     void Update()
@@ -52,27 +59,30 @@ public class CircleControl : MonoBehaviour
                 realPosition.z = 10f;
                 realPosition = Camera.main.ScreenToWorldPoint(realPosition);
 
-                if (canMove && !isDragging && WithinCircleRadius(realPosition,
-                    transform.position, GetComponent<CircleCollider2D>().radius))
+                if (!isDragging && 
+                    WithinCircleRadius(realPosition, transform.position, GetComponent<CircleCollider2D>().radius) &&
+                    amountofMoves > 0)
                 {
                     circleCopy = this.gameObject;
+                    circleCopy.transform.localScale -= new Vector3(0.2f, 0.2f, 0.2f);
                     Instantiate(circleCopy, transform.position, Quaternion.identity);
 
-                    if (amountofMoves > 0)
-                    {
-                        circleCopy.transform.localScale -= new Vector3(0.1f, 0.1f, 0.1f);
-                        offset = realPosition - transform.position;
-                        amountofMoves -= 1;
-                        isDragging = true;
-                    }
-                    else
-                    {
-                        canMove = false;
-                    }
+                    offset = realPosition - transform.position;
+                    amountofMoves -= 1;
+                    isDragging = true;
+
+                    //if ()
+                    //{
+                        
+                    //}
+                    //else
+                    //{
+                    //    canMove = false;
+                    //}
                 }
             }
             //Release
-            else if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
+            else if (isDragging && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
             {
                 isDragging = false;
 
@@ -82,6 +92,12 @@ public class CircleControl : MonoBehaviour
                 if (WithinMapBounds(new_x, new_y) && CheckNeighbourTiles(new_x, new_y))
                 {
                     tilePosition = mapGenerator.CoordToVector(x, y);
+                }
+                else
+                {
+                    Destroy(circleCopy);
+                    amountofMoves += 1;
+                    transform.localScale += new Vector3(0.2f, 0.2f, 0.2f);
                 }
 
                 speedRadius = Vector3.Distance(transform.position, tilePosition);
@@ -97,7 +113,8 @@ public class CircleControl : MonoBehaviour
 
                 transform.position = realPos - offset;
             }
-            if (canMove && !isDragging && !WithinCircleRadius(tilePosition, transform.position, 0.01f))
+
+            if (!isDragging && !WithinCircleRadius(tilePosition, transform.position, 0.01f))
             {
                 SnapToGrid();
             }
