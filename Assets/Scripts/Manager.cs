@@ -6,7 +6,6 @@ using System.IO;
 public class Manager : MonoBehaviour {
 
     private string[] questions, answers, answersID;
-    
 
     public Transform resultObj;
 
@@ -16,17 +15,14 @@ public class Manager : MonoBehaviour {
 
     public static int randomQuestion = -1;
 
-    string file = "Assets/Questions.txt", fileAnswers = "Assets/Answers.txt", fileAnswersID = "Assets/AnswersID.txt";
+    string file = "Assets/TextFiles/Questions.txt", fileAnswers = "Assets/TextFiles/Answers.txt", fileAnswersID = "Assets/TextFiles/AnswersID.txt";
 
     private string[] lines, answerlines, answerIDLines;
-    public static int randomLineNumber, nrOfQuestions;
     private string line, answerline;
 
     // Use this for initialization
     private void Start () {
-
-        nrOfQuestions = 4;
-
+        
         questions = new string[4];
         answers = new string[4];
         answersID = new string[4];
@@ -35,15 +31,12 @@ public class Manager : MonoBehaviour {
         ReadAnswers(fileAnswers);
         ReadAnswerID(fileAnswersID);
 
-        Debug.Log("Choice Selected: " + choiceSelected);
+        //Debug.Log("Choice Selected: " + choiceSelected);
     }
 
     // Update is called once per frame
     private void Update()
     {
-        
-        Debug.Log("Choice Selected: " + choiceSelected);
-
         if (randomQuestion == -1)
         {
             randomQuestion = Random.Range(0, 3);
@@ -79,11 +72,6 @@ public class Manager : MonoBehaviour {
     void ReadQuestions(string _filePath)
     {
             lines = File.ReadAllLines(_filePath);
-
-            //questions[0] = lines[0];
-            //questions[1] = lines[1];
-            //questions[2] = lines[2];
-            //questions[3] = lines[3];
 
             for (int i = 0; i < lines.Length; i++)
             {

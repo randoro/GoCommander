@@ -4,15 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 
 public class Text4 : MonoBehaviour {
-
-    //List<string> fourthChoice = new List<string>() { "4", "Maybe not", "3", "Fourth" };
-
-    string[] fourthChoices;
+    
+    private string[] fourthChoices;
     
     private string[] lines;
     public static int randomLineNumber;
     private string line;
-    private string file = "Assets/fourthOptions.txt";
+    private string file = "Assets/TextFiles/fourthOptions.txt";
 
     // Use this for initialization
     void Start()
@@ -28,8 +26,7 @@ public class Text4 : MonoBehaviour {
         if (Manager.randomQuestion > -1)
         {
             GetComponent<TextMesh>().text = fourthChoices[Manager.randomQuestion];
-
-            Debug.Log("Option 4: " + GetComponent<TextMesh>().text);
+            //Debug.Log("Option 4: " + GetComponent<TextMesh>().text);
         }
     }
 

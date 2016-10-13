@@ -4,15 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 
 public class Text2 : MonoBehaviour {
-
-    //List<string> secondChoice = new List<string>() { "8", "No", "2", "Fourth" };
-
-    string[] secondChoices;
+    
+    private string[] secondChoices;
 
     private string[] lines;
-    public static int randomLineNumber;
     private string line;
-    private string file = "Assets/secondOptions.txt";
+    private string file = "Assets/TextFiles/secondOptions.txt";
 
     // Use this for initialization
     void Start()
@@ -28,7 +25,7 @@ public class Text2 : MonoBehaviour {
         if (Manager.randomQuestion > -1)
         {
             GetComponent<TextMesh>().text = secondChoices[Manager.randomQuestion];
-            Debug.Log("Option 2: " + GetComponent<TextMesh>().text);
+            //Debug.Log("Option 2: " + GetComponent<TextMesh>().text);
         }
     }
 
