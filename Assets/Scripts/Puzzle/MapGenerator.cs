@@ -7,12 +7,14 @@ public class MapGenerator : MonoBehaviour
     public Transform tilePrefab;
     public Transform circlePrefab;
     public Vector2 mapSize;
+    
     public int shuffleSeeed;
     int circleCount;
 
     [Range(0,1)]
     public float gridLinePercent;
 
+    public Tile[,] tileArray;
     public List<Coordinate> tileCoordinates;
     Queue<Coordinate> circleCoordinates;
 
@@ -28,11 +30,16 @@ public class MapGenerator : MonoBehaviour
     public void GenerateMap()
     {
         tileCoordinates = new List<Coordinate>();
+        tileArray = new Tile[(int)mapSize.x, (int)mapSize.y];
 
-        for(int x = 0; x < mapSize.x; x++)
+        for (int x = 0; x < mapSize.x; x++)
             for(int y = 0; y < mapSize.y; y++)
             {
+
                 tileCoordinates.Add(new Coordinate(x, y));
+                Tile newTile = new Tile(new Coordinate(x, y));
+                newTile.CurrentColor = Tile.CircleColor.Empty;
+                tileArray[x, y] = newTile;
             }
 
         circleCoordinates = new Queue<Coordinate>(Utility.ShuffleArray(tileCoordinates.ToArray(), shuffleSeeed));
@@ -50,9 +57,9 @@ public class MapGenerator : MonoBehaviour
             for(int y = 0; y < mapSize.y; y++)
             {
                 Vector3 tilePos = CoordToVector(x, y);
-                Transform newTile = Instantiate(tilePrefab, tilePos, Quaternion.Euler(Vector3.right)) as Transform;
-                newTile.localScale = Vector3.one * (1 - gridLinePercent);
-                newTile.parent = mapHolder;      
+                Transform newTileInstance = Instantiate(tilePrefab, tilePos, Quaternion.Euler(Vector3.right)) as Transform;
+                newTileInstance.localScale = Vector3.one * (1 - gridLinePercent);
+                newTileInstance.parent = mapHolder;      
             }
         
         for(int i = 0; i < circleCount; i++)
@@ -60,6 +67,7 @@ public class MapGenerator : MonoBehaviour
             Coordinate randomizeCoord = GetRandomCoordinates();
             Vector3 circlePos = CoordToVector(randomizeCoord.x, randomizeCoord.y);
             Transform newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
+
             newCircle.parent = mapHolder;
         }
     }
@@ -76,15 +84,48 @@ public class MapGenerator : MonoBehaviour
         return randomCoordinate;
     }
 
+
+    public class Tile
+    {
+        public enum CircleColor
+        {
+            Empty,
+            Red,
+            Blue,
+            Green
+        }
+        CircleColor currentColor;
+
+        Coordinate coordinate;
+
+        public Tile(Coordinate coordinate)
+        {
+            this.coordinate = coordinate;
+        }
+
+        public CircleColor CurrentColor
+        {
+            get
+            {
+                return currentColor;
+            }
+            set
+            {
+                currentColor = value;
+            }
+        }    
+    }
+
+
     public struct Coordinate
     {
-       public int x;
-       public int y;
-       
-       public Coordinate(int x, int y)
-       {
+        public int x;
+        public int y;
+
+        public Coordinate(int x, int y)
+        {
             this.x = x;
             this.y = y;
-       }
+        }
     }
 }

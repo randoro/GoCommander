@@ -5,21 +5,13 @@ using UnityEngine.EventSystems;
 public class CircleControl : MonoBehaviour
 {
 
-    public enum Type
-    {
-        Red = 0,
-        Blue = 1,
-        Green = 2
-    }
-
-    Type defaultType;
-
     Vector3 tilePosition;
     Vector3 touchPosition;
     Vector3 moveDirection;
     Vector3 offset;
     Vector3 noScale;
     MapGenerator mapGenerator;
+    
     GameObject circleCopy;
     
     float speedRadius = 0;
@@ -36,12 +28,28 @@ public class CircleControl : MonoBehaviour
         tilePosition = transform.position;
         mapGenerator = FindObjectOfType<MapGenerator>();
 
-        System.Random random = new System.Random();
-        defaultType = ((Type)(random.Next(0, 4)));
-
         x = (int)transform.position.x;
         y = (int)transform.position.y;
+
+        DetermineColor(mapGenerator.tileArray[x, y].CurrentColor);
     }
+
+    public void DetermineColor(MapGenerator.Tile.CircleColor color)
+    {
+        if(color == MapGenerator.Tile.CircleColor.Red)
+        {
+            GetComponent<MeshRenderer>().material.color = Color.red;
+        }
+        else if (color == MapGenerator.Tile.CircleColor.Green)
+        {
+            GetComponent<MeshRenderer>().material.color = Color.green;
+        }
+        else if (color == MapGenerator.Tile.CircleColor.Blue)
+        {
+            GetComponent<MeshRenderer>().material.color = Color.blue;
+        }
+    }
+
     int CalcMoveAmount(float scaleDifference)
     {
         int scaleToInt = 5;
