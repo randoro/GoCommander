@@ -5,21 +5,24 @@ using System.Collections.Generic;
 public class MapGenerator1 : MonoBehaviour
 {
     public Transform tilePrefab;
-    public Transform obstaclePrefab;
+    public Transform circlePrefab;
     public Vector2 mapSize;
+    
+    public int shuffleSeeed;
+    int circleCount;
 
     [Range(0,1)]
-    public float outLinePercent;
+    public float gridLinePercent;
 
-    List<Coordinate> tileCoordinates;
-    Queue<Coordinate> shuffledCoordinates;
+    public Tile[,] tileArray;
+    public List<Coordinate> tileCoordinates;
+    Queue<Coordinate> circleCoordinates;
 
-    public int shuffleSeeed;
-
-    //Random.Range (1,10000)
     void Start()
     {
-       shuffleSeeed = Random.Range(1, 10000);
+        circleCount = Random.Range(5,15);
+        shuffleSeeed = Random.Range(0, 9999);
+        gridLinePercent = 0.3f;
 
         GenerateMap();
     }
@@ -27,17 +30,21 @@ public class MapGenerator1 : MonoBehaviour
     public void GenerateMap()
     {
         tileCoordinates = new List<Coordinate>();
+        tileArray = new Tile[(int)mapSize.x, (int)mapSize.y];
 
-        for(int x = 0; x < mapSize.x; x++)
+        for (int x = 0; x < mapSize.x; x++)
             for(int y = 0; y < mapSize.y; y++)
             {
+
                 tileCoordinates.Add(new Coordinate(x, y));
+                Tile newTile = new Tile(new Coordinate(x, y));
+                newTile.CurrentColor = Tile.CircleColor.Empty;
+                tileArray[x, y] = newTile;
             }
 
-        shuffledCoordinates = new Queue<Coordinate>(Utility1.ShuffleArray(tileCoordinates.ToArray(), shuffleSeeed));
+        circleCoordinates = new Queue<Coordinate>(Utility.ShuffleArray(tileCoordinates.ToArray(), shuffleSeeed));
 
-        string holderName = "Generated Map1";
-
+        string holderName = "Generated Map";
         if(transform.FindChild(holderName))
         {
             DestroyImmediate(transform.FindChild(holderName).gameObject);
@@ -50,42 +57,75 @@ public class MapGenerator1 : MonoBehaviour
             for(int y = 0; y < mapSize.y; y++)
             {
                 Vector3 tilePos = CoordToVector(x, y);
-                Transform newTile = Instantiate(tilePrefab, tilePos, Quaternion.Euler(Vector3.right * 90)) as Transform;
-                newTile.localScale = Vector3.one * (1 - outLinePercent);
-                newTile.parent = mapHolder;      
+                Transform newTileInstance = Instantiate(tilePrefab, tilePos, Quaternion.Euler(Vector3.right)) as Transform;
+                newTileInstance.localScale = Vector3.one * (1 - gridLinePercent);
+                newTileInstance.parent = mapHolder;      
             }
-
-        int obstacleCount = 10;
-        for(int i = 0; i < obstacleCount; i++)
+        
+        for(int i = 0; i < circleCount; i++)
         {
             Coordinate randomizeCoord = GetRandomCoordinates();
-            Vector3 obstaclePos = CoordToVector(randomizeCoord.x, randomizeCoord.y);
-            Transform newObstacle = Instantiate(obstaclePrefab, obstaclePos + Vector3.up * 0.5f, Quaternion.identity) as Transform;
-            newObstacle.parent = mapHolder;
+            Vector3 circlePos = CoordToVector(randomizeCoord.x, randomizeCoord.y);
+            Transform newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
+
+            newCircle.parent = mapHolder;
         }
     }
 
     public Vector3 CoordToVector(int x, int y)
     {
-        return new Vector3(-mapSize.x / 2 + 0.5f + x, 0, -mapSize.y / 2 + 0.5f + y);
+        return new Vector3(x + 0.5f, y + 0.5f, 0);
     }
 
     public Coordinate GetRandomCoordinates()
     {
-        Coordinate randomCoordinate = shuffledCoordinates.Dequeue();
-        shuffledCoordinates.Enqueue(randomCoordinate);
+        Coordinate randomCoordinate = circleCoordinates.Dequeue();
+        circleCoordinates.Enqueue(randomCoordinate);
         return randomCoordinate;
     }
 
+
+    public class Tile
+    {
+        public enum CircleColor
+        {
+            Empty,
+            Red,
+            Blue,
+            Green
+        }
+        CircleColor currentColor;
+
+        Coordinate coordinate;
+
+        public Tile(Coordinate coordinate)
+        {
+            this.coordinate = coordinate;
+        }
+
+        public CircleColor CurrentColor
+        {
+            get
+            {
+                return currentColor;
+            }
+            set
+            {
+                currentColor = value;
+            }
+        }    
+    }
+
+
     public struct Coordinate
     {
-       public int x;
-       public int y;
-       
-    public Coordinate(int x, int y)
-    {
+        public int x;
+        public int y;
+
+        public Coordinate(int x, int y)
+        {
             this.x = x;
             this.y = y;
-    }
+        }
     }
 }
