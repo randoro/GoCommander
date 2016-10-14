@@ -9,7 +9,6 @@ public class CircleControl : MonoBehaviour
     Vector3 touchPosition;
     Vector3 moveDirection;
     Vector3 offset;
-    Vector3 noScale;
     MapGenerator mapGenerator;
     
     GameObject circleCopy;
@@ -24,13 +23,13 @@ public class CircleControl : MonoBehaviour
     {
         amountOfMoves = CalcMoveAmount(1.0f - transform.localScale.x);
         moveDirection = new Vector3(0, 0, 0);
-        noScale = new Vector3(0, 0, 0);
         tilePosition = transform.position;
         mapGenerator = FindObjectOfType<MapGenerator>();
 
         x = (int)transform.position.x;
         y = (int)transform.position.y;
 
+        BindToTile();
         DetermineColor(mapGenerator.tileArray[x, y].CurrentColor);
     }
 
@@ -48,6 +47,10 @@ public class CircleControl : MonoBehaviour
         {
             GetComponent<MeshRenderer>().material.color = Color.blue;
         }
+    }
+    public void BindToTile()
+    {
+        mapGenerator.tileArray[x, y].Circle = this;
     }
 
     int CalcMoveAmount(float scaleDifference)
@@ -71,21 +74,12 @@ public class CircleControl : MonoBehaviour
                     amountOfMoves > 0)
                 {
                     circleCopy = (GameObject)Instantiate(gameObject, transform.position, Quaternion.identity);
-                    circleCopy.transform.localScale -= new Vector3(0.2f, 0.2f, 0.2f);
+                    circleCopy.transform.localScale -= new Vector3(0.2f, 0.2f, 0.0f);
                     transform.localScale = circleCopy.transform.localScale;
                     amountOfMoves--;
 
                     offset = realPosition - transform.position;
                     isDragging = true;
-
-                    //if ()
-                    //{
-                        
-                    //}
-                    //else
-                    //{
-                    //    canMove = false;
-                    //}
                 }
             }
             //Release
@@ -96,15 +90,19 @@ public class CircleControl : MonoBehaviour
                 int new_x = (int)transform.position.x;
                 int new_y = (int)transform.position.y;
 
-                if (WithinMapBounds(new_x, new_y) && CheckNeighbourTiles(new_x, new_y))
+                if (WithinMapBounds(new_x, new_y) && CheckNeighbourTiles(new_x, new_y) && mapGenerator.tileArray[new_x, new_y].CurrentColor != mapGenerator.tileArray[x, y].CurrentColor)
                 {
-                    tilePosition = mapGenerator.CoordToVector(x, y);
+                    tilePosition = mapGenerator.CoordToVector(new_x, new_y);
+                    mapGenerator.tileArray[new_x, new_y].UpdateColor(mapGenerator.tileArray[x, y].CurrentColor, this);
+
+                    x = new_x;
+                    y = new_y;
                 }
                 else if(amountOfMoves < maxAmountOfMoves)
                 {
                     GameObject.Destroy(circleCopy);
                     amountOfMoves++;
-                    transform.localScale += new Vector3(0.2f, 0.2f, 0.2f);
+                    transform.localScale += new Vector3(0.2f, 0.2f, 0.0f);
                 }
 
                 speedRadius = Vector3.Distance(transform.position, tilePosition);
@@ -137,12 +135,10 @@ public class CircleControl : MonoBehaviour
     {
         if (new_x == x + 1 && new_y == y || new_x == x - 1 && new_y == y)
         {
-            x = new_x;
             return true;
         }
-        if (new_y == y + 1 && new_x == x || new_y == y - 1 && new_x == x)
+        else if (new_y == y + 1 && new_x == x || new_y == y - 1 && new_x == x)
         {
-            y = new_y;
             return true;
         }
         return false;
