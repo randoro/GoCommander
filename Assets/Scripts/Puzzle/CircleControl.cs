@@ -24,14 +24,13 @@ public class CircleControl : MonoBehaviour
     
     float speedRadius = 0;
     bool isDragging = false;
-    bool canMove = true;
+    //bool canMove = true;
     float maxAmountOfMoves = 2;
-    public int amountofMoves;
+    public int amountOfMoves;
     int x, y;
-
     void Start()
     {
-        amountofMoves = CalcMoveAmount(1.0f - transform.localScale.x);
+        amountOfMoves = CalcMoveAmount(1.0f - transform.localScale.x);
         moveDirection = new Vector3(0, 0, 0);
         noScale = new Vector3(0, 0, 0);
         tilePosition = transform.position;
@@ -61,14 +60,14 @@ public class CircleControl : MonoBehaviour
 
                 if (!isDragging && 
                     WithinCircleRadius(realPosition, transform.position, GetComponent<CircleCollider2D>().radius) &&
-                    amountofMoves > 0)
+                    amountOfMoves > 0)
                 {
-                    circleCopy = this.gameObject;
+                    circleCopy = (GameObject)Instantiate(gameObject, transform.position, Quaternion.identity);
                     circleCopy.transform.localScale -= new Vector3(0.2f, 0.2f, 0.2f);
-                    Instantiate(circleCopy, transform.position, Quaternion.identity);
+                    transform.localScale = circleCopy.transform.localScale;
+                    amountOfMoves--;
 
                     offset = realPosition - transform.position;
-                    amountofMoves -= 1;
                     isDragging = true;
 
                     //if ()
@@ -93,10 +92,10 @@ public class CircleControl : MonoBehaviour
                 {
                     tilePosition = mapGenerator.CoordToVector(x, y);
                 }
-                else
+                else if(amountOfMoves < maxAmountOfMoves)
                 {
-                    Destroy(circleCopy);
-                    amountofMoves += 1;
+                    GameObject.Destroy(circleCopy);
+                    amountOfMoves++;
                     transform.localScale += new Vector3(0.2f, 0.2f, 0.2f);
                 }
 
@@ -122,7 +121,7 @@ public class CircleControl : MonoBehaviour
 
     private void SnapToGrid()
     {
-        float distance_right_now = Vector3.Distance(circleCopy.transform.position, tilePosition);
+        float distance_right_now = Vector3.Distance(transform.position, tilePosition);
         transform.position += moveDirection * (distance_right_now / speedRadius) * 0.3f;
     }
 
