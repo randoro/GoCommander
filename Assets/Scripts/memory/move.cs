@@ -55,15 +55,17 @@ public class move : MonoBehaviour
         {
             if (dictens.x > 0)
             {
-                unite.x = 0;
-                unite.z = -1;
+                unite.x = 1;
+                unite.y = 0;
+                unite.z = 0;
                 transform.Translate(unite);
 
             }
             if (dictens.x < 0)
             {
-                unite.x = 0;
-                unite.z = 1;
+                unite.y = 0;
+                unite.x = -1;
+                unite.z = 0;
                 transform.Translate(unite);
             }
 
@@ -72,14 +74,16 @@ public class move : MonoBehaviour
         {
             if (dictens.y > 0)
             {
+                unite.y = 1;
                 unite.z = 0;
-                unite.x = 1;
+                unite.x = 0;
                 transform.Translate(unite);
             }
             if (dictens.y < 0)
             {
+                unite.y = -1;
                 unite.z = 0;
-                unite.x = -1;
+                unite.x = 0;
                 transform.Translate(unite);
             }
         }
