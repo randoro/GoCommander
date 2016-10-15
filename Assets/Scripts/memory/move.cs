@@ -21,10 +21,11 @@ public class move : MonoBehaviour
     MapGenerator1 mapGenerator1;
     Vector2 tileCoordinatePosition;
     int x, y, finger_x, finger_y;
+    Color defaultColor;
 
     void Start()
     {
-
+        defaultColor = GetComponent<MeshRenderer>().material.color;
         mapGenerator1 = FindObjectOfType<MapGenerator1>();
         //tilePosition = transform.position;
 
@@ -59,6 +60,7 @@ public class move : MonoBehaviour
         //Release
         else if (isDragging && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
         {
+            GetComponent<MeshRenderer>().material.color = defaultColor;
             isDragging = false;
         }
         //Drag

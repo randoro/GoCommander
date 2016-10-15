@@ -105,8 +105,8 @@ public class CircleControl : MonoBehaviour
                 if (WithinMapBounds(new_x, new_y) && CheckNeighbourTiles(new_x, new_y) && mapGenerator.tileArray[new_x, new_y].CurrentColor != mapGenerator.tileArray[x, y].CurrentColor)
                 {
                     tilePosition = mapGenerator.CoordToVector(new_x, new_y);
-                    mapGenerator.tileArray[new_x, new_y].UpdateColor(mapGenerator.tileArray[x, y].CurrentColor, this);
-                    mapGenerator.tileArray[new_x, new_y].InitialMoveDecrease = mapGenerator.tileArray[x, y].InitialMoveDecrease;
+                    mapGenerator.tileArray[new_x, new_y].UpdateTile(mapGenerator.tileArray[x, y].CurrentColor, this, mapGenerator.tileArray[x, y].InitialMoveDecrease);
+                    //mapGenerator.tileArray[new_x, new_y].InitialMoveDecrease = ;
 
                     x = new_x;
                     y = new_y;

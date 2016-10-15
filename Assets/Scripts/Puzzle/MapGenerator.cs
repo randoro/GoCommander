@@ -230,7 +230,7 @@ public class MapGenerator : MonoBehaviour
         Tile[,] tileFamily;
         List<Tile> usedTiles;
 
-        int inScaleDe;
+        int inMoveDe;
 
         public Tile(Coordinate coordinate, Tile[,] tileFamily, List<Tile> usedTiles)
         {
@@ -269,20 +269,21 @@ public class MapGenerator : MonoBehaviour
         {
             get
             {
-                return inScaleDe;
+                return inMoveDe;
             }
             set
             {
-                inScaleDe = value;
+                inMoveDe = value;
             }
         }
-        public void UpdateColor(CircleColor newColor, CircleControl activeCircle)
+        public void UpdateTile(CircleColor newColor, CircleControl activeCircle, int newMoveDecrease)
         {
             // If the tile is empty it has to be binded with the dragged circle - otherwise the dragged circle should be deleted
             if (circle == null)
             {
                 circle = activeCircle;
                 CurrentColor = newColor;
+                inMoveDe = newMoveDecrease;
             }
             else
             {
