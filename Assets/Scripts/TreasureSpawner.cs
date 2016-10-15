@@ -64,6 +64,8 @@ public class TreasureSpawner : MonoBehaviour {
 
         print(fetchedList.Count);
 
+        fetchedList.Add(new Treasure(0, 55.590137, 12.995480));
+
         for (int i = treasureList.Count; i-- > 0;)
         {
 
@@ -93,9 +95,9 @@ public class TreasureSpawner : MonoBehaviour {
             print("v.lat "+v.lat+" latitude"+ gMap.centerLocation.latitude);
             print("v.lng " + v.lng + " longitude" + gMap.centerLocation.longitude);
 
-            GameObject newPlayer = (GameObject)Instantiate(prefab, new Vector3(coordScaleToGameScale(v.lng - gMap.centerLocation.longitude), 0.0f, coordScaleToGameScale(v.lat - gMap.centerLocation.latitude)), Quaternion.Euler(new Vector3(0, Random.value * 360, 0)));
+            GameObject newPlayer = (GameObject)Instantiate(prefab, new Vector3(coordScaleToGameScale(v.lng - gMap.centerLocation.longitude, 180.0f, 10.0f), 0.0f, coordScaleToGameScale(v.lat - gMap.centerLocation.latitude, 90.0f, 9.0f)), Quaternion.Euler(new Vector3(0, Random.value * 360, 0)));
             newPlayer.transform.parent = gameObject.transform;
-            newPlayer.transform.localScale = new Vector3(6, 6, 6);
+            newPlayer.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             newPlayer.gameObject.GetComponent<TreasureHolder>().treasure = v;
             treasureList.Add(newPlayer);
 
@@ -114,9 +116,9 @@ public class TreasureSpawner : MonoBehaviour {
 
 
 
-    private float coordScaleToGameScale(float inFloat)
+    private float coordScaleToGameScale(float inFloat, float total, float multi)
     {
-        float returnfloat = (inFloat/180.0f) * (32.0f * (float)Math.Pow(2, gMap.zoom));
+        float returnfloat = (inFloat/total) * (multi * (float)Math.Pow(2, gMap.zoom));
         return returnfloat;
     }
 
