@@ -152,4 +152,17 @@ public class TreasureSpawner : MonoBehaviour {
             value = value.Remove(value.IndexOf("|"));
         return value;
     }
+
+    public void UpdateTreasureLocations()
+    {
+        for (int i = treasureList.Count; i-- > 0;)
+        {
+            TreasureHolder tempTres = treasureList[i].gameObject.GetComponent<TreasureHolder>();
+            Treasure v = tempTres.treasure;
+            treasureList[i].transform.position =
+                new Vector3(coordScaleToGameScale(v.lng - gMap.centerLocation.longitude, 180.0f, 10.0f),
+                    0.0f, coordScaleToGameScale(v.lat - gMap.centerLocation.latitude, 90.0f, 9.0f));
+
+        }
+    }
 }

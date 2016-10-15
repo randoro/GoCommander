@@ -86,6 +86,10 @@ public class GoogleMap : MonoBehaviour {
             tex.LoadImage(req.bytes);
             GetComponent<Renderer>().material.mainTexture = tex;
         }
+
+        GameObject.FindGameObjectWithTag("TreasureSpawner").GetComponent<TreasureSpawner>().UpdateTreasureLocations();
+
+
     }
     
 
