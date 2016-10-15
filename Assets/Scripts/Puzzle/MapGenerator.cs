@@ -23,7 +23,8 @@ public class MapGenerator : MonoBehaviour
     List<Tile> usedTiles = new List<Tile>();
 
     StreamReader stream_reader;
-    String level_file;
+    TextAsset level_file;
+    String level_file_text;
     List<String> map_strings;
 
     void Start()
@@ -34,9 +35,18 @@ public class MapGenerator : MonoBehaviour
 
         int random_level = UnityEngine.Random.Range(1, 5);
 
-        SetUpReadFromFile(level_file);
+        //if (random_level == 1)
+        //{
+
+        
+              level_file = Resources.Load<TextAsset>("Level1.txt");
+              level_file_text = level_file.text;
+              //level_file_text = "Assets/Resources/Level1.txt";
+
+        //}
+
+        SetUpReadFromFile(level_file_text);
         SetUpCamera();
-        GenerateMap();
     }
     private void SetUpCamera()
     {
@@ -45,8 +55,7 @@ public class MapGenerator : MonoBehaviour
 
     public void SetUpReadFromFile(String level_file)
     {
-        level_file = "Assets/Scripts/Puzzle/Level_TextFiles/Level1.txt";
-        map_strings = new List<String>();
+       map_strings = new List<String>();
 
         stream_reader = new StreamReader(@level_file);
 
@@ -61,7 +70,9 @@ public class MapGenerator : MonoBehaviour
         mapSize.y = map_strings.Count;
 
         tileCoordinates = new List<Coordinate>();
-        tileArray = new Tile[(int)mapSize.x, (int)mapSize.y];      
+        tileArray = new Tile[(int)mapSize.x, (int)mapSize.y];
+
+        GenerateMap();
     }
 
     private void GenerateMap()
