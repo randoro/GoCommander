@@ -14,15 +14,30 @@ public class move : MonoBehaviour
     float swpedict;
     float swipetime;
     Vector3 unite;
+    bool test = false;
+    MapGenerator1 mapGenerator1;
+    Vector3 tilePosition;
+    int x, y;
 
     void Start()
     {
+
+        mapGenerator1 = FindObjectOfType<MapGenerator1>();
+        tilePosition = transform.position;
 
     }
 
     void Update()
     {
+        if (test == true)
+        {
+            x = (int)transform.position.x;
+            y = (int)transform.position.y;
+        
+               
 
+
+        }
         if (Input.touchCount > 0)
         {
             Touch toutch = Input.GetTouch(0);
