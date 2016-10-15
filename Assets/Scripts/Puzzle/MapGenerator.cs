@@ -26,7 +26,6 @@ public class MapGenerator : MonoBehaviour
     String level_file;
     List<String> map_strings;
 
-
     void Start()
     {
         //circleCount = Random.Range(5,15);
@@ -35,19 +34,22 @@ public class MapGenerator : MonoBehaviour
 
         int random_level = UnityEngine.Random.Range(1, 5);
 
-        //if (random_level == 1)
-        //{
-
-        level_file = "Assets/Scripts/Puzzle/Level_TextFiles/Level1.txt";
-        map_strings = new List<String>();
         SetUpReadFromFile(level_file);
-       
-        //}
+        SetUpCamera();
+        GenerateMap();
+    }
+    private void SetUpCamera()
+    {
+        Camera.main.transform.position = new Vector3(mapSize.x / 2, mapSize.y / 2, Camera.main.transform.position.z);
     }
 
     public void SetUpReadFromFile(String level_file)
     {
+        level_file = "Assets/Scripts/Puzzle/Level_TextFiles/Level1.txt";
+        map_strings = new List<String>();
+
         stream_reader = new StreamReader(@level_file);
+
         while (!stream_reader.EndOfStream)
         {
             map_strings.Add(stream_reader.ReadLine());
@@ -55,90 +57,149 @@ public class MapGenerator : MonoBehaviour
         stream_reader.Close();
         map_strings.Reverse();
 
-        //Regex.Split(level_file," ");
-
-        //int x = int.Parse(level_file.Split(' ')[0].ToString());
-        //int y = int.Parse(level_file.Split(' ')[1].ToString());
-
-        mapSize.x = 5;
-        mapSize.y = 9;
+        mapSize.x = map_strings[0].Length;
+        mapSize.y = map_strings.Count;
 
         tileCoordinates = new List<Coordinate>();
-        tileArray = new Tile[(int)mapSize.x, (int)mapSize.y];
+        tileArray = new Tile[(int)mapSize.x, (int)mapSize.y];      
+    }
 
+    private void GenerateMap()
+    {
         string holderName = "Generated Map";
         Transform mapHolder = new GameObject(holderName).transform;
         mapHolder.parent = this.transform;
 
-        GenerateMap(mapHolder);
-       
-        //if (transform.FindChild(holderName))
-        //{
-            //DestroyImmediate(transform.FindChild(holderName).gameObject);
-        //}
-
-        //circleCoordinates = new Queue<Coordinate>(Utility.ShuffleArray(tileCoordinates.ToArray(), shuffleSeeed));       
-    }
-
-    private void GenerateMap(Transform mapHolder)
-    {
         for (int y = 0; y < map_strings.Count; y++)
             for (int x = 0; x < map_strings[y].Length; x++)
             {
                 tileCoordinates.Add(new Coordinate(x, y));
                 Tile newTile = new Tile(new Coordinate(x, y), tileArray, usedTiles);
                 newTile.CurrentColor = Tile.CircleColor.Empty;
-                tileArray[x,y] = newTile;
+                tileArray[x, y] = newTile;
 
-                Vector3 tilePos = CoordToVector(x,y);
+                Vector3 tilePos = CoordToVector(x, y);
                 //Vector3 tilePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
                 Transform newTileInstance = Instantiate(tilePrefab, tilePos, Quaternion.Euler(Vector3.right)) as Transform;
 
                 newTileInstance.localScale = Vector3.one * (1 - gridLinePercent);
                 newTileInstance.parent = mapHolder;
 
-                switch(map_strings[y][x])
-                {
-                    case 'R':
-                        {
-                            //Coordinate randomizeCoord = GetRandomCoordinates();
-                            Vector3 circlePos = CoordToVector(x, y);
-                            //Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
-                            Transform newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
-                            newCircle.parent = mapHolder;
-
-                            // Every tile with a circle has a gameobject
-                            tileArray[x, y].CurrentColor = Tile.CircleColor.Red;
-                        }
-                        break;
-                    case 'G':
-                        {
-                            //Coordinate randomizeCoord = GetRandomCoordinates();
-                            Vector3 circlePos = CoordToVector(x, y);
-                            //Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
-                            Transform newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
-                            newCircle.parent = mapHolder;
-
-                            // Every tile with a circle has a gameobject
-                            tileArray[x, y].CurrentColor = Tile.CircleColor.Green;
-                        }
-                        break;
-                    case 'B':
-                        {
-                            //Coordinate randomizeCoord = GetRandomCoordinates();
-                            Vector3 circlePos = CoordToVector(x, y);
-                            //Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
-                            Transform newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
-                            newCircle.parent = mapHolder;
-
-                            // Every tile with a circle has a gameobject
-                            tileArray[x, y].CurrentColor = Tile.CircleColor.Blue;
-                        }
-                        break;
-                }
+                CreateCircle(x, y, mapHolder);
             }
-      }
-    
+    }
+    private void CreateCircle(int x, int y, Transform mapHolder)
+    {
+        switch (map_strings[y][x])
+        {
+            case 'R':
+                //Coordinate randomizeCoord = GetRandomCoordinates();
+                Vector3 circlePos = CoordToVector(x, y);
+                //Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
+                Transform newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
+                newCircle.parent = mapHolder;
+
+                // Every tile with a circle has a gameobject
+                tileArray[x, y].CurrentColor = Tile.CircleColor.Red;
+                tileArray[x, y].InitialMoveDecrease = 0;
+                break;
+
+            case 'G':
+                //Coordinate randomizeCoord = GetRandomCoordinates();
+                circlePos = CoordToVector(x, y);
+                //Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
+                newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
+                newCircle.parent = mapHolder;
+
+                // Every tile with a circle has a gameobject
+                tileArray[x, y].CurrentColor = Tile.CircleColor.Green;
+                tileArray[x, y].InitialMoveDecrease = 0;
+                break;
+
+            case 'B':
+                //Coordinate randomizeCoord = GetRandomCoordinates();
+                circlePos = CoordToVector(x, y);
+                //Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
+                newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
+                newCircle.parent = mapHolder;
+
+                // Every tile with a circle has a gameobject
+                tileArray[x, y].CurrentColor = Tile.CircleColor.Blue;
+                tileArray[x, y].InitialMoveDecrease = 0;
+                break;
+
+            case 'r':
+                //Coordinate randomizeCoord = GetRandomCoordinates();
+                circlePos = CoordToVector(x, y);
+                //Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
+                newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
+                newCircle.parent = mapHolder;
+
+                // Every tile with a circle has a gameobject
+                tileArray[x, y].CurrentColor = Tile.CircleColor.Red;
+                tileArray[x, y].InitialMoveDecrease = 1;
+                break;
+
+            case 'g':
+                //Coordinate randomizeCoord = GetRandomCoordinates();
+                circlePos = CoordToVector(x, y);
+                //Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
+                newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
+                newCircle.parent = mapHolder;
+
+                // Every tile with a circle has a gameobject
+                tileArray[x, y].CurrentColor = Tile.CircleColor.Green;
+                tileArray[x, y].InitialMoveDecrease = 1;
+                break;
+
+            case 'b':
+                //Coordinate randomizeCoord = GetRandomCoordinates();
+                circlePos = CoordToVector(x, y);
+                //Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
+                newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
+                newCircle.parent = mapHolder;
+
+                // Every tile with a circle has a gameobject
+                tileArray[x, y].CurrentColor = Tile.CircleColor.Blue;
+                tileArray[x, y].InitialMoveDecrease = 1;
+                break;
+            case '+':
+                //Coordinate randomizeCoord = GetRandomCoordinates();
+                circlePos = CoordToVector(x, y);
+                //Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
+                newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
+                newCircle.parent = mapHolder;
+
+                // Every tile with a circle has a gameobject
+                tileArray[x, y].CurrentColor = Tile.CircleColor.Red;
+                tileArray[x, y].InitialMoveDecrease = 2;
+                break;
+
+            case '-':
+                //Coordinate randomizeCoord = GetRandomCoordinates();
+                circlePos = CoordToVector(x, y);
+                //Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
+                newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
+                newCircle.parent = mapHolder;
+
+                // Every tile with a circle has a gameobject
+                tileArray[x, y].CurrentColor = Tile.CircleColor.Green;
+                tileArray[x, y].InitialMoveDecrease = 2;
+                break;
+
+            case '*':
+                //Coordinate randomizeCoord = GetRandomCoordinates();
+                circlePos = CoordToVector(x, y);
+                //Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
+                newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
+                newCircle.parent = mapHolder;
+
+                // Every tile with a circle has a gameobject
+                tileArray[x, y].CurrentColor = Tile.CircleColor.Blue;
+                tileArray[x, y].InitialMoveDecrease = 2;
+                break;
+        }
+    }
 
     public Vector3 CoordToVector(int x, int y)
     {
@@ -168,6 +229,8 @@ public class MapGenerator : MonoBehaviour
         CircleControl circle;
         Tile[,] tileFamily;
         List<Tile> usedTiles;
+
+        int inScaleDe;
 
         public Tile(Coordinate coordinate, Tile[,] tileFamily, List<Tile> usedTiles)
         {
@@ -200,6 +263,17 @@ public class MapGenerator : MonoBehaviour
             set
             {
                 circle = value;
+            }
+        }
+        public int InitialMoveDecrease
+        {
+            get
+            {
+                return inScaleDe;
+            }
+            set
+            {
+                inScaleDe = value;
             }
         }
         public void UpdateColor(CircleColor newColor, CircleControl activeCircle)

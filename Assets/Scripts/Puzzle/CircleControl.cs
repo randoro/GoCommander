@@ -16,23 +16,31 @@ public class CircleControl : MonoBehaviour
     float speedRadius = 0;
     bool isDragging = false;
     //bool canMove = true;
-    float maxAmountOfMoves = 2;
-    public int amountOfMoves;
+    int maxAmountOfMoves = 2;
+    int amountOfMoves;
     int x, y;
     void Start()
     {
-        amountOfMoves = CalcMoveAmount(1.0f - transform.localScale.x);
         moveDirection = new Vector3(0, 0, 0);
+
         tilePosition = transform.position;
+
         mapGenerator = FindObjectOfType<MapGenerator>();
 
         x = (int)transform.position.x;
         y = (int)transform.position.y;
 
+        transform.localScale = DeterminedScale(mapGenerator.tileArray[x, y].InitialMoveDecrease);
+        //amountOfMoves = CalcMoveAmount(1.0f - transform.localScale.x);
+
         BindToTile();
         DetermineColor(mapGenerator.tileArray[x, y].CurrentColor);
     }
-
+    private Vector3 DeterminedScale(int InitialMoveDecrease)
+    {
+        amountOfMoves = maxAmountOfMoves - InitialMoveDecrease;
+        return new Vector3(1, 1, 1) - new Vector3(0.2f, 0.2f, 0) * InitialMoveDecrease;
+    }
     public void DetermineColor(MapGenerator.Tile.CircleColor color)
     {
         if(color == MapGenerator.Tile.CircleColor.Red)
@@ -48,16 +56,16 @@ public class CircleControl : MonoBehaviour
             GetComponent<MeshRenderer>().material.color = Color.blue;
         }
     }
-    public void BindToTile()
+    private void BindToTile()
     {
         mapGenerator.tileArray[x, y].Circle = this;
     }
 
-    int CalcMoveAmount(float scaleDifference)
-    {
-        int scaleToInt = 5;
-        return (int)(maxAmountOfMoves - (scaleDifference * scaleToInt));
-    }
+    //private int CalcMoveAmount(float scaleDifference)
+    //{
+    //    int scaleToInt = 5;
+    //    return (int)(maxAmountOfMoves - (scaleDifference * scaleToInt));
+    //}
 
     void Update()
     {
@@ -74,9 +82,13 @@ public class CircleControl : MonoBehaviour
                     amountOfMoves > 0)
                 {
                     circleCopy = (GameObject)Instantiate(gameObject, transform.position, Quaternion.identity);
-                    circleCopy.transform.localScale -= new Vector3(0.2f, 0.2f, 0.0f);
-                    transform.localScale = circleCopy.transform.localScale;
-                    amountOfMoves--;
+                    AddMoves(-1);
+                    //mapGenerator.tileArray[x, y].InitialMoveDecrease -= 1;
+                    //circleCopy.transform.localScale -= new Vector3(0.2f, 0.2f, 0.0f);
+                    //transform.localScale = circleCopy.transform.localScale;
+
+                    //transform.localScale -= new Vector3(0.2f, 0.2f, 0.0f);
+                    //amountOfMoves--;
 
                     offset = realPosition - transform.position;
                     isDragging = true;
@@ -94,6 +106,7 @@ public class CircleControl : MonoBehaviour
                 {
                     tilePosition = mapGenerator.CoordToVector(new_x, new_y);
                     mapGenerator.tileArray[new_x, new_y].UpdateColor(mapGenerator.tileArray[x, y].CurrentColor, this);
+                    mapGenerator.tileArray[new_x, new_y].InitialMoveDecrease = mapGenerator.tileArray[x, y].InitialMoveDecrease;
 
                     x = new_x;
                     y = new_y;
@@ -101,8 +114,11 @@ public class CircleControl : MonoBehaviour
                 else if(amountOfMoves < maxAmountOfMoves)
                 {
                     GameObject.Destroy(circleCopy);
-                    amountOfMoves++;
-                    transform.localScale += new Vector3(0.2f, 0.2f, 0.0f);
+                    //mapGenerator.tileArray[x, y].InitialMoveDecrease += 1;
+
+                    //amountOfMoves++;
+                    //transform.localScale += new Vector3(0.2f, 0.2f, 0.0f);
+                    AddMoves(1);
                 }
 
                 speedRadius = Vector3.Distance(transform.position, tilePosition);
@@ -123,6 +139,12 @@ public class CircleControl : MonoBehaviour
             {
                 SnapToGrid();
             }
+    }
+    private void AddMoves(int addition)
+    {
+        mapGenerator.tileArray[x, y].InitialMoveDecrease -= addition;
+        amountOfMoves += addition;
+        transform.localScale += new Vector3(0.2f, 0.2f, 0.0f) * addition;
     }
 
     private void SnapToGrid()
