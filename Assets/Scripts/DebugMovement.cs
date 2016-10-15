@@ -9,6 +9,7 @@ public class DebugMovement : MonoBehaviour {
     public GameObject scale_inputField;
     private GameObject map;
     private GoogleMap gMap;
+    private GPSController gps;
 
     float lat_value;
     float long_value;
@@ -19,6 +20,7 @@ public class DebugMovement : MonoBehaviour {
     {
         map = GameObject.FindGameObjectWithTag("Map");
         gMap = map.GetComponent<GoogleMap>();
+        gps = map.GetComponent<GPSController>();
     }
 
     public void buttonClicked()
@@ -37,6 +39,9 @@ public class DebugMovement : MonoBehaviour {
         {
             print("cheating lat:"+ lat_value+" long:"+long_value+" scale:"+scale_value);
         }
+
+
+        gps.StopRefreshing();
 
         gMap.centerLocation.address = "";
         gMap.centerLocation.latitude = lat_value;

@@ -52,8 +52,7 @@ public class TreasureSpawner : MonoBehaviour {
             {
                 yield return null;
             }
-
-            print(fetchedList.Count);
+            
 
             //fetchedList.Add(new Treasure(0, 55.590137, 12.995480));
 
@@ -61,7 +60,6 @@ public class TreasureSpawner : MonoBehaviour {
             {
 
                 TreasureHolder tempTres = treasureList[i].gameObject.GetComponent<TreasureHolder>();
-                print("x => x.lat.Equals(" + tempTres.treasure.lat + ") && x.lng.Equals(" + tempTres.treasure.lng + "))");
 
                 if (!fetchedList.Exists(x => x.lat.Equals(tempTres.treasure.lat) && x.lng.Equals(tempTres.treasure.lng)))
                 {
@@ -83,10 +81,6 @@ public class TreasureSpawner : MonoBehaviour {
             foreach (Treasure v in fetchedList)
             {
                 //adding the new
-
-                print("v.lat " + v.lat + " latitude" + gMap.centerLocation.latitude);
-                print("v.lng " + v.lng + " longitude" + gMap.centerLocation.longitude);
-
                 GameObject newPlayer =
                     (GameObject)
                         Instantiate(prefab,
@@ -142,7 +136,6 @@ public class TreasureSpawner : MonoBehaviour {
             fetchedList.Add(new Treasure(id, lat, lng));
         }
         fetched = true;
-        print(fetchedList.Count);
     }
 
     string GetDataValue(string data, string index)
