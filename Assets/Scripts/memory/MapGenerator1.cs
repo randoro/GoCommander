@@ -15,6 +15,8 @@ public class MapGenerator1 : MonoBehaviour
     public float gridLinePercent;
 
     public Tile[,] tileArray;
+    List<Tile> usedTiles;
+
     public List<Coordinate> tileCoordinates;
     Queue<Coordinate> circleCoordinates;
 
@@ -22,7 +24,8 @@ public class MapGenerator1 : MonoBehaviour
     {
         circleCount = Random.Range(5,15);
         shuffleSeeed = Random.Range(0, 9999);
-        gridLinePercent = 0.3f;
+        //gridLinePercent = 0.3f;
+        usedTiles = new List<Tile>();
 
         GenerateMap();
     }
@@ -37,8 +40,8 @@ public class MapGenerator1 : MonoBehaviour
             {
 
                 tileCoordinates.Add(new Coordinate(x, y));
-                Tile newTile = new Tile(new Coordinate(x, y));
-                newTile.CurrentColor = Tile.CircleColor.Empty;
+                Tile newTile = new Tile(new Coordinate(x, y), tileArray, usedTiles);
+                //newTile.CurrentColor = Tile.TileColor.Empty;
                 tileArray[x, y] = newTile;
             }
 
@@ -84,38 +87,55 @@ public class MapGenerator1 : MonoBehaviour
         return randomCoordinate;
     }
 
-
     public class Tile
     {
-        public enum CircleColor
-        {
-            Empty,
-            Red,
-            Blue,
-            Green
-        }
-        CircleColor currentColor;
+        //private GameObject tileQuad;
+        //public enum TileColor
+        //{
+        //    Empty,
+        //    Green,
+        //    Red
+        //}
+        //TileColor currentColor;
 
         Coordinate coordinate;
+        Tile[,] tileFamily;
+        List<Tile> usedTiles;
 
-        public Tile(Coordinate coordinate)
+        public Tile(Coordinate coordinate, Tile[,] tileFamily, List<Tile> usedTiles)
         {
             this.coordinate = coordinate;
+            this.tileFamily = tileFamily;
+            this.usedTiles = usedTiles;
         }
+        //public void AddToList()
+        //{
+        //    usedTiles.Add(this);
+        //}
 
-        public CircleColor CurrentColor
-        {
-            get
-            {
-                return currentColor;
-            }
-            set
-            {
-                currentColor = value;
-            }
-        }    
+        //public TileColor CurrentColor
+        //{
+        //    get
+        //    {
+        //        return currentColor;
+        //    }
+        //    set
+        //    {
+        //        currentColor = value;
+        //    }
+        //}
+        //public GameObject TileQuad
+        //{
+        //    get
+        //    {
+        //        return tileQuad;
+        //    }
+        //    set
+        //    {
+        //        tileQuad = value;
+        //    }
+        //}
     }
-
 
     public struct Coordinate
     {
