@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.IO;
 using System;
+using System.Resources;
+using System.Reflection;
+using UnityEngine.Serialization;
+using System.IO.Compression;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -23,7 +27,7 @@ public class MapGenerator : MonoBehaviour
     List<Tile> usedTiles = new List<Tile>();
 
     StreamReader stream_reader;
-    public TextAsset level_file;
+    TextAsset level_file;
     String level_file_text;
     List<String> map_strings;
 
@@ -40,13 +44,15 @@ public class MapGenerator : MonoBehaviour
         //if (random_level == 1)
         //{
 
-              level_file = Resources.Load("Level1.txt") as TextAsset;
-              level_file_text = level_file.text;
+               //level_file = Instantiate(Resources.Load("Level1", typeof(TextAsset)), Vector3.zero, Quaternion.identity) as TextAsset;
+              //level_file = Resources.Load("Level1") as TextAsset;
+              //level_file_text = level_file.text;
               //level_file_text = "Assets/Resources/Level1.txt";
+              stream_reader = new StreamReader(Application.dataPath + "/Resources/Level1.txt");
 
         //}
 
-        SetUpReadFromFile(level_file_text);
+        SetUpReadFromFile();
         SetUpCamera();
     }
     private void SetUpCamera()
@@ -54,12 +60,9 @@ public class MapGenerator : MonoBehaviour
         Camera.main.transform.position = new Vector3(mapSize.x / 2, mapSize.y / 2, Camera.main.transform.position.z);
     }
 
-    public void SetUpReadFromFile(String level_file)
+    public void SetUpReadFromFile()
     {
        map_strings = new List<String>();
-
-        stream_reader = new StreamReader(@level_file);
-
         while (!stream_reader.EndOfStream)
         {
             map_strings.Add(stream_reader.ReadLine());
