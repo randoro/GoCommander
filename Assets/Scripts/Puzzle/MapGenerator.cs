@@ -42,7 +42,7 @@ public class MapGenerator : MonoBehaviour
 
         //}
 
-        SetUpReadFromFile();
+        SetUpReadFromFile("puzzlelevel1");
         GenerateMap();
         SetUpCamera();
     }
@@ -51,11 +51,11 @@ public class MapGenerator : MonoBehaviour
         Camera.main.transform.position = new Vector3(mapSize.x / 2, mapSize.y / 2, Camera.main.transform.position.z);
     }
 
-    public void SetUpReadFromFile()
+    public void SetUpReadFromFile(String level_to_load)
     {
         map_strings = new List<String>();
 
-        TextAsset level_file = Resources.Load("puzzlelevel1") as TextAsset;
+        TextAsset level_file = Resources.Load(level_to_load) as TextAsset;
 
         String[] linesInFile = level_file.text.Split('\n');
 
