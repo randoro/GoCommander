@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.IO;
 using System;
+using System.Text;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -22,12 +23,8 @@ public class MapGenerator : MonoBehaviour
     Queue<Coordinate> circleCoordinates;
     List<Tile> usedTiles = new List<Tile>();
 
-    StreamReader stream_reader;
-    public TextAsset level_file;
-    String level_file_text;
+    //StreamReader stream_reader;
     List<String> map_strings;
-
-    string test = "x";
 
     void Start()
     {
@@ -40,13 +37,13 @@ public class MapGenerator : MonoBehaviour
         //if (random_level == 1)
         //{
 
-              level_file = Resources.Load("Level1.txt") as TextAsset;
-              level_file_text = level_file.text;
+              //level_file_path = level_file.text;
               //level_file_text = "Assets/Resources/Level1.txt";
 
         //}
 
-        SetUpReadFromFile(level_file_text);
+        SetUpReadFromFile();
+        GenerateMap();
         SetUpCamera();
     }
     private void SetUpCamera()
@@ -54,17 +51,19 @@ public class MapGenerator : MonoBehaviour
         Camera.main.transform.position = new Vector3(mapSize.x / 2, mapSize.y / 2, Camera.main.transform.position.z);
     }
 
-    public void SetUpReadFromFile(String level_file)
+    public void SetUpReadFromFile()
     {
-       map_strings = new List<String>();
+        map_strings = new List<String>();
 
-        stream_reader = new StreamReader(@level_file);
+        TextAsset level_file = Resources.Load("puzzlelevel1") as TextAsset;
 
-        while (!stream_reader.EndOfStream)
+        String[] linesInFile = level_file.text.Split('\n');
+
+        for (int i = 0; i < linesInFile.Length; i++)
         {
-            map_strings.Add(stream_reader.ReadLine());
+            map_strings.Add(linesInFile[i]);
         }
-        stream_reader.Close();
+
         map_strings.Reverse();
 
         mapSize.x = map_strings[0].Length;
@@ -72,8 +71,6 @@ public class MapGenerator : MonoBehaviour
 
         tileCoordinates = new List<Coordinate>();
         tileArray = new Tile[(int)mapSize.x, (int)mapSize.y];
-
-        GenerateMap();
     }
 
     private void GenerateMap()
@@ -82,12 +79,11 @@ public class MapGenerator : MonoBehaviour
         Transform mapHolder = new GameObject(holderName).transform;
         mapHolder.parent = this.transform;
 
-        for (int y = 0; y < map_strings.Count; y++)
-            for (int x = 0; x < map_strings[y].Length; x++)
+        for (int y = 0; y < mapSize.y; y++)
+            for (int x = 0; x < mapSize.x; x++)
             {
                 tileCoordinates.Add(new Coordinate(x, y));
                 Tile newTile = new Tile(new Coordinate(x, y), tileArray, usedTiles);
-                newTile.CurrentColor = Tile.CircleColor.Empty;
                 tileArray[x, y] = newTile;
 
                 Vector3 tilePos = CoordToVector(x, y);
@@ -249,6 +245,8 @@ public class MapGenerator : MonoBehaviour
             this.coordinate = coordinate;
             this.tileFamily = tileFamily;
             this.usedTiles = usedTiles;
+
+            currentColor = CircleColor.Empty;
         }
 
         public CircleColor CurrentColor
