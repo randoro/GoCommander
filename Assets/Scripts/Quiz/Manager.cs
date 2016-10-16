@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -32,6 +33,7 @@ public class Manager : MonoBehaviour {
         ReadAnswerID(fileAnswersID);
 
         //Debug.Log("Choice Selected: " + choiceSelected);
+        
     }
 
     // Update is called once per frame
@@ -45,7 +47,7 @@ public class Manager : MonoBehaviour {
         {
             GetComponent<TextMesh>().text = questions[randomQuestion];
 
-            //Debug.Log("RandomQuestionInt = " + randomQuestion);
+            Debug.Log("RandomQuestionInt = " + randomQuestion);
             //Debug.Log("RandomLineNumberInt = " + randomLineNumber);
             //Debug.Log("NrOfQuestions = " + nrOfQuestions);
             //Debug.Log("Answer: " + answersID[randomQuestion] + " SelectedAnswer: " + selectedAnswer);
@@ -98,5 +100,6 @@ public class Manager : MonoBehaviour {
             answersID[i] = answerIDLines[i];
         }
     }
+    
     
 }
