@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class MapGenerator1 : MonoBehaviour
 {
@@ -15,63 +16,94 @@ public class MapGenerator1 : MonoBehaviour
     public float gridLinePercent;
 
     public Tile[,] tileArray;
-    List<Tile> usedTiles;
+    public Tile startPoint;
+    public Tile otherStartPoint;
 
     public List<Coordinate> tileCoordinates;
     Queue<Coordinate> circleCoordinates;
+    List<String> map_strings;
 
-    void Start()
+    private void Awake()
     {
-        circleCount = Random.Range(5,15);
-        shuffleSeeed = Random.Range(0, 9999);
+        //circleCount = Random.Range(5,15);
+        //shuffleSeeed = Random.Range(0, 9999);
         //gridLinePercent = 0.3f;
-        usedTiles = new List<Tile>();
-
+        SetUpReadFromFile();
         GenerateMap();
+        SetUpCamera();
     }
 
-    public void GenerateMap()
+    private void SetUpCamera()
     {
-        tileCoordinates = new List<Coordinate>();
-        tileArray = new Tile[(int)mapSize.x, (int)mapSize.y];
+        Camera.main.transform.position = new Vector3(mapSize.x / 2, mapSize.y / 2, Camera.main.transform.position.z);
+    }
 
-        for (int x = 0; x < mapSize.x; x++)
-            for(int y = 0; y < mapSize.y; y++)
-            {
+    public void SetUpReadFromFile()
+    {
+        map_strings = new List<String>();
 
-                tileCoordinates.Add(new Coordinate(x, y));
-                Tile newTile = new Tile(new Coordinate(x, y), tileArray, usedTiles);
-                //newTile.CurrentColor = Tile.TileColor.Empty;
-                tileArray[x, y] = newTile;
-            }
+        TextAsset level_file = Resources.Load("memorylevel1") as TextAsset;
 
-        circleCoordinates = new Queue<Coordinate>(Utility.ShuffleArray(tileCoordinates.ToArray(), shuffleSeeed));
+        String[] linesInFile = level_file.text.Split('\n');
 
-        string holderName = "Generated Map";
-        if(transform.FindChild(holderName))
+        for (int i = 0; i < linesInFile.Length; i++)
         {
-            DestroyImmediate(transform.FindChild(holderName).gameObject);
+            map_strings.Add(linesInFile[i]);
         }
 
+        map_strings.Reverse();
+
+        mapSize.x = map_strings[0].Length;
+        mapSize.y = map_strings.Count;
+
+        tileCoordinates = new List<Coordinate>();
+        tileArray = new Tile[(int)mapSize.x, (int)mapSize.y];
+    }
+
+    private void GenerateMap()
+    {
+        string holderName = "Generated Map";
         Transform mapHolder = new GameObject(holderName).transform;
         mapHolder.parent = this.transform;
 
-        for(int x = 0; x < mapSize.x; x++)
-            for(int y = 0; y < mapSize.y; y++)
+        for (int y = 0; y < mapSize.y; y++)
+            for (int x = 0; x < mapSize.x; x++)
             {
-                Vector3 tilePos = CoordToVector(x, y);
-                Transform newTileInstance = Instantiate(tilePrefab, tilePos, Quaternion.Euler(Vector3.right)) as Transform;
-                newTileInstance.localScale = Vector3.one * (1 - gridLinePercent);
-                newTileInstance.parent = mapHolder;      
-            }
-        
-        for(int i = 0; i < circleCount; i++)
-        {
-            Coordinate randomizeCoord = GetRandomCoordinates();
-            Vector3 circlePos = CoordToVector(randomizeCoord.x, randomizeCoord.y);
-            Transform newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
+                tileCoordinates.Add(new Coordinate(x, y));
+                Tile newTile = new Tile(new Coordinate(x, y));
+                tileArray[x, y] = newTile;
 
-            newCircle.parent = mapHolder;
+                Vector3 tilePos = CoordToVector(x, y);
+                //Vector3 tilePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
+                Transform newTileInstance = Instantiate(tilePrefab, tilePos, Quaternion.Euler(Vector3.right)) as Transform;
+
+                newTileInstance.localScale = Vector3.one * (1 - gridLinePercent);
+                newTileInstance.parent = mapHolder;
+
+                DetermineTileStatus(x, y, mapHolder);
+            }
+    }
+    private void DetermineTileStatus(int x, int y, Transform mapHolder)
+    {
+        switch (map_strings[y][x])
+        {
+            case 'O':
+                Vector3 circlePos = CoordToVector(x, y);
+                Transform newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
+                newCircle.parent = mapHolder;
+
+                tileArray[x, y].Obstacle = true;
+                break;
+            case 'S':
+                if (startPoint == null)
+                {
+                    startPoint = tileArray[x, y];
+                }
+                else
+                {
+                    otherStartPoint = tileArray[x, y];
+                }
+                break;
         }
     }
 
@@ -89,52 +121,53 @@ public class MapGenerator1 : MonoBehaviour
 
     public class Tile
     {
-        //private GameObject tileQuad;
-        //public enum TileColor
-        //{
-        //    Empty,
-        //    Green,
-        //    Red
-        //}
-        //TileColor currentColor;
+        bool obstacle = false;
 
         Coordinate coordinate;
-        Tile[,] tileFamily;
-        List<Tile> usedTiles;
+        ColorTile colorTile;
 
-        public Tile(Coordinate coordinate, Tile[,] tileFamily, List<Tile> usedTiles)
+        public Tile(Coordinate coordinate)
         {
             this.coordinate = coordinate;
-            this.tileFamily = tileFamily;
-            this.usedTiles = usedTiles;
         }
-        //public void AddToList()
-        //{
-        //    usedTiles.Add(this);
-        //}
-
-        //public TileColor CurrentColor
-        //{
-        //    get
-        //    {
-        //        return currentColor;
-        //    }
-        //    set
-        //    {
-        //        currentColor = value;
-        //    }
-        //}
-        //public GameObject TileQuad
-        //{
-        //    get
-        //    {
-        //        return tileQuad;
-        //    }
-        //    set
-        //    {
-        //        tileQuad = value;
-        //    }
-        //}
+        public bool Obstacle
+        {
+            get
+            {
+                return obstacle;
+            }
+            set
+            {
+                obstacle = value;
+            }
+        }
+        public ColorTile ColorTile
+        {
+            get
+            {
+                return colorTile;
+            }
+            set
+            {
+                colorTile = value;
+            }
+        }
+        public void TilePressed()
+        {
+            colorTile.ChangeColor(Color.blue);
+        }
+        public void GoalIsReached()
+        {
+            colorTile.ChangeColor(Color.green);
+        }
+        public void ObstacleCollision()
+        {
+            colorTile.ChangeColor(Color.red);
+        }
+        public void TileReleased()
+        {
+            colorTile.ChangeColor(Color.white);
+        }
     }
 
     public struct Coordinate
