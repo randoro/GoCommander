@@ -5,49 +5,67 @@ using UnityEngine.EventSystems;
 public class CircleControl : MonoBehaviour
 {
 
-    public enum Type
-    {
-        Red = 0,
-        Blue = 1,
-        Green = 2
-    }
-
-    Type defaultType;
-
     Vector3 tilePosition;
     Vector3 touchPosition;
     Vector3 moveDirection;
     Vector3 offset;
-    Vector3 noScale;
     MapGenerator mapGenerator;
+    
     GameObject circleCopy;
     
     float speedRadius = 0;
     bool isDragging = false;
-    bool canMove = true;
-    float maxAmountOfMoves = 2;
-    public int amountofMoves;
+    //bool canMove = true;
+    int maxAmountOfMoves = 2;
+    int amountOfMoves;
     int x, y;
-
     void Start()
     {
-        amountofMoves = CalcMoveAmount(1.0f - transform.localScale.x);
         moveDirection = new Vector3(0, 0, 0);
-        noScale = new Vector3(0, 0, 0);
-        tilePosition = transform.position;
-        mapGenerator = FindObjectOfType<MapGenerator>();
 
-        System.Random random = new System.Random();
-        defaultType = ((Type)(random.Next(0, 4)));
+        tilePosition = transform.position;
+
+        mapGenerator = FindObjectOfType<MapGenerator>();
 
         x = (int)transform.position.x;
         y = (int)transform.position.y;
+
+        transform.localScale = DeterminedScale(mapGenerator.tileArray[x, y].InitialMoveDecrease);
+        //amountOfMoves = CalcMoveAmount(1.0f - transform.localScale.x);
+
+        BindToTile();
+        DetermineColor(mapGenerator.tileArray[x, y].CurrentColor);
     }
-    int CalcMoveAmount(float scaleDifference)
+    private Vector3 DeterminedScale(int InitialMoveDecrease)
     {
-        int scaleToInt = 5;
-        return (int)(maxAmountOfMoves - (scaleDifference * scaleToInt));
+        amountOfMoves = maxAmountOfMoves - InitialMoveDecrease;
+        return new Vector3(1, 1, 1) - new Vector3(0.2f, 0.2f, 0) * InitialMoveDecrease;
     }
+    public void DetermineColor(MapGenerator.Tile.CircleColor color)
+    {
+        if(color == MapGenerator.Tile.CircleColor.Red)
+        {
+            GetComponent<MeshRenderer>().material.color = Color.red;
+        }
+        else if (color == MapGenerator.Tile.CircleColor.Green)
+        {
+            GetComponent<MeshRenderer>().material.color = Color.green;
+        }
+        else if (color == MapGenerator.Tile.CircleColor.Blue)
+        {
+            GetComponent<MeshRenderer>().material.color = Color.blue;
+        }
+    }
+    private void BindToTile()
+    {
+        mapGenerator.tileArray[x, y].Circle = this;
+    }
+
+    //private int CalcMoveAmount(float scaleDifference)
+    //{
+    //    int scaleToInt = 5;
+    //    return (int)(maxAmountOfMoves - (scaleDifference * scaleToInt));
+    //}
 
     void Update()
     {
@@ -61,24 +79,19 @@ public class CircleControl : MonoBehaviour
 
                 if (!isDragging && 
                     WithinCircleRadius(realPosition, transform.position, GetComponent<CircleCollider2D>().radius) &&
-                    amountofMoves > 0)
+                    amountOfMoves > 0)
                 {
-                    circleCopy = this.gameObject;
-                    circleCopy.transform.localScale -= new Vector3(0.2f, 0.2f, 0.2f);
-                    Instantiate(circleCopy, transform.position, Quaternion.identity);
+                    circleCopy = (GameObject)Instantiate(gameObject, transform.position, Quaternion.identity);
+                    AddMoves(-1);
+                    //mapGenerator.tileArray[x, y].InitialMoveDecrease -= 1;
+                    //circleCopy.transform.localScale -= new Vector3(0.2f, 0.2f, 0.0f);
+                    //transform.localScale = circleCopy.transform.localScale;
+
+                    //transform.localScale -= new Vector3(0.2f, 0.2f, 0.0f);
+                    //amountOfMoves--;
 
                     offset = realPosition - transform.position;
-                    amountofMoves -= 1;
                     isDragging = true;
-
-                    //if ()
-                    //{
-                        
-                    //}
-                    //else
-                    //{
-                    //    canMove = false;
-                    //}
                 }
             }
             //Release
@@ -89,15 +102,23 @@ public class CircleControl : MonoBehaviour
                 int new_x = (int)transform.position.x;
                 int new_y = (int)transform.position.y;
 
-                if (WithinMapBounds(new_x, new_y) && CheckNeighbourTiles(new_x, new_y))
+                if (WithinMapBounds(new_x, new_y) && CheckNeighbourTiles(new_x, new_y) && mapGenerator.tileArray[new_x, new_y].CurrentColor != mapGenerator.tileArray[x, y].CurrentColor)
                 {
-                    tilePosition = mapGenerator.CoordToVector(x, y);
+                    tilePosition = mapGenerator.CoordToVector(new_x, new_y);
+                    mapGenerator.tileArray[new_x, new_y].UpdateTile(mapGenerator.tileArray[x, y].CurrentColor, this, mapGenerator.tileArray[x, y].InitialMoveDecrease);
+                    //mapGenerator.tileArray[new_x, new_y].InitialMoveDecrease = ;
+
+                    x = new_x;
+                    y = new_y;
                 }
-                else
+                else if(amountOfMoves < maxAmountOfMoves)
                 {
-                    Destroy(circleCopy);
-                    amountofMoves += 1;
-                    transform.localScale += new Vector3(0.2f, 0.2f, 0.2f);
+                    GameObject.Destroy(circleCopy);
+                    //mapGenerator.tileArray[x, y].InitialMoveDecrease += 1;
+
+                    //amountOfMoves++;
+                    //transform.localScale += new Vector3(0.2f, 0.2f, 0.0f);
+                    AddMoves(1);
                 }
 
                 speedRadius = Vector3.Distance(transform.position, tilePosition);
@@ -119,10 +140,16 @@ public class CircleControl : MonoBehaviour
                 SnapToGrid();
             }
     }
+    private void AddMoves(int addition)
+    {
+        mapGenerator.tileArray[x, y].InitialMoveDecrease -= addition;
+        amountOfMoves += addition;
+        transform.localScale += new Vector3(0.2f, 0.2f, 0.0f) * addition;
+    }
 
     private void SnapToGrid()
     {
-        float distance_right_now = Vector3.Distance(circleCopy.transform.position, tilePosition);
+        float distance_right_now = Vector3.Distance(transform.position, tilePosition);
         transform.position += moveDirection * (distance_right_now / speedRadius) * 0.3f;
     }
 
@@ -130,12 +157,10 @@ public class CircleControl : MonoBehaviour
     {
         if (new_x == x + 1 && new_y == y || new_x == x - 1 && new_y == y)
         {
-            x = new_x;
             return true;
         }
-        if (new_y == y + 1 && new_x == x || new_y == y - 1 && new_x == x)
+        else if (new_y == y + 1 && new_x == x || new_y == y - 1 && new_x == x)
         {
-            y = new_y;
             return true;
         }
         return false;

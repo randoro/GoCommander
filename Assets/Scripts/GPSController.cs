@@ -28,7 +28,7 @@ public class GPSController : MonoBehaviour
 
     IEnumerator RefreshLoop(float waitTime)
     {
-        while (true)
+        while (autoRefresh)
         {
             StopCoroutine(FetchLocation());
             StartCoroutine(FetchLocation());
@@ -82,12 +82,18 @@ public class GPSController : MonoBehaviour
             longitude = Input.location.lastData.longitude;
             map.centerLocation.latitude = Input.location.lastData.latitude;
             map.centerLocation.longitude = Input.location.lastData.longitude;
-            print("lat:"+latitude+" long:"+longitude);
 
             map.Refresh();
         }
 
         // Stop service if there is no need to query location updates continuously
         //Input.location.Stop();
+    }
+
+
+    public void StopRefreshing()
+    {
+        autoRefresh = false;
+        StopCoroutine(RefreshLoop(refreshDelay));
     }
 }

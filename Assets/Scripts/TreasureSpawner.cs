@@ -9,7 +9,7 @@ public class TreasureSpawner : MonoBehaviour {
 
 
     public bool autoRefresh = true;
-    public int refreshDelay = 20;
+    public int refreshDelay = 5;
     public GameObject prefab;
 
 
@@ -20,6 +20,9 @@ public class TreasureSpawner : MonoBehaviour {
     private GameObject map;
     private GoogleMap gMap;
 
+    private float lastTime = 0;
+    private bool fetched;
+
     // Use this for initialization
     void Start () {
 
@@ -28,104 +31,86 @@ public class TreasureSpawner : MonoBehaviour {
 
         treasureList = new List<GameObject>();
         fetchedList = new List<Treasure>();
-
-        if (autoRefresh)
-        {
-            StartCoroutine(RefreshLoop(refreshDelay));
-        }
+        
+        StartCoroutine(UpdateTreasures());
     }
 
-    IEnumerator RefreshLoop(float waitTime)
-    {
-        while (true)
-        {
-            StopCoroutine(UpdateTreasures());
-            StartCoroutine(UpdateTreasures());
-            yield return new WaitForSeconds(waitTime);
-        }
 
+
+    void Update()
+    {
+        
     }
 
     IEnumerator UpdateTreasures()
     {
-        ////For testing
-        //GameObject yourPlayer = GameObject.FindGameObjectWithTag("Player");
-        //Vector2 playerPos = new Vector2(yourPlayer.transform.position.x, yourPlayer.transform.position.z);
-        //int offset = 32;
-        //Vector2 mapCorner = new Vector2(playerPos.x - offset, playerPos.y - offset);
-        ////Five random locations
-        //fetchedList.Add(new Vector2(Random.value * (offset + offset) + mapCorner.x, Random.value * (offset + offset) + mapCorner.y));
-        //fetchedList.Add(new Vector2(Random.value * (offset + offset) + mapCorner.x, Random.value * (offset + offset) + mapCorner.y));
-        //fetchedList.Add(new Vector2(Random.value * (offset + offset) + mapCorner.x, Random.value * (offset + offset) + mapCorner.y));
-        //fetchedList.Add(new Vector2(Random.value * (offset + offset) + mapCorner.x, Random.value * (offset + offset) + mapCorner.y));
-        //fetchedList.Add(new Vector2(Random.value * (offset + offset) + mapCorner.x, Random.value * (offset + offset) + mapCorner.y));
-
-        StartCoroutine(GetTreasures());
-
-        print(fetchedList.Count);
-
-        for (int i = treasureList.Count; i-- > 0;)
+        while (true)
         {
+            StartCoroutine(GetTreasures());
 
-            TreasureHolder tempTres = treasureList[i].gameObject.GetComponent<TreasureHolder>();
-            print("x => x.lat.Equals("+tempTres.treasure.lat+") && x.lng.Equals("+tempTres.treasure.lng+"))");
-
-            if (!fetchedList.Exists(x => x.lat.Equals(tempTres.treasure.lat) && x.lng.Equals(tempTres.treasure.lng)))
+            while (!fetched)
             {
-                //removing old objects
-                Destroy(treasureList[i].gameObject);
-                treasureList.RemoveAt(i);
+                yield return null;
+            }
+            
+
+            //fetchedList.Add(new Treasure(0, 55.590137, 12.995480));
+
+            for (int i = treasureList.Count; i-- > 0;)
+            {
+
+                TreasureHolder tempTres = treasureList[i].gameObject.GetComponent<TreasureHolder>();
+
+                if (!fetchedList.Exists(x => x.lat.Equals(tempTres.treasure.lat) && x.lng.Equals(tempTres.treasure.lng)))
+                {
+                    //removing old objects
+                    Destroy(treasureList[i].gameObject);
+                    treasureList.RemoveAt(i);
+
+                }
+                else
+                {
+                    //removing copies
+                    fetchedList.Remove(
+                        fetchedList.Find(x => x.lat.Equals(tempTres.treasure.lat) && x.lng.Equals(tempTres.treasure.lng)));
+                }
+            }
+            //print(coordScaleToGameScale(180));
+
+
+            foreach (Treasure v in fetchedList)
+            {
+                //adding the new
+                GameObject newPlayer =
+                    (GameObject)
+                        Instantiate(prefab,
+                            new Vector3(coordScaleToGameScale(v.lng - gMap.centerLocation.longitude, 180.0f, 10.0f),
+                                0.0f, coordScaleToGameScale(v.lat - gMap.centerLocation.latitude, 90.0f, 9.0f)),
+                            Quaternion.Euler(new Vector3(0, Random.value*360, 0)));
+                newPlayer.transform.parent = gameObject.transform;
+                newPlayer.transform.localScale = new Vector3(4f, 4f, 4f);
+                newPlayer.gameObject.GetComponent<TreasureHolder>().treasure = v;
+                treasureList.Add(newPlayer);
 
             }
-            else
-            {
-                //removing copies
-                fetchedList.Remove(fetchedList.Find(x => x.lat.Equals(tempTres.treasure.lat) && x.lng.Equals(tempTres.treasure.lng)));
-            }
+
+
+            fetched = false;
+            yield return new WaitForSeconds(refreshDelay);
         }
-        //print(coordScaleToGameScale(180));
         
-
-        foreach (Treasure v in fetchedList)
-        {
-            //adding the new
-
-            print("v.lat "+v.lat+" latitude"+ gMap.centerLocation.latitude);
-            print("v.lng " + v.lng + " longitude" + gMap.centerLocation.longitude);
-
-            GameObject newPlayer = (GameObject)Instantiate(prefab, new Vector3(coordScaleToGameScale(v.lng - gMap.centerLocation.longitude), 0.0f, coordScaleToGameScale(v.lat - gMap.centerLocation.latitude)), Quaternion.Euler(new Vector3(0, Random.value * 360, 0)));
-            newPlayer.transform.parent = gameObject.transform;
-            newPlayer.transform.localScale = new Vector3(6, 6, 6);
-            newPlayer.gameObject.GetComponent<TreasureHolder>().treasure = v;
-            treasureList.Add(newPlayer);
-
-        }
-
-
-
-        
-
-
-
-        yield return null;
     }
 
 
 
 
 
-    private float coordScaleToGameScale(float inFloat)
+    private float coordScaleToGameScale(float inFloat, float total, float multi)
     {
-        float returnfloat = (inFloat/180.0f) * (32.0f * (float)Math.Pow(2, gMap.zoom));
+        float returnfloat = (inFloat/total) * (multi * (float)Math.Pow(2, gMap.zoom));
         return returnfloat;
     }
-
-
-    static double NthRoot(double A, int N)
-    {
-        return Math.Pow(A, 1.0 / N);
-    }
-
+    
 
     IEnumerator GetTreasures()
     {
@@ -140,6 +125,8 @@ public class TreasureSpawner : MonoBehaviour {
             nav = result.Split(';');
         }
 
+        fetchedList.Clear();
+
         for (int i = 0; i < nav.Length - 1; i++)
         {
             int id = int.Parse(GetDataValue(nav[i], "ID:"));
@@ -148,7 +135,7 @@ public class TreasureSpawner : MonoBehaviour {
 
             fetchedList.Add(new Treasure(id, lat, lng));
         }
-        //print(fetchedList.Count);
+        fetched = true;
     }
 
     string GetDataValue(string data, string index)
@@ -157,5 +144,18 @@ public class TreasureSpawner : MonoBehaviour {
         if (value.Contains("|"))
             value = value.Remove(value.IndexOf("|"));
         return value;
+    }
+
+    public void UpdateTreasureLocations()
+    {
+        for (int i = treasureList.Count; i-- > 0;)
+        {
+            TreasureHolder tempTres = treasureList[i].gameObject.GetComponent<TreasureHolder>();
+            Treasure v = tempTres.treasure;
+            treasureList[i].transform.position =
+                new Vector3(coordScaleToGameScale(v.lng - gMap.centerLocation.longitude, 180.0f, 10.0f),
+                    0.0f, coordScaleToGameScale(v.lat - gMap.centerLocation.latitude, 90.0f, 9.0f));
+
+        }
     }
 }
