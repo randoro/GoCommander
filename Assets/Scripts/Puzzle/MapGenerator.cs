@@ -23,9 +23,11 @@ public class MapGenerator : MonoBehaviour
     List<Tile> usedTiles = new List<Tile>();
 
     StreamReader stream_reader;
-    TextAsset level_file;
+    public TextAsset level_file;
     String level_file_text;
     List<String> map_strings;
+
+    string test = "x";
 
     void Start()
     {
@@ -38,8 +40,7 @@ public class MapGenerator : MonoBehaviour
         //if (random_level == 1)
         //{
 
-        
-              level_file = Resources.Load<TextAsset>("Level1.txt");
+              level_file = Resources.Load("Level1.txt") as TextAsset;
               level_file_text = level_file.text;
               //level_file_text = "Assets/Resources/Level1.txt";
 

@@ -1,10 +1,13 @@
 fileFormatVersion: 2
 guid: 9813e61945eb22b49a7417568f491b65
-timeCreated: 1475655374
+timeCreated: 1476615450
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - tilePrefab: {instanceID: 0}
+  - circlePrefab: {instanceID: 0}
+  - level_file: {fileID: 4900000, guid: e9cc535ce691d104e882684e4dcb0746, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
