@@ -24,6 +24,8 @@ public class Manager : MonoBehaviour {
     private List<string> lines, answerlines, answerIDLines;
     private string line, answerline;
 
+    private TextMesh[] options;
+
     // Use this for initialization
     private void Start () {
 
@@ -40,8 +42,13 @@ public class Manager : MonoBehaviour {
         ReadAnswers(fileAnswers);
         ReadAnswerID(fileAnswersID);
 
+        options[0] = Text1.firstOption;
+        options[1] = Text2.secondOption;
+        options[2] = Text3.thirdOption;
+        options[3] = Text4.fourthOption;
+
         //Debug.Log("Choice Selected: " + choiceSelected);
-        
+
     }
 
     // Update is called once per frame
@@ -49,40 +56,28 @@ public class Manager : MonoBehaviour {
     {
         if (randomQuestion == -1)
         {
-            randomQuestion = Random.Range(0, 3);
+            randomQuestion = Random.Range(0, 2);
         }
         if (randomQuestion > -1)
         {
             GetComponent<TextMesh>().text = questions[randomQuestion];
-
-            //Debug.Log("RandomQuestionInt = " + randomQuestion);
-            //Debug.Log("RandomLineNumberInt = " + randomLineNumber);
-            //Debug.Log("NrOfQuestions = " + nrOfQuestions);
-            //Debug.Log("Answer: " + answersID[randomQuestion] + " SelectedAnswer: " + selectedAnswer);
         }
-
-        //Debug.Log(selectedAnswer);
-        //Debug.Log(choiceSelected);
-        //Debug.Log(questions[0]);
-        //Debug.Log(answersID[0]);
 
         if (choiceSelected == "y")
         {
             choiceSelected = "n";
             //Debug.Log("Answer: " + answersID[randomQuestion] + " SelectedAnswer: " + selectedAnswer);
-
             //Debug.Log(answersID[randomQuestion].Equals(selectedAnswer));
 
             if (answersID[randomQuestion].Contains(selectedAnswer))
             {
-                //Debug.Log("Answer: " + answersID[randomQuestion] + " SelectedAnswer: " + selectedAnswer);
                 resultObj.GetComponent<TextMesh>().text = "Correct";
                 resultObj.GetComponent<TextMesh>().color = Color.green;
 
                 StartCoroutine(delayTime());
-                
                 SceneManager.LoadScene("mainScene");
 
+                //Debug.Log("Answer: " + answersID[randomQuestion] + " SelectedAnswer: " + selectedAnswer);
                 //Debug.Log("Correct");
             }
             else
@@ -91,14 +86,16 @@ public class Manager : MonoBehaviour {
                 resultObj.GetComponent<TextMesh>().color = Color.red;
                 //Debug.Log("Answer: " + answersID[randomQuestion] + " SelectedAnswer: " + selectedAnswer);
                 //Debug.Log("False");
+
+                StartCoroutine(delayTime());
+                SceneManager.LoadScene("mainScene");
             }
             
         }
     }
-
     IEnumerator delayTime()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(5000);
     }
 
     void ReadQuestions(string _filePath)
