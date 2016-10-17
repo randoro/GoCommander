@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System;
 using System.Text;
+using UnityEngine.SceneManagement;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -46,6 +47,8 @@ public class MapGenerator : MonoBehaviour
         GenerateMap();
         SetUpCamera();
     }
+
+
     private void SetUpCamera()
     {
         Camera.main.transform.position = new Vector3(mapSize.x / 2, mapSize.y / 2, Camera.main.transform.position.z);
@@ -221,12 +224,22 @@ public class MapGenerator : MonoBehaviour
         return randomCoordinate;
     }
 
+    IEnumerator delayTime()
+    {
+        yield return new WaitForSeconds(5);
+    }
+    public void TestWin()
+    {
+        StartCoroutine(delayTime());
+        SceneManager.LoadScene("mainScene");
+    }
+
 
     public class Tile
     {
         public enum CircleColor
         {
-            //Empty,
+            Empty,
             Red,
             Blue,
             Green
@@ -245,6 +258,8 @@ public class MapGenerator : MonoBehaviour
             this.coordinate = coordinate;
             this.tileFamily = tileFamily;
             this.usedTiles = usedTiles;
+
+            currentColor = CircleColor.Empty;
         }
 
         public CircleColor CurrentColor
@@ -300,9 +315,14 @@ public class MapGenerator : MonoBehaviour
 
                 GameObject.Destroy(activeCircle.gameObject);
 
-                DidWeWin();
+                if (DidWeWin())
+                {
+                    //StartCoroutine(delayTime());
+                    SceneManager.LoadScene("mainScene");
+                }
             }
         }
+
         public void ChangeNeighbourChain(CircleColor newColor, Tile parent)
         {
             usedTiles.Add(this); // We need to MOVE ON - we don't wanna come back here and make the whole thing explode
@@ -381,7 +401,7 @@ public class MapGenerator : MonoBehaviour
             {
                 for (int j = 0; j < tileFamily.GetLength(1); j++)
                 {
-                    if (tileFamily[i, j].currentColor != null)
+                    if (tileFamily[i, j].currentColor != CircleColor.Empty)
                     {
                         firstColoredTile = tileFamily[i, j];
                         breakAllLoops = true;
@@ -400,7 +420,7 @@ public class MapGenerator : MonoBehaviour
             {
                 for (int j = 0; j < tileFamily.GetLength(1); j++)
                 {
-                    if (tileFamily[i, j].currentColor != null && tileFamily[i, j].currentColor != firstColoredTile.currentColor)
+                    if (tileFamily[i, j].currentColor != CircleColor.Empty && tileFamily[i, j].currentColor != firstColoredTile.currentColor)
                     {
                         breakAllLoops = true;
                         break;
