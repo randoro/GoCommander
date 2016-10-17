@@ -111,7 +111,7 @@ public class CircleControl : MonoBehaviour
                     x = new_x;
                     y = new_y;
                 }
-                else if(amountOfMoves < maxAmountOfMoves)
+                else
                 {
                     GameObject.Destroy(circleCopy);
                     //mapGenerator.tileArray[x, y].InitialMoveDecrease += 1;
