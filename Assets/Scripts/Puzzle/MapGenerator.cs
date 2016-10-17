@@ -226,7 +226,7 @@ public class MapGenerator : MonoBehaviour
     {
         public enum CircleColor
         {
-            Empty,
+            //Empty,
             Red,
             Blue,
             Green
@@ -245,8 +245,6 @@ public class MapGenerator : MonoBehaviour
             this.coordinate = coordinate;
             this.tileFamily = tileFamily;
             this.usedTiles = usedTiles;
-
-            currentColor = CircleColor.Empty;
         }
 
         public CircleColor CurrentColor
@@ -301,6 +299,8 @@ public class MapGenerator : MonoBehaviour
                 CurrentColor = newColor;
 
                 GameObject.Destroy(activeCircle.gameObject);
+
+                DidWeWin();
             }
         }
         public void ChangeNeighbourChain(CircleColor newColor, Tile parent)
@@ -370,6 +370,52 @@ public class MapGenerator : MonoBehaviour
             {
                 usedTiles.Clear();
             }
+        }
+
+        private bool DidWeWin()
+        {
+            Tile firstColoredTile;
+            bool breakAllLoops = false;
+
+            for (int i = 0; i < tileFamily.GetLength(0); i++)
+            {
+                for (int j = 0; j < tileFamily.GetLength(1); j++)
+                {
+                    if (tileFamily[i, j].currentColor != null)
+                    {
+                        Tile firstTile = tileFamily[i, j];
+                        breakAllLoops = true;
+                        break;
+                    }
+                }
+                if (breakAllLoops)
+                {
+                    break;
+                }
+            }
+
+            breakAllLoops = false;
+
+            for (int i = 0; i < tileFamily.GetLength(0); i++)
+            {
+                for (int j = 0; j < tileFamily.GetLength(1); j++)
+                {
+                    if (tileFamily[i, j].currentColor != null && tileFamily[i, j].currentColor != firstColoredTile.currentColor)
+                    {
+                        breakAllLoops = true;
+                        break;
+                    }
+                    else if (tileFamily[i, j] == tileFamily[tileFamily.GetLength(0) - 1, tileFamily.GetLength(1) - 1])
+                    {
+                        return true;
+                    }
+                }
+                if (breakAllLoops)
+                {
+                    break;
+                }
+            }
+            return false;
         }
     }
 
