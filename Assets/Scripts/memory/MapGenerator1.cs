@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.SceneManagement;
+using System.IO;
+using UnityEngine.UI;
 
 public class MapGenerator1 : MonoBehaviour
 {
@@ -14,6 +17,8 @@ public class MapGenerator1 : MonoBehaviour
 
     [Range(0,1)]
     public float gridLinePercent;
+
+    public static bool win = false;
 
     public Tile[,] tileArray;
     public Tile startPoint;
@@ -31,6 +36,21 @@ public class MapGenerator1 : MonoBehaviour
         SetUpReadFromFile();
         GenerateMap();
         SetUpCamera();
+    }
+
+    void Update()
+    {
+        if (win == true)
+        {
+            StartCoroutine(delayTime());
+                
+            SceneManager.LoadScene("mainScene");
+        }
+    }
+
+    IEnumerator delayTime()
+    {
+        yield return new WaitForSeconds(5);
     }
 
     private void SetUpCamera()
@@ -159,6 +179,9 @@ public class MapGenerator1 : MonoBehaviour
         public void GoalIsReached()
         {
             colorTile.ChangeColor(Color.green);
+
+            MapGenerator1.win = true;
+
         }
         public void ObstacleCollision()
         {
@@ -168,7 +191,14 @@ public class MapGenerator1 : MonoBehaviour
         {
             colorTile.ChangeColor(Color.white);
         }
+
+        IEnumerator delayTime()
+        {
+            yield return new WaitForSeconds(5);
+        }
     }
+
+   
 
     public struct Coordinate
     {

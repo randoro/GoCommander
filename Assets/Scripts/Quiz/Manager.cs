@@ -3,12 +3,15 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour {
 
     private string[] questions, answers, answersID;
 
     public Transform resultObj;
+
+    int score = 0;
 
     public static string selectedAnswer;
 
@@ -76,6 +79,10 @@ public class Manager : MonoBehaviour {
                 resultObj.GetComponent<TextMesh>().text = "Correct";
                 resultObj.GetComponent<TextMesh>().color = Color.green;
 
+                StartCoroutine(delayTime());
+                
+                SceneManager.LoadScene("mainScene");
+
                 //Debug.Log("Correct");
             }
             else
@@ -87,6 +94,11 @@ public class Manager : MonoBehaviour {
             }
             
         }
+    }
+
+    IEnumerator delayTime()
+    {
+        yield return new WaitForSeconds(5);
     }
 
     void ReadQuestions(string _filePath)
