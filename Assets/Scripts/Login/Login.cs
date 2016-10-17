@@ -26,6 +26,7 @@ public class Login : MonoBehaviour {
             StartTimer();
             StartCoroutine(LoginUser(Username, Password));
             StopTimer();
+            SceneManager.LoadScene("mainScene");
         }
     }
 
