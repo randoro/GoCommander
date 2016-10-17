@@ -13,7 +13,6 @@ public class TreasureSpawner : MonoBehaviour {
     public GameObject prefab;
 
 
-
     private string[] nav;
     public List<GameObject> treasureList;
     List<Treasure> fetchedList;
@@ -81,16 +80,13 @@ public class TreasureSpawner : MonoBehaviour {
             foreach (Treasure v in fetchedList)
             {
                 //adding the new
-                GameObject newPlayer =
-                    (GameObject)
-                        Instantiate(prefab,
+                TreasureHolder newTreasureHolder = ((GameObject)Instantiate(prefab,
                             new Vector3(coordScaleToGameScale(v.lng - gMap.centerLocation.longitude, 180.0f, 10.0f),
                                 0.0f, coordScaleToGameScale(v.lat - gMap.centerLocation.latitude, 90.0f, 9.0f)),
-                            Quaternion.Euler(new Vector3(0, Random.value*360, 0)));
-                newPlayer.transform.parent = gameObject.transform;
-                newPlayer.transform.localScale = new Vector3(4f, 4f, 4f);
-                newPlayer.gameObject.GetComponent<TreasureHolder>().treasure = v;
-                treasureList.Add(newPlayer);
+                            Quaternion.Euler(new Vector3(0, Random.value * 360, 0)))).GetComponent<TreasureHolder>();
+                newTreasureHolder.Initialize(v.id, v.lat, v.lng);
+                newTreasureHolder.gameObject.transform.localScale = new Vector3(4f, 4f, 4f);
+                treasureList.Add(newTreasureHolder.gameObject);
 
             }
 
@@ -100,8 +96,7 @@ public class TreasureSpawner : MonoBehaviour {
         }
         
     }
-
-
+    
 
 
 

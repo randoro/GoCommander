@@ -9,4 +9,14 @@ public class TreasureHolder : MonoBehaviour
 	void Start () {
 	
 	}
+
+    void Update()
+    {
+        
+    }
+
+    public void Initialize(int id, double lat, double lng)
+    {
+        treasure = new Treasure(id, lat, lng);
+    }
 }
