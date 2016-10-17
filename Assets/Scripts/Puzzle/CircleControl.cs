@@ -119,6 +119,7 @@ public class CircleControl : MonoBehaviour
                     //amountOfMoves++;
                     //transform.localScale += new Vector3(0.2f, 0.2f, 0.0f);
                     AddMoves(1);
+                    BindToTile();
                 }
 
                 speedRadius = Vector3.Distance(transform.position, tilePosition);
