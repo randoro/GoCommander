@@ -374,7 +374,7 @@ public class MapGenerator : MonoBehaviour
 
         private bool DidWeWin()
         {
-            Tile firstColoredTile;
+            Tile firstColoredTile = this;
             bool breakAllLoops = false;
 
             for (int i = 0; i < tileFamily.GetLength(0); i++)
@@ -383,7 +383,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     if (tileFamily[i, j].currentColor != null)
                     {
-                        Tile firstTile = tileFamily[i, j];
+                        firstColoredTile = tileFamily[i, j];
                         breakAllLoops = true;
                         break;
                     }
