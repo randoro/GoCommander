@@ -37,16 +37,16 @@ public class PlayerSpawner : MonoBehaviour {
     {
         //For testing
         List<Vector2> fetchedList = new List<Vector2>();
-        GameObject yourPlayer = GameObject.FindGameObjectWithTag("Player");
-        Vector2 playerPos = new Vector2(yourPlayer.transform.position.x, yourPlayer.transform.position.z);
-        int offset = 32;
-        Vector2 mapCorner = new Vector2(playerPos.x - offset, playerPos.y - offset);
-        //Five random locations
-        fetchedList.Add(new Vector2(Random.value * (offset + offset) + mapCorner.x, Random.value * (offset + offset) + mapCorner.y));
-        fetchedList.Add(new Vector2(Random.value * (offset + offset) + mapCorner.x, Random.value * (offset + offset) + mapCorner.y));
-        fetchedList.Add(new Vector2(Random.value * (offset + offset) + mapCorner.x, Random.value * (offset + offset) + mapCorner.y));
-        fetchedList.Add(new Vector2(Random.value * (offset + offset) + mapCorner.x, Random.value * (offset + offset) + mapCorner.y));
-        fetchedList.Add(new Vector2(Random.value * (offset + offset) + mapCorner.x, Random.value * (offset + offset) + mapCorner.y));
+        //GameObject yourPlayer = GameObject.FindGameObjectWithTag("Player");
+        //Vector2 playerPos = new Vector2(yourPlayer.transform.position.x, yourPlayer.transform.position.z);
+        //int offset = 32;
+        //Vector2 mapCorner = new Vector2(playerPos.x - offset, playerPos.y - offset);
+        ////Five random locations
+        //fetchedList.Add(new Vector2(Random.value * (offset + offset) + mapCorner.x, Random.value * (offset + offset) + mapCorner.y));
+        //fetchedList.Add(new Vector2(Random.value * (offset + offset) + mapCorner.x, Random.value * (offset + offset) + mapCorner.y));
+        //fetchedList.Add(new Vector2(Random.value * (offset + offset) + mapCorner.x, Random.value * (offset + offset) + mapCorner.y));
+        //fetchedList.Add(new Vector2(Random.value * (offset + offset) + mapCorner.x, Random.value * (offset + offset) + mapCorner.y));
+        //fetchedList.Add(new Vector2(Random.value * (offset + offset) + mapCorner.x, Random.value * (offset + offset) + mapCorner.y));
 
 
         for (int i = playerList.Count; i-- > 0;)
