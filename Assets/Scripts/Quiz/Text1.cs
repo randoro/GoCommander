@@ -7,10 +7,10 @@ public class Text1 : MonoBehaviour {
     
     string[] firstChoices;
 
-    private string[] lines;
+    private List<string> lines = new List<string>();
     public static int randomLineNumber;
     private string line;
-    private string file = "Assets/TextFiles/firstOptions.txt";
+    private string file = "firstOptions";
 
     // Use this for initialization
     void Start()
@@ -38,9 +38,17 @@ public class Text1 : MonoBehaviour {
 
     private void ReadFirstOptions(string _filePath)
     {
-        lines = File.ReadAllLines(_filePath);
+        TextAsset level_file = Resources.Load(_filePath) as TextAsset;
 
-        for (int i = 0; i < lines.Length; i++)
+        string[] linesInFile = level_file.text.Split('\n');
+
+
+        for (int i = 0; i < linesInFile.Length; i++)
+        {
+            lines.Add(linesInFile[i]);
+        }
+
+        for (int i = 0; i < lines.Count; i++)
         {
             firstChoices[i] = lines[i];
         }

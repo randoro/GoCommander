@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 
 public class Text2 : MonoBehaviour {
-    
+
     private string[] secondChoices;
 
-    private string[] lines;
+    private List<string> lines = new List<string>();
     private string line;
-    private string file = "Assets/TextFiles/secondOptions.txt";
+    private string file = "secondOptions";
 
     // Use this for initialization
     void Start()
@@ -37,11 +37,21 @@ public class Text2 : MonoBehaviour {
 
     void ReadSecondOptions(string _filePath)
     {
-        lines = File.ReadAllLines(_filePath);
+        TextAsset level_file = Resources.Load(_filePath) as TextAsset;
 
-        for (int i = 0; i < lines.Length; i++)
+        string[] linesInFile = level_file.text.Split('\n');
+
+
+        for (int i = 0; i < linesInFile.Length; i++)
+        {
+            lines.Add(linesInFile[i]);
+        }
+
+        for (int i = 0; i < lines.Count; i++)
         {
             secondChoices[i] = lines[i];
+
+            //Debug.Log(secondChoices[0]);
         }
     }
 }
