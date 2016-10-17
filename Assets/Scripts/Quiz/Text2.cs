@@ -11,6 +11,8 @@ public class Text2 : MonoBehaviour {
     private string line;
     private string file = "secondOptions";
 
+    public static TextMesh secondOption;
+
     // Use this for initialization
     void Start()
     {
@@ -24,7 +26,8 @@ public class Text2 : MonoBehaviour {
     {
         if (Manager.randomQuestion > -1)
         {
-            GetComponent<TextMesh>().text = secondChoices[Manager.randomQuestion];
+            secondOption = GetComponent<TextMesh>();
+            secondOption.text = secondChoices[Manager.randomQuestion];
             //Debug.Log("Option 2: " + GetComponent<TextMesh>().text);
         }
     }
