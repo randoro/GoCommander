@@ -9,6 +9,6 @@ public class OnCollision : MonoBehaviour {
     void OnCollisionEnter(Collision collision)
     {
         print("Collision Detected");
-        SceneManager.LoadScene("Quiz");
+        SceneManager.LoadScene("MinigameMemory");
     }
 }
