@@ -26,6 +26,7 @@ public class Login : MonoBehaviour {
             StartTimer();
             StartCoroutine(LoginUser(Username, Password));
             StopTimer();
+            GPSController.username = Username;
             SceneManager.LoadScene("mainScene");
         }
     }

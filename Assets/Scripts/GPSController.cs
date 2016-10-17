@@ -11,6 +11,7 @@ public class GPSController : MonoBehaviour
     public static float latitude;
     public static float longitude;
     private GoogleMap map;
+    public static string username;
 
 
 
@@ -75,13 +76,15 @@ public class GPSController : MonoBehaviour
             // Access granted and location value could be retrieved
             Debug.LogError("Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude + " " +
                   Input.location.lastData.altitude + " " + Input.location.lastData.horizontalAccuracy + " " +
-                  Input.location.lastData.timestamp);
+                  Input.location.lastData.timestamp);          
 
             map.centerLocation.address = "";
             latitude = Input.location.lastData.latitude;
             longitude = Input.location.lastData.longitude;
             map.centerLocation.latitude = Input.location.lastData.latitude;
             map.centerLocation.longitude = Input.location.lastData.longitude;
+
+            StartCoroutine(SendPlayerGPS());
 
             map.Refresh();
         }
@@ -95,5 +98,18 @@ public class GPSController : MonoBehaviour
     {
         autoRefresh = false;
         StopCoroutine(RefreshLoop(refreshDelay));
+    }
+
+    IEnumerator SendPlayerGPS()
+    {
+        string sendGPSURL = "https://ddwap.mah.se/AC3992/getGPS.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", username);
+        form.AddField("userLatPost", latitude.ToString());
+        form.AddField("userLongPost", longitude.ToString());
+
+        WWW www = new WWW(sendGPSURL, form);
+        yield return www;
     }
 }
