@@ -29,13 +29,13 @@ public class MinigameStarter : MonoBehaviour {
                         Treasure t = th.treasure;
                         int id = t.id;
 
-                        id = Random.Range(0, 2);
+                        id = Random.Range(0, 3);
 
                         switch (id)
                         {
                             case 0:
                                 print("loading new scene");
-                                //Application.LoadLevel("MinigameMemory");
+                                Application.LoadLevel("MinigameMemory");
                                 break;
                             case 1:
                                 print("loading new scene");
