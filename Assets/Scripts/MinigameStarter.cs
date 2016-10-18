@@ -19,42 +19,38 @@ public class MinigameStarter : MonoBehaviour {
 
             if (Physics.Raycast(ray, out hit))
             {
-                print("found1");
 
                 if (hit.transform.tag == "Treasure")
                 {
-                    print("found2");
                     GameObject treasure = hit.transform.root.gameObject;
-                    print("found3");
                     TreasureHolder th = treasure.GetComponent<TreasureHolder>();
-                    print("found4");
-                    Treasure t = th.treasure;
-                    print("found5");
-                    int id = t.id;
-
-                    switch (id)
+                    if (th.canBeClicked)
                     {
-                        case 0:
-                            print("loading new scene");
-                            //Application.LoadLevel("MinigameMemory");
-                            break;
-                        case 1:
-                            print("loading new scene");
-                            Application.LoadLevel("MinigamePuzzle");
-                            break;
-                        case 2:
-                            print("loading new scene");
-                            Application.LoadLevel("MinigameQuiz");
-                            break;
-                        default:
-                            print("loading new scene");
-                            Application.LoadLevel("MinigameMemory");
-                            break;
-                    }
-                }
-                else
-                {
+                        Treasure t = th.treasure;
+                        int id = t.id;
 
+                        id = Random.Range(0, 2);
+
+                        switch (id)
+                        {
+                            case 0:
+                                print("loading new scene");
+                                //Application.LoadLevel("MinigameMemory");
+                                break;
+                            case 1:
+                                print("loading new scene");
+                                Application.LoadLevel("MinigamePuzzle");
+                                break;
+                            case 2:
+                                print("loading new scene");
+                                Application.LoadLevel("MinigameQuiz");
+                                break;
+                            default:
+                                print("loading new scene");
+                                Application.LoadLevel("MinigameMemory");
+                                break;
+                        }
+                    }
                 }
             }
         }
