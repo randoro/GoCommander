@@ -12,7 +12,10 @@ public class MapGenerator : MonoBehaviour
     public Transform tilePrefab;
     public Transform circlePrefab;
     public Vector2 mapSize;
-    
+
+    private string[] puzzle;
+    private string level;
+
     public int shuffleSeeed;
     //int circleCount;
 
@@ -29,6 +32,10 @@ public class MapGenerator : MonoBehaviour
 
     void Start()
     {
+        // !!! Denna metod skall läsas så tidigt som möjligt !!!
+        StartCoroutine(GetPuzzles());
+
+
         //circleCount = Random.Range(5,15);
         //shuffleSeeed = Random.Range(0, 9999);
         gridLinePercent = 0.3f;
@@ -46,6 +53,38 @@ public class MapGenerator : MonoBehaviour
         SetUpReadFromFile("puzzlelevel1");
         GenerateMap();
         SetUpCamera();
+    }
+
+    IEnumerator GetPuzzles()
+    {
+        string puzzleURL = "https://ddwap.mah.se/AC3992/puzzlelevel.php";
+
+        WWW www = new WWW(puzzleURL);
+        yield return www;
+        string result = www.text;
+
+        if (result != null)
+        {
+            puzzle = result.Split(';');
+        }
+
+        for (int i = 0; i < puzzle.Length - 1; i++)
+        {
+            int id = int.Parse(GetDataValue(puzzle[i], "ID:"));
+            level = GetDataValue(puzzle[i], "Level:");
+
+            print(level);
+
+            //listPuzzle.Add(new PuzzleList(id, level));
+        }
+    }
+
+    string GetDataValue(string data, string index)
+    {
+        string value = data.Substring(data.IndexOf(index) + index.Length);
+        if (value.Contains("|"))
+            value = value.Remove(value.IndexOf("|"));
+        return value;
     }
 
 
