@@ -28,14 +28,52 @@ public class MapGenerator1 : MonoBehaviour
     Queue<Coordinate> circleCoordinates;
     List<String> map_strings;
 
+    private string[] puzzle;
+    private string level;
+
     private void Awake()
     {
+        // !!! Denna metod skall läsas så tidigt som möjligt !!!
+        StartCoroutine(GetMemory());
+
         //circleCount = Random.Range(5,15);
         //shuffleSeeed = Random.Range(0, 9999);
         //gridLinePercent = 0.3f;
         SetUpReadFromFile();
         GenerateMap();
         SetUpCamera();
+    }
+
+    IEnumerator GetMemory()
+    {
+        string puzzleURL = "https://ddwap.mah.se/AC3992/memorylevel.php";
+
+        WWW www = new WWW(puzzleURL);
+        yield return www;
+        string result = www.text;
+
+        if (result != null)
+        {
+            puzzle = result.Split(';');
+        }
+
+        for (int i = 0; i < puzzle.Length - 1; i++)
+        {
+            int id = int.Parse(GetDataValue(puzzle[i], "ID:"));
+            level = GetDataValue(puzzle[i], "Level:");
+
+            print(level);
+
+            //listPuzzle.Add(new PuzzleList(id, level));
+        }
+    }
+
+    string GetDataValue(string data, string index)
+    {
+        string value = data.Substring(data.IndexOf(index) + index.Length);
+        if (value.Contains("|"))
+            value = value.Remove(value.IndexOf("|"));
+        return value;
     }
 
     void Update()
