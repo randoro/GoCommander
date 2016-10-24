@@ -6,6 +6,7 @@ using System.IO;
 using System;
 using System.Text;
 using UnityEngine.SceneManagement;
+using System.Threading;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class MapGenerator : MonoBehaviour
 
     private string[] puzzle;
     private string level;
+    private bool getGoingMammaFuckah = false;
 
     public int shuffleSeeed;
     //int circleCount;
@@ -30,12 +32,8 @@ public class MapGenerator : MonoBehaviour
     //StreamReader stream_reader;
     List<String> map_strings;
 
-    void Start()
+    IEnumerator Start()
     {
-        // !!! Denna metod skall läsas så tidigt som möjligt !!!
-        StartCoroutine(GetPuzzles());
-
-
         //circleCount = Random.Range(5,15);
         //shuffleSeeed = Random.Range(0, 9999);
         gridLinePercent = 0.3f;
@@ -49,8 +47,9 @@ public class MapGenerator : MonoBehaviour
               //level_file_text = "Assets/Resources/Level1.txt";
 
         //}
+        yield return StartCoroutine(GetPuzzles());
 
-        SetUpReadFromFile("puzzlelevel1");
+        SetUpReadFromFile();
         GenerateMap();
         SetUpCamera();
     }
@@ -73,10 +72,11 @@ public class MapGenerator : MonoBehaviour
             int id = int.Parse(GetDataValue(puzzle[i], "ID:"));
             level = GetDataValue(puzzle[i], "Level:");
 
-            print(level);
+            //print(level);
 
             //listPuzzle.Add(new PuzzleList(id, level));
         }
+        level = level.Replace(',', '\n');
     }
 
     string GetDataValue(string data, string index)
@@ -93,13 +93,11 @@ public class MapGenerator : MonoBehaviour
         Camera.main.transform.position = new Vector3(mapSize.x / 2, mapSize.y / 2, Camera.main.transform.position.z);
     }
 
-    public void SetUpReadFromFile(String level_to_load)
+    public void SetUpReadFromFile()
     {
         map_strings = new List<String>();
 
-        TextAsset level_file = Resources.Load(level_to_load) as TextAsset;
-
-        String[] linesInFile = level_file.text.Split('\n');
+        String[] linesInFile = level.Split('\n');
 
         for (int i = 0; i < linesInFile.Length; i++)
         {
