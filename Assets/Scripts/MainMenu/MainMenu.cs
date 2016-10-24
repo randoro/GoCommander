@@ -60,4 +60,14 @@ public class MainMenu : MonoBehaviour {
     {
         current_phase = Phase.RankedMatch;
     }
+
+    public void HowToPlayClick()
+    {
+        current_phase = Phase.HowToPlay;
+    }
+
+    public void ExitClick()
+    {
+        Application.Quit();
+    }
 }
