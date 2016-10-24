@@ -18,18 +18,16 @@ public class Text3 : MonoBehaviour {
     void Start()
     {
         thirdChoices = new string[4];
-
-        ReadThirdOptions(file);
     }
 
     // Update is called once per frame
     void Update()
     {
+        ReadThirdOptions();
+
         if (Manager.randomQuestion > -1)
         {
-            thirdOption = GetComponent<TextMesh>();
-            thirdOption.text = thirdChoices[Manager.randomQuestion];
-            //Debug.Log("Option 3: " + GetComponent<TextMesh>().text);
+            GetComponent<TextMesh>().text = thirdChoices[Manager.randomQuestion];
         }
     }
 
@@ -39,21 +37,11 @@ public class Text3 : MonoBehaviour {
         Manager.choiceSelected = "y";
     }
 
-    private void ReadThirdOptions(string _filePath)
+    private void ReadThirdOptions()
     {
-        TextAsset level_file = Resources.Load(_filePath) as TextAsset;
-
-        string[] linesInFile = level_file.text.Split('\n');
-
-
-        for (int i = 0; i < linesInFile.Length; i++)
+        for (int i = 0; i < Manager.listQuiz.Count; i++)
         {
-            lines.Add(linesInFile[i]);
-        }
-
-        for (int i = 0; i < lines.Count; i++)
-        {
-            thirdChoices[i] = lines[i];
+            thirdChoices[i] = Manager.listQuiz[i].alt3;
         }
     }
 }

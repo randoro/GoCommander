@@ -17,18 +17,16 @@ public class Text2 : MonoBehaviour {
     void Start()
     {
         secondChoices = new string[4];
-
-        ReadSecondOptions(file);
     }
 
     // Update is called once per frame
     void Update()
     {
+        ReadSecondOptions();
+
         if (Manager.randomQuestion > -1)
         {
-            secondOption = GetComponent<TextMesh>();
-            secondOption.text = secondChoices[Manager.randomQuestion];
-            //Debug.Log("Option 2: " + GetComponent<TextMesh>().text);
+            GetComponent<TextMesh>().text = secondChoices[Manager.randomQuestion];
         }
     }
 
@@ -38,23 +36,11 @@ public class Text2 : MonoBehaviour {
         Manager.choiceSelected = "y";
     }
 
-    void ReadSecondOptions(string _filePath)
+    void ReadSecondOptions()
     {
-        TextAsset level_file = Resources.Load(_filePath) as TextAsset;
-
-        string[] linesInFile = level_file.text.Split('\n');
-
-
-        for (int i = 0; i < linesInFile.Length; i++)
+        for (int i = 0; i < Manager.listQuiz.Count; i++)
         {
-            lines.Add(linesInFile[i]);
-        }
-
-        for (int i = 0; i < lines.Count; i++)
-        {
-            secondChoices[i] = lines[i];
-
-            //Debug.Log(secondChoices[0]);
+            secondChoices[i] = Manager.listQuiz[i].alt2;
         }
     }
 }

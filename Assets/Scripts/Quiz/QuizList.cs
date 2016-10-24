@@ -5,19 +5,22 @@ using System.Collections.Generic;
 
 public class QuizList
 {
-
     public string city;
-    public string wrong1;
-    public string wrong2;
-    public string wrong3;
-    public string correct;
+    public string question;
+    public string alt1;
+    public string alt2;
+    public string alt3;
+    public string alt4;
+    public string answer;
 
-    public QuizList(string city, string wrong1, string wrong2, string wrong3, string correct)
+    public QuizList(string city, string question, string alt1, string alt2, string alt3, string alt4, string answer)
     {
         this.city = city;
-        this.wrong1 = wrong1;
-        this.wrong2 = wrong2;
-        this.wrong3 = wrong3;
-        this.correct = correct;
+        this.question = question;
+        this.alt1 = alt1;
+        this.alt2 = alt2;
+        this.alt3 = alt3;
+        this.alt4 = alt4;
+        this.answer = answer;
     }
 }

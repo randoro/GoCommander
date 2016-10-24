@@ -18,18 +18,16 @@ public class Text4 : MonoBehaviour {
     void Start()
     {
         fourthChoices = new string[4];
-
-        ReadFourthOptions(file);
     }
 
     // Update is called once per frame
     void Update()
     {
+        ReadFourthOptions();
+
         if (Manager.randomQuestion > -1)
         {
-            fourthOption = GetComponent<TextMesh>();
-            fourthOption.text = fourthChoices[Manager.randomQuestion];
-            //Debug.Log("Option 4: " + GetComponent<TextMesh>().text);
+            GetComponent<TextMesh>().text = fourthChoices[Manager.randomQuestion];
         }
     }
 
@@ -39,21 +37,11 @@ public class Text4 : MonoBehaviour {
         Manager.choiceSelected = "y";
     }
 
-    private void ReadFourthOptions(string _filePath)
+    private void ReadFourthOptions()
     {
-        TextAsset level_file = Resources.Load(_filePath) as TextAsset;
-
-        string[] linesInFile = level_file.text.Split('\n');
-
-
-        for (int i = 0; i < linesInFile.Length; i++)
+        for (int i = 0; i < Manager.listQuiz.Count; i++)
         {
-            lines.Add(linesInFile[i]);
-        }
-
-        for (int i = 0; i < lines.Count; i++)
-        {
-            fourthChoices[i] = lines[i];
+            fourthChoices[i] = Manager.listQuiz[i].alt4;
         }
     }
 

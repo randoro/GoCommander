@@ -20,17 +20,16 @@ public class Text1 : MonoBehaviour {
     void Start()
     {
         firstChoices = new string[4];
-
-        ReadFirstOptions(file);
     }
 
     // Update is called once per frame
     void Update()
     {
+        ReadFirstOptions();
+
         if (Manager.randomQuestion > -1)
         {
-            firstOption = GetComponent<TextMesh>();
-            firstOption.text = firstChoices[Manager.randomQuestion];
+            GetComponent<TextMesh>().text = firstChoices[Manager.randomQuestion];
         }
     }
 
@@ -40,21 +39,11 @@ public class Text1 : MonoBehaviour {
         Manager.choiceSelected = "y";
     }
 
-    private void ReadFirstOptions(string _filePath)
+    private void ReadFirstOptions()
     {
-        TextAsset level_file = Resources.Load(_filePath) as TextAsset;
-
-        string[] linesInFile = level_file.text.Split('\n');
-
-
-        for (int i = 0; i < linesInFile.Length; i++)
+        for (int i = 0; i < Manager.listQuiz.Count; i++)
         {
-            lines.Add(linesInFile[i]);
-        }
-
-        for (int i = 0; i < lines.Count; i++)
-        {
-            firstChoices[i] = lines[i];
+            firstChoices[i] = Manager.listQuiz[i].alt1;
         }
     }
 }
