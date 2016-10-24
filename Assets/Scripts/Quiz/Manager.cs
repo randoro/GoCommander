@@ -7,6 +7,9 @@ using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour {
 
+    private string[] quiz;
+    private List<QuizList> listQuiz = new List<QuizList>();
+
     private string[] questions, answers, answersID;
 
     public Transform resultObj;
@@ -29,6 +32,8 @@ public class Manager : MonoBehaviour {
     // Use this for initialization
     private void Start () {
 
+        StartCoroutine(GetQuizes());
+
         lines = new List<string>();
         answerlines = new List<string>();
         answerIDLines = new List<string>();
@@ -49,6 +54,42 @@ public class Manager : MonoBehaviour {
 
         //Debug.Log("Choice Selected: " + choiceSelected);
 
+    }
+
+    IEnumerator GetQuizes()
+    {
+        string quizURL = "https://ddwap.mah.se/AC3992/getQuiz.php";
+
+        WWW www = new WWW(quizURL);
+        yield return www;
+        string result = www.text;
+
+        if (result != null)
+        {
+            quiz = result.Split(';');
+        }
+
+        for (int i = 0; i < quiz.Length - 1; i++)
+        {
+            string city = GetDataValue(quiz[i], "City:");
+            string wrong1 = GetDataValue(quiz[i], "Wrong_1:");
+            string wrong2 = GetDataValue(quiz[i], "Wrong_2:");
+            string wrong3 = GetDataValue(quiz[i], "Wrong_3:");
+            string correct = GetDataValue(quiz[i], "Correct:");
+
+            print(city + " " + wrong1 + " " + wrong2 + " " + wrong3 + " " + correct);
+
+            listQuiz.Add(new QuizList(city, wrong1, wrong2, wrong3, correct));
+        }
+        print(listQuiz.Count);
+    }
+
+    string GetDataValue(string data, string index)
+    {
+        string value = data.Substring(data.IndexOf(index) + index.Length);
+        if (value.Contains("|"))
+            value = value.Remove(value.IndexOf("|"));
+        return value;
     }
 
     // Update is called once per frame
