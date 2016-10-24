@@ -11,7 +11,7 @@ public class MinigameStarter : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended))
+        if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
         {
             print("found0");
             RaycastHit hit;
@@ -54,6 +54,10 @@ public class MinigameStarter : MonoBehaviour {
                 }
             }
         }
+
+
+        
+        
 
     }
 }
