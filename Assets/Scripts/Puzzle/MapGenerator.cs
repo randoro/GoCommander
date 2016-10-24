@@ -16,7 +16,6 @@ public class MapGenerator : MonoBehaviour
 
     private string[] puzzle;
     private string level;
-    private bool getGoingMammaFuckah = false;
 
     public int shuffleSeeed;
     //int circleCount;

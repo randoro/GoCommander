@@ -16,16 +16,17 @@ public class TouchController : MonoBehaviour {
     MapGenerator1.Tile startPoint1, startPoint2;
 
 	// Use this for initialization
-	void Start () 
+	void Start ()
     {
         mapGenerator1 = FindObjectOfType<MapGenerator1>();
-        tileArray = mapGenerator1.tileArray;
-        pressedTiles = new List<MapGenerator1.Tile>();
+        //yield return mapGenerator1.done;
+        //tileArray = mapGenerator1.tileArray;
+        //pressedTiles = new List<MapGenerator1.Tile>();
 
-        startPoint1 = mapGenerator1.startPoint;
-        startPoint2 = mapGenerator1.otherStartPoint;
+        //startPoint1 = mapGenerator1.startPoint;
+        //startPoint2 = mapGenerator1.otherStartPoint;
 
-        SetStartPointColor();
+        //SetStartPointColor();
 
         oldRealPos = new Vector3(0, 0, 0);
 	}
@@ -39,6 +40,17 @@ public class TouchController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
+        if(MapGenerator1.finished)
+        {
+            print(MapGenerator1.finished.ToString());
+            tileArray = mapGenerator1.tileArray;
+            pressedTiles = new List<MapGenerator1.Tile>();
+
+            startPoint1 = mapGenerator1.startPoint;
+            startPoint2 = mapGenerator1.otherStartPoint;
+
+            SetStartPointColor();
+        }
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
             touchPosition = Input.GetTouch(0).position;

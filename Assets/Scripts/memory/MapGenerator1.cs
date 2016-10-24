@@ -11,6 +11,9 @@ public class MapGenerator1 : MonoBehaviour
     public Transform tilePrefab;
     public Transform circlePrefab;
     public Vector2 mapSize;
+
+    private String[] memoryLevels;
+    private String level;
     
     public int shuffleSeeed;
     int circleCount;
@@ -28,13 +31,12 @@ public class MapGenerator1 : MonoBehaviour
     Queue<Coordinate> circleCoordinates;
     List<String> map_strings;
 
-    private string[] puzzle;
-    private string level;
+    public static bool finished = false;
 
-    private void Awake()
+    IEnumerator Start()
     {
         // !!! Denna metod skall läsas så tidigt som möjligt !!!
-        StartCoroutine(GetMemory());
+        yield return StartCoroutine(GetMemory());
 
         //circleCount = Random.Range(5,15);
         //shuffleSeeed = Random.Range(0, 9999);
@@ -46,24 +48,22 @@ public class MapGenerator1 : MonoBehaviour
 
     IEnumerator GetMemory()
     {
-        string puzzleURL = "https://ddwap.mah.se/AC3992/memorylevel.php";
+        string memoryURL = "https://ddwap.mah.se/AC3992/memorylevel.php";
 
-        WWW www = new WWW(puzzleURL);
+        WWW www = new WWW(memoryURL);
         yield return www;
         string result = www.text;
 
         if (result != null)
         {
-            puzzle = result.Split(';');
+            memoryLevels = result.Split(';');
         }
 
-        for (int i = 0; i < puzzle.Length - 1; i++)
+        for (int i = 0; i < memoryLevels.Length - 1; i++)
         {
-            int id = int.Parse(GetDataValue(puzzle[i], "ID:"));
-            level = GetDataValue(puzzle[i], "Level:");
-
+            int id = int.Parse(GetDataValue(memoryLevels[i], "ID:"));
+            level = GetDataValue(memoryLevels[i], "Level:");
             print(level);
-
             //listPuzzle.Add(new PuzzleList(id, level));
         }
     }
@@ -81,7 +81,7 @@ public class MapGenerator1 : MonoBehaviour
         if (win == true)
         {
             StartCoroutine(delayTime());
-                
+
             SceneManager.LoadScene("mainScene");
         }
     }
@@ -94,15 +94,18 @@ public class MapGenerator1 : MonoBehaviour
     private void SetUpCamera()
     {
         Camera.main.transform.position = new Vector3(mapSize.x / 2, mapSize.y / 2, Camera.main.transform.position.z);
+        finished = true;
     }
 
     public void SetUpReadFromFile()
     {
         map_strings = new List<String>();
 
-        TextAsset level_file = Resources.Load("memorylevel1") as TextAsset;
+        level = level.Replace(",", "\n");
 
-        String[] linesInFile = level_file.text.Split('\n');
+        //TextAsset level_file = Resources.Load("memorylevel1") as TextAsset;
+
+        String[] linesInFile = level.Split('\n');
 
         for (int i = 0; i < linesInFile.Length; i++)
         {
@@ -230,10 +233,10 @@ public class MapGenerator1 : MonoBehaviour
             colorTile.ChangeColor(Color.white);
         }
 
-        IEnumerator delayTime()
-        {
-            yield return new WaitForSeconds(5);
-        }
+        //IEnumerator delayTime()
+        //{
+        //    yield return new WaitForSeconds(5);
+        //}
     }
 
    
