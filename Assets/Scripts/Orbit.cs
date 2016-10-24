@@ -26,15 +26,15 @@ public class Orbit : MonoBehaviour {
 
     void LateUpdate()
     {
-        //if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
-        //{
-        //    // Get movement of the finger since last frame
-        //    Vector2 touchDeltaPosition = Input.GetTouch(0).deltaPosition;
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
+        {
+            // Get movement of the finger since last frame
+            Vector2 touchDeltaPosition = Input.GetTouch(0).deltaPosition;
 
-        //    offset = Quaternion.AngleAxis(touchDeltaPosition.x * turnSpeed, Vector3.up) * offset;
-        //    transform.position = player.position + offset;
-        //    transform.LookAt(player.position);
-        //}
+            offset = Quaternion.AngleAxis(touchDeltaPosition.x * turnSpeed, Vector3.up) * offset;
+            transform.position = player.position + offset;
+            transform.LookAt(player.position);
+        }
 
         // If there are two touches on the device...
         if (Input.touchCount == 2)
@@ -99,7 +99,7 @@ public class Orbit : MonoBehaviour {
             //Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Mathf.Clamp(Camera.main.transform.position.z, -20.0f, 20.0f));
             //}
         }
-        
+
 
         //Vector3 cameraRelative = transform.InverseTransformVector(transform.localPosition);
         //cameraRelative = new Vector3(cameraRelative.x, cameraRelative.y, Mathf.Clamp(cameraRelative.z, -20.0f, 20.0f));
@@ -114,12 +114,12 @@ public class Orbit : MonoBehaviour {
         //For debugging purposes
 #if UNITY_EDITOR
 
-        //if (Input.GetMouseButton(0))
-        //{
-        //    offset = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * turnSpeed, Vector3.up) * offset;
-        //    transform.position = player.position + offset;
-        //    transform.LookAt(player.position);
-        //}
+        if (Input.GetMouseButton(0))
+        {
+            offset = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * turnSpeed, Vector3.up) * offset;
+            transform.position = player.position + offset;
+            transform.LookAt(player.position);
+        }
 
 #endif
     }
