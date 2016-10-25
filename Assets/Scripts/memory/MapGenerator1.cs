@@ -14,11 +14,16 @@ public class MapGenerator1 : MonoBehaviour
 
     private String[] memoryLevels;
     private String level;
-    
+    public Text Thetext;
     public int shuffleSeeed;
     int circleCount;
+    //tiden man har på sig att klara spelet
+   private int starttime;
+    //tid som är kvar
+    private float timeleft;
+    public int showtime;
 
-    [Range(0,1)]
+  [Range(0, 1)]
     public float gridLinePercent;
 
     public static bool win = false;
@@ -44,7 +49,16 @@ public class MapGenerator1 : MonoBehaviour
         SetUpReadFromFile();
         GenerateMap();
         SetUpCamera();
-    }
+        starttime = 45;
+      timeleft = starttime;
+        //  Thetext=GetComponent<Text>()as Text;
+
+
+
+
+
+
+}
 
     IEnumerator GetMemory()
     {
@@ -78,12 +92,26 @@ public class MapGenerator1 : MonoBehaviour
 
     void Update()
     {
+     
         if (win == true)
         {
             StartCoroutine(delayTime());
 
             SceneManager.LoadScene("mainScene");
         }
+        if (timeleft < -1)
+
+        {
+            Debug.Log("lose");
+            StartCoroutine(delayTime());
+
+            SceneManager.LoadScene("mainScene");
+        }
+        timeleft = timeleft - Time.deltaTime;
+
+        // Debug.Log(timeleft);
+        showtime = (int)timeleft;
+        Thetext.text = showtime.ToString("");
     }
 
     IEnumerator delayTime()
@@ -239,7 +267,7 @@ public class MapGenerator1 : MonoBehaviour
         //}
     }
 
-   
+
 
     public struct Coordinate
     {
