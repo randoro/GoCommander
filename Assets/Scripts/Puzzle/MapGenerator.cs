@@ -7,6 +7,7 @@ using System;
 using System.Text;
 using UnityEngine.SceneManagement;
 using System.Threading;
+using UnityEngine.UI;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -30,6 +31,14 @@ public class MapGenerator : MonoBehaviour
 
     //StreamReader stream_reader;
     List<String> map_strings;
+    /// <summary>
+    /// efter det här tidsvariabler
+    /// </summary>
+    /// <returns></returns>
+    public Text Thetext;
+    private int starttime;
+    private float timeleft;
+    public int showtime;
 
     IEnumerator Start()
     {
@@ -51,8 +60,27 @@ public class MapGenerator : MonoBehaviour
         SetUpReadFromFile();
         GenerateMap();
         SetUpCamera();
-    }
 
+        //tid
+        starttime = 100;
+        timeleft = starttime;
+    }
+    void Update()
+    {
+        if (timeleft < -1)
+
+        {
+            Debug.Log("lose");
+            StartCoroutine(delayTime());
+
+            SceneManager.LoadScene("mainScene");
+        }
+        timeleft = timeleft - Time.deltaTime;
+
+        // Debug.Log(timeleft);
+        showtime = (int)timeleft;
+        Thetext.text = showtime.ToString("");
+    }
     IEnumerator GetPuzzles()
     {
         string puzzleURL = "https://ddwap.mah.se/AC3992/puzzlelevel.php";

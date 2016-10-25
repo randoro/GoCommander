@@ -51,7 +51,7 @@ public class MapGenerator1 : MonoBehaviour
         SetUpCamera();
         starttime = 45;
       timeleft = starttime;
-        //  Thetext=GetComponent<Text>()as Text;
+    
 
 
 
