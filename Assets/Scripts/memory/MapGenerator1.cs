@@ -50,14 +50,7 @@ public class MapGenerator1 : MonoBehaviour
         GenerateMap();
         SetUpCamera();
         starttime = 45;
-      timeleft = starttime;
-    
-
-
-
-
-
-
+        timeleft = starttime;
 }
 
     IEnumerator GetMemory()
@@ -77,7 +70,7 @@ public class MapGenerator1 : MonoBehaviour
         {
             int id = int.Parse(GetDataValue(memoryLevels[i], "ID:"));
             level = GetDataValue(memoryLevels[i], "Level:");
-            print(level);
+            //print(level);
             //listPuzzle.Add(new PuzzleList(id, level));
         }
     }
@@ -130,6 +123,8 @@ public class MapGenerator1 : MonoBehaviour
         map_strings = new List<String>();
 
         level = level.Replace(",", "\n");
+
+        print(level);
 
         //TextAsset level_file = Resources.Load("memorylevel1") as TextAsset;
 
