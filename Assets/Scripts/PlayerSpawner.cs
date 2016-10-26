@@ -101,11 +101,12 @@ public class PlayerSpawner : MonoBehaviour {
 
     IEnumerator GetPlayers()
     {
-        string treasureURL = "https://ddwap.mah.se/AC3992/get_player_locations.php";
+        string playerURL = "https://ddwap.mah.se/AC3992/get_player_locations.php";
 
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", GoogleMap.username);
 
-
-        WWW www = new WWW(treasureURL);
+        WWW www = new WWW(playerURL, form);
         yield return www;
         string result = www.text;
 
