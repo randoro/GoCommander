@@ -137,7 +137,7 @@ public class PlayerSpawner : MonoBehaviour {
         return value;
     }
 
-    public void UpdateTreasureLocations()
+    public void UpdatePlayerLocations()
     {
         for (int i = playerList.Count; i-- > 0; )
         {

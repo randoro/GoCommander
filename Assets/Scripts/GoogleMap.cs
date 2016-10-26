@@ -105,7 +105,10 @@ public class GoogleMap : MonoBehaviour {
 
         StartCoroutine(SendPlayerGPS());
         TreasureSpawner ts = GameObject.FindGameObjectWithTag("TreasureSpawner").GetComponent<TreasureSpawner>();
+        PlayerSpawner ps = GameObject.FindGameObjectWithTag("PlayerSpawner").GetComponent<PlayerSpawner>();
+        
         ts.UpdateTreasureLocations();
+        ps.UpdatePlayerLocations();
 
         if (!generated)
         {
