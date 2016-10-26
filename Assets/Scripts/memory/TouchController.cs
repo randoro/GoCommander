@@ -50,6 +50,8 @@ public class TouchController : MonoBehaviour {
             startPoint2 = mapGenerator1.otherStartPoint;
 
             SetStartPointColor();
+
+            MapGenerator1.finished = false;
         }
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
