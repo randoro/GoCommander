@@ -103,12 +103,13 @@ public class GoogleMap : MonoBehaviour {
             GetComponent<Renderer>().material.mainTexture = tex;
         }
 
-        StartCoroutine(SendPlayerGPS());
         TreasureSpawner ts = GameObject.FindGameObjectWithTag("TreasureSpawner").GetComponent<TreasureSpawner>();
         PlayerSpawner ps = GameObject.FindGameObjectWithTag("PlayerSpawner").GetComponent<PlayerSpawner>();
         
         ts.UpdateTreasureLocations();
         ps.UpdatePlayerLocations();
+
+        StartCoroutine(SendPlayerGPS());
 
         if (!generated)
         {
