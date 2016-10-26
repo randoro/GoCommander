@@ -26,7 +26,7 @@ public class GoogleMap : MonoBehaviour {
 
     void Start()
     {
-        Refresh();
+        //Refresh();
     }
 
     public void Refresh()
