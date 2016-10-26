@@ -83,7 +83,7 @@ public class TreasureSpawner : MonoBehaviour {
                 TreasureHolder newTreasureHolder = ((GameObject)Instantiate(prefab,
                             new Vector3(coordScaleToGameScale(v.lng - gMap.centerLocation.longitude, 180.0f, 10.0f),
                                 0.0f, coordScaleToGameScale(v.lat - gMap.centerLocation.latitude, 90.0f, 9.0f)),
-                            Quaternion.Euler(new Vector3(0, Random.value * 360, 0)))).GetComponent<TreasureHolder>();
+                            Quaternion.Euler(new Vector3(0, UnityEngine.Random.value * 360, 0)))).GetComponent<TreasureHolder>();
                 newTreasureHolder.Initialize(v.id, v.lat, v.lng);
                 newTreasureHolder.gameObject.transform.localScale = new Vector3(4f, 4f, 4f);
                 treasureList.Add(newTreasureHolder.gameObject);

@@ -20,6 +20,7 @@ public class GoogleMap : MonoBehaviour {
     public Color landscapeColor = Color.green;
     public Color roadColor = Color.white;
     public Color waterColor = Color.blue;
+    public static string username;
 
     void Start()
     {
@@ -30,6 +31,19 @@ public class GoogleMap : MonoBehaviour {
     {
         StopCoroutine(_Refresh());
         StartCoroutine(_Refresh());
+    }
+
+    IEnumerator SendPlayerGPS()
+    {
+        string sendGPSURL = "https://ddwap.mah.se/AC3992/get_gps.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", username);
+        form.AddField("userLatPost", centerLocation.latitude.ToString());
+        form.AddField("userLongPost", centerLocation.longitude.ToString());
+
+        WWW www = new WWW(sendGPSURL, form);
+        yield return www;
     }
 
     IEnumerator _Refresh()
@@ -87,6 +101,7 @@ public class GoogleMap : MonoBehaviour {
             GetComponent<Renderer>().material.mainTexture = tex;
         }
 
+        StartCoroutine(SendPlayerGPS());
         GameObject.FindGameObjectWithTag("TreasureSpawner").GetComponent<TreasureSpawner>().UpdateTreasureLocations();
 
 
