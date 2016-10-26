@@ -76,13 +76,13 @@ public class GPSController : MonoBehaviour
             // Access granted and location value could be retrieved
             Debug.LogError("Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude + " " +
                   Input.location.lastData.altitude + " " + Input.location.lastData.horizontalAccuracy + " " +
-                  Input.location.lastData.timestamp);          
+                  Input.location.lastData.timestamp);
 
-            map.centerLocation.address = "";
+            GoogleMap.centerLocation.address = "";
             latitude = Input.location.lastData.latitude;
             longitude = Input.location.lastData.longitude;
-            map.centerLocation.latitude = Input.location.lastData.latitude;
-            map.centerLocation.longitude = Input.location.lastData.longitude;
+            GoogleMap.centerLocation.latitude = Input.location.lastData.latitude;
+            GoogleMap.centerLocation.longitude = Input.location.lastData.longitude;
 
             
 

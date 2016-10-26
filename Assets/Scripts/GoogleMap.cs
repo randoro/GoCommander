@@ -12,7 +12,7 @@ public class GoogleMap : MonoBehaviour {
         Hybrid
     }
     
-    public GoogleMapLocation centerLocation;
+    public static GoogleMapLocation centerLocation = new GoogleMapLocation();
     public int zoom = 16;
     public MapType mapType;
     public int size = 640;
@@ -21,6 +21,8 @@ public class GoogleMap : MonoBehaviour {
     public Color roadColor = Color.white;
     public Color waterColor = Color.blue;
     public static string username;
+
+    private bool generated;
 
     void Start()
     {
@@ -102,7 +104,14 @@ public class GoogleMap : MonoBehaviour {
         }
 
         StartCoroutine(SendPlayerGPS());
-        GameObject.FindGameObjectWithTag("TreasureSpawner").GetComponent<TreasureSpawner>().UpdateTreasureLocations();
+        TreasureSpawner ts = GameObject.FindGameObjectWithTag("TreasureSpawner").GetComponent<TreasureSpawner>();
+        ts.UpdateTreasureLocations();
+
+        if (!generated)
+        {
+            generated = true;
+            ts.GenerateNewTreasures();
+        }
 
 
     }

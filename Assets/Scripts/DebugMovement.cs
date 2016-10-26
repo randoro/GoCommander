@@ -43,9 +43,9 @@ public class DebugMovement : MonoBehaviour {
 
         gps.StopRefreshing();
 
-        gMap.centerLocation.address = "";
-        gMap.centerLocation.latitude = lat_value;
-        gMap.centerLocation.longitude = long_value;
+        GoogleMap.centerLocation.address = "";
+        GoogleMap.centerLocation.latitude = lat_value;
+        GoogleMap.centerLocation.longitude = long_value;
         gMap.zoom = scale_value;
         gMap.Refresh();
 

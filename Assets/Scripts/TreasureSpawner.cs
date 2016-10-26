@@ -81,8 +81,8 @@ public class TreasureSpawner : MonoBehaviour {
             {
                 //adding the new
                 TreasureHolder newTreasureHolder = ((GameObject)Instantiate(prefab,
-                            new Vector3(coordScaleToGameScale(v.lng - gMap.centerLocation.longitude, 180.0f, 10.0f),
-                                0.0f, coordScaleToGameScale(v.lat - gMap.centerLocation.latitude, 90.0f, 9.0f)),
+                            new Vector3(coordScaleToGameScale(v.lng - GoogleMap.centerLocation.longitude, 180.0f, 10.0f),
+                                0.0f, coordScaleToGameScale(v.lat - GoogleMap.centerLocation.latitude, 90.0f, 9.0f)),
                             Quaternion.Euler(new Vector3(0, UnityEngine.Random.value * 360, 0)))).GetComponent<TreasureHolder>();
                 newTreasureHolder.Initialize(v.id, v.lat, v.lng);
                 newTreasureHolder.gameObject.transform.localScale = new Vector3(4f, 4f, 4f);
@@ -105,13 +105,18 @@ public class TreasureSpawner : MonoBehaviour {
         float returnfloat = (inFloat/total) * (multi * (float)Math.Pow(2, gMap.zoom));
         return returnfloat;
     }
+
+
+    public void GenerateNewTreasures() {
+        StartCoroutine(GenerateTreasures());
+    }
     
 
     IEnumerator GetTreasures()
     {
-        string treasureURL = "https://ddwap.mah.se/AC3992/treasureSpawn.php";
+        string treasureURL = "https://ddwap.mah.se/AC3992/treasure_locations.php";
 
-
+       
 
         WWW www = new WWW(treasureURL);
         yield return www;
@@ -135,6 +140,20 @@ public class TreasureSpawner : MonoBehaviour {
         fetched = true;
     }
 
+    IEnumerator GenerateTreasures()
+    {
+        string treasureURL = "https://ddwap.mah.se/AC3992/treasure_spawn.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", GoogleMap.username);
+        form.AddField("userLatPost", GoogleMap.centerLocation.latitude.ToString());
+        form.AddField("userLongPost", GoogleMap.centerLocation.longitude.ToString());
+
+        WWW www = new WWW(treasureURL, form);
+        yield return www;
+        
+    }
+
     string GetDataValue(string data, string index)
     {
         string value = data.Substring(data.IndexOf(index) + index.Length);
@@ -150,8 +169,8 @@ public class TreasureSpawner : MonoBehaviour {
             TreasureHolder tempTres = treasureList[i].gameObject.GetComponent<TreasureHolder>();
             Treasure v = tempTres.treasure;
             treasureList[i].transform.position =
-                new Vector3(coordScaleToGameScale(v.lng - gMap.centerLocation.longitude, 180.0f, 10.0f),
-                    0.0f, coordScaleToGameScale(v.lat - gMap.centerLocation.latitude, 90.0f, 9.0f));
+                new Vector3(coordScaleToGameScale(v.lng - GoogleMap.centerLocation.longitude, 180.0f, 10.0f),
+                    0.0f, coordScaleToGameScale(v.lat - GoogleMap.centerLocation.latitude, 90.0f, 9.0f));
 
         }
     }
