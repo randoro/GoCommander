@@ -55,7 +55,7 @@ public class MapGenerator1 : MonoBehaviour
 
     IEnumerator GetMemory()
     {
-        string memoryURL = "https://ddwap.mah.se/AC3992/memorylevel.php";
+        string memoryURL = "http://gocommander.sytes.net/scripts/memorylevel.php";
 
         WWW www = new WWW(memoryURL);
         yield return www;

@@ -68,7 +68,6 @@ public class MapGenerator : MonoBehaviour
     void Update()
     {
         if (timeleft < -1)
-
         {
             Debug.Log("lose");
             StartCoroutine(delayTime());
@@ -83,8 +82,8 @@ public class MapGenerator : MonoBehaviour
     }
     IEnumerator GetPuzzles()
     {
-        string puzzleURL = "https://ddwap.mah.se/AC3992/puzzlelevel.php";
-
+        string puzzleURL = "http://gocommander.sytes.net/scripts/puzzlelevel.php";
+    
         WWW www = new WWW(puzzleURL);
         yield return www;
         string result = www.text;
