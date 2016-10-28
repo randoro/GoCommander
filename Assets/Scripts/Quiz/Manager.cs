@@ -13,13 +13,13 @@ public class Manager : MonoBehaviour {
 
     public Transform resultObj;
 
-    int score = 0;
+    int score = 0, answeredQuestions = 0;
 
     public static string selectedAnswer;
 
     public static string choiceSelected = "n";
 
-    public static int randomQuestion = -1, nrOfQuestions;
+    public static int randomQuestion = -1;
 
     private string line, answerline;
 
@@ -73,9 +73,14 @@ public class Manager : MonoBehaviour {
     // Update is called once per frame
     private void Update()
     {
+        if (answeredQuestions == 4)
+        {
+            SceneManager.LoadScene("mainScene");
+        }
         if (randomQuestion == -1)
         {
-            randomQuestion = Random.Range(0, 2);
+            //randomQuestion = Random.Range(0, 2);
+            RandomizeQuestion();
         }
         if (randomQuestion > -1)
         {
@@ -95,8 +100,15 @@ public class Manager : MonoBehaviour {
                 resultObj.GetComponent<TextMesh>().text = "Correct";
                 resultObj.GetComponent<TextMesh>().color = Color.green;
 
-                StartCoroutine(delayTime());
-                SceneManager.LoadScene("mainScene");
+                GenerateNewQuestion();
+                score += 10;
+
+                print(answeredQuestions);
+                print(score);
+                print(randomQuestion);
+
+                //StartCoroutine(delayTime());
+                //SceneManager.LoadScene("mainScene");
 
                 //Debug.Log("Answer: " + answersID[randomQuestion] + " SelectedAnswer: " + selectedAnswer);
                 //Debug.Log("Correct");
@@ -105,11 +117,14 @@ public class Manager : MonoBehaviour {
             {
                 resultObj.GetComponent<TextMesh>().text = "Wrong Answer";
                 resultObj.GetComponent<TextMesh>().color = Color.red;
+
+                GenerateNewQuestion();
+
                 //Debug.Log("Answer: " + answersID[randomQuestion] + " SelectedAnswer: " + selectedAnswer);
                 //Debug.Log("False");
 
-                StartCoroutine(delayTime());
-                SceneManager.LoadScene("mainScene");
+                //StartCoroutine(delayTime());
+                //SceneManager.LoadScene("mainScene");
             }
             
         }
@@ -126,6 +141,26 @@ public class Manager : MonoBehaviour {
             questions[i] = listQuiz[i].question;
             answersID[i] = listQuiz[i].answer;
         }
+    }
+
+    void GenerateNewQuestion()
+    {
+        randomQuestion = -1;
+        answeredQuestions++;
+    }
+
+    void RandomizeQuestion()
+    {
+        int number = randomQuestion;
+
+        randomQuestion = Random.Range(0, 2);
+
+        if (randomQuestion == number)
+        {
+            randomQuestion = Random.Range(0, 2);
+        }
+
+
     }
     
     

@@ -22,7 +22,8 @@ public class LoadImage : MonoBehaviour {
     {
         if (Manager.randomQuestion == 0)
         {
-            background.sprite = Resources.Load<Sprite>("torso") as Sprite;
+            //background.sprite = Resources.Load<Sprite>("torso") as Sprite;
+            StartCoroutine(DownloadImage("http://architectism.com/wp-content/uploads/2011/12/Turning-Torso-Malmo-5.jpg"));
         }
         else if (Manager.randomQuestion == 1)
         {
