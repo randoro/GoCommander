@@ -53,64 +53,16 @@ public class Orbit : MonoBehaviour {
 
             // Find the difference in the distances between each frame.
             float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
-
-            // If the camera is orthographic...
-            //if (Camera.main.isOrthoGraphic)
-            //{
-            //    // ... change the orthographic size based on the change in distance between the touches.
-            //    camera.orthographicSize += deltaMagnitudeDiff * orthoZoomSpeed;
-
-            //    // Make sure the orthographic size never drops below zero.
-            //    camera.orthographicSize = Mathf.Max(camera.orthographicSize, 0.1f);
-            //}
-            //else
-            //{
-            // Otherwise change the field of view based on the change in distance between the touches.
-
-            //deltaMagnitudeDiff * 0.1f);
-            //Camera.main.fieldOfView += deltaMagnitudeDiff * 0.1f;
+            
             Camera.main.transform.Translate(new Vector3(0, 0, -(deltaMagnitudeDiff * 0.05f)));
             offset = transform.position - player.position;
             Vector3 cameraRelative = transform.InverseTransformVector(transform.localPosition);
             cameraRelative = new Vector3(cameraRelative.x, cameraRelative.y, Mathf.Clamp(cameraRelative.z, -20.0f, -10.0f));
-
             
-
-
-            //float per = cameraRelative.z + 20.0f;
-            //int thirds = (int)per/3;
-            //switch (thirds)
-            //{
-            //    case 0:
-            //        gMap.zoom = 13;
-            //        break;
-            //    case 1:
-            //        gMap.zoom = 14;
-            //        break;
-            //    case 2:
-            //        gMap.zoom = 15;
-            //        break;
-            //    default:
-            //        break;
-            //}
-
             transform.localPosition = transform.TransformVector(cameraRelative);
-            // Clamp the field of view to make sure it's between 0 and 180.
-            //Camera.main.transform.localPosition = new Vector3(Camera.main.transform.localPosition.x, Camera.main.transform.localPosition.y, Mathf.Clamp(Camera.main.transform.localPosition.z, -20.0f, 20.0f));
-            //Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Mathf.Clamp(Camera.main.transform.position.z, -20.0f, 20.0f));
-            //}
+            
         }
-
-
-        //Vector3 cameraRelative = transform.InverseTransformVector(transform.localPosition);
-        //cameraRelative = new Vector3(cameraRelative.x, cameraRelative.y, Mathf.Clamp(cameraRelative.z, -20.0f, 20.0f));
-        //cameraRelative = cameraRelative + (Vector3.forward*0.01f);
-        //print(cameraRelative);
-        //transform.localPosition = transform.TransformVector(cameraRelative);
-
-        //Camera.main.transform.position = Camera.main.transform.TransformPoint(Camera.main.transform.position + (Vector3.forward * 0.1f));
-        //new Vector3(Camera.main.transform.position.x,
-        // Camera.main.transform.position.y, Camera.main.transform.position.z+0.6f);
+        
 
         //For debugging purposes
 #if UNITY_EDITOR
