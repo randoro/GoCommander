@@ -70,28 +70,29 @@ public class Orbit : MonoBehaviour {
             //deltaMagnitudeDiff * 0.1f);
             //Camera.main.fieldOfView += deltaMagnitudeDiff * 0.1f;
             Camera.main.transform.Translate(new Vector3(0, 0, -(deltaMagnitudeDiff * 0.05f)));
+            offset = transform.position - player.position;
             Vector3 cameraRelative = transform.InverseTransformVector(transform.localPosition);
             cameraRelative = new Vector3(cameraRelative.x, cameraRelative.y, Mathf.Clamp(cameraRelative.z, -20.0f, -10.0f));
 
             
 
 
-            float per = cameraRelative.z + 20.0f;
-            int thirds = (int)per/3;
-            switch (thirds)
-            {
-                case 0:
-                    gMap.zoom = 13;
-                    break;
-                case 1:
-                    gMap.zoom = 14;
-                    break;
-                case 2:
-                    gMap.zoom = 15;
-                    break;
-                default:
-                    break;
-            }
+            //float per = cameraRelative.z + 20.0f;
+            //int thirds = (int)per/3;
+            //switch (thirds)
+            //{
+            //    case 0:
+            //        gMap.zoom = 13;
+            //        break;
+            //    case 1:
+            //        gMap.zoom = 14;
+            //        break;
+            //    case 2:
+            //        gMap.zoom = 15;
+            //        break;
+            //    default:
+            //        break;
+            //}
 
             transform.localPosition = transform.TransformVector(cameraRelative);
             // Clamp the field of view to make sure it's between 0 and 180.
