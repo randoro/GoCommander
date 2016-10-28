@@ -77,7 +77,7 @@ public class PlayerSpawner : MonoBehaviour {
                                 0.0f, coordScaleToGameScale(v.lat - GoogleMap.centerLocation.latitude, 90.0f, 9.0f)),
                             Quaternion.Euler(new Vector3(0, UnityEngine.Random.value * 360, 0)))).GetComponent<PlayerHolder>();
                 newTreasureHolder.Initialize(v.id, v.name, v.lat, v.lng);
-                newTreasureHolder.gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+                newTreasureHolder.gameObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
                 playerList.Add(newTreasureHolder.gameObject);
 
             }
