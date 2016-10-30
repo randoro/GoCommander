@@ -116,8 +116,6 @@ public class TreasureSpawner : MonoBehaviour {
     {
         string treasureURL = "https://ddwap.mah.se/AC3992/treasure_locations.php";
 
-       
-
         WWW www = new WWW(treasureURL);
         yield return www;
         string result = www.text;
