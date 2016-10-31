@@ -27,7 +27,7 @@ public class Login : MonoBehaviour {
             StartCoroutine(LoginUser(Username, Password));
             StopTimer();
             GoogleMap.username = Username;
-            SceneManager.LoadScene("mainScene");
+            SceneManager.LoadScene("CommanderScene");
         }
     }
 
