@@ -174,4 +174,20 @@ public class TreasureSpawner : MonoBehaviour {
 
         }
     }
+
+
+    public void RemoveTreasure(int id)
+    {
+        for (int i = treasureList.Count; i-- > 0;)
+        {
+            TreasureHolder tempTres = treasureList[i].gameObject.GetComponent<TreasureHolder>();
+            Treasure v = tempTres.treasure;
+            int itsId = v.id;
+            if (itsId == id)
+            {
+                Destroy(tempTres.gameObject);
+            }
+
+        }
+    }
 }
