@@ -5,7 +5,7 @@ using System;
 using UnityEngine.SceneManagement;
 using System.IO;
 using UnityEngine.UI;
-
+//memoryclassen
 public class MapGenerator1 : MonoBehaviour
 {
     public Transform tilePrefab;
@@ -22,6 +22,8 @@ public class MapGenerator1 : MonoBehaviour
     //tid som är kvar
     private float timeleft;
     public int showtime;
+	public int score;
+	public int lvl;//hämttar lvl från server (svårihihetsgrad)
 
   [Range(0, 1)]
     public float gridLinePercent;
@@ -51,6 +53,7 @@ public class MapGenerator1 : MonoBehaviour
         SetUpCamera();
         starttime = 45;
         timeleft = starttime;
+		lvl = 1;
 }
 
     IEnumerator GetMemory()
@@ -88,6 +91,7 @@ public class MapGenerator1 : MonoBehaviour
      
         if (win == true)
         {
+			score = (int)timeleft * lvl * 100;
             StartCoroutine(delayTime());
 
             SceneManager.LoadScene("mainScene");
@@ -99,9 +103,11 @@ public class MapGenerator1 : MonoBehaviour
             StartCoroutine(delayTime());
 
             SceneManager.LoadScene("mainScene");
-        }
-        timeleft = timeleft - Time.deltaTime;
-
+        }		
+		if (win=false)
+		{
+			timeleft = timeleft - Time.deltaTime;
+		}
         // Debug.Log(timeleft);
         showtime = (int)timeleft;
         Thetext.text = showtime.ToString("");

@@ -9,22 +9,25 @@ public class Highscoremanger : MonoBehaviour {
 	public int qwizscore;
 	public int puzzelscore;
 	public int memoryscore;
+	MapGenerator1 puzzel;
 
 	// Use this for initialization
 	void Start () {
 		
-		
+		//LoadScores ();
 	
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		test = "namn efternamn  "+ qwizscore + " nr1 ";
+		test = "namn efternamn \n qwizscore= "+ qwizscore + "\n puzzelscore= "+ puzzelscore+ "\n memoryscore= "+ memoryscore ;
 		hightext.text = test;
-		qwizscore =qwizscore+1;
+
 	}
 	public void LoadScores(){
-		
+		puzzelscore = puzzel.score;
+
+
 	}
 
 }
