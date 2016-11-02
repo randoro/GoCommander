@@ -13,7 +13,8 @@ public class Manager : MonoBehaviour {
 
     public Transform resultObj;
 
-    int score = 0, answeredQuestions = 0;
+	public int score = 0;
+	int answeredQuestions = 0;
 
     public static string selectedAnswer;
 
