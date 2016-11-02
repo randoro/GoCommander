@@ -28,8 +28,9 @@ public class MinigameStarter : MonoBehaviour {
                     {
                         Treasure t = th.treasure;
                         int id = t.id;
+                        //int type = t.type;
 
-                        id = Random.Range(0, 3);
+                        //id = Random.Range(0, 3);
 
                         switch (id)
                         {

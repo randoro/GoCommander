@@ -13,5 +13,4 @@ public class Treasure
         this.lat = (float)lat;
         this.lng = (float)lng;
     }
-
 }
