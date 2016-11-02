@@ -85,7 +85,8 @@ public class MapGenerator : MonoBehaviour
 		if (win=true) 
 		{
 			score = (int)timeleft * lvl * 100;
-			scoremanager.GetComponent<ScoreHolder>().setpuzzelscore(score);
+			//scoremanager.GetComponent<ScoreHolder>().setpuzzelscore(score);
+			scoremanager.GetComponent<ScoreHolder>().puzzelscore=score;
 		}
 		if(win=false)
 		{
@@ -397,7 +398,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     //StartCoroutine(delayTime());
                     SceneManager.LoadScene("mainScene");
-					MapGenerator.win =true
+					MapGenerator.win = true;
                 }
             }
         }
