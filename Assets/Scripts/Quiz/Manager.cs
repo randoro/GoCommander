@@ -12,7 +12,7 @@ public class Manager : MonoBehaviour {
     private string[] questions, answers, answersID, quiz;
 
     public Transform resultObj;
-
+	GameObject scoremanager;
 	public int score = 0;
 	int answeredQuestions = 0;
 
@@ -32,6 +32,7 @@ public class Manager : MonoBehaviour {
         questions = new string[4];
         answers = new string[4];
         answersID = new string[4];
+		scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
     }
 
     IEnumerator GetQuizes()

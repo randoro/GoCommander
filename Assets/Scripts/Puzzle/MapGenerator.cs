@@ -42,7 +42,9 @@ public class MapGenerator : MonoBehaviour
     public int showtime;
 	public int score;
 	public int lvl;//hämttar lvl från server (svårihihetsgrad)
+	GameObject scoremanager;
 
+	//HighScoreHolder 
     IEnumerator Start()
     {
         //circleCount = Random.Range(5,15);
@@ -68,6 +70,7 @@ public class MapGenerator : MonoBehaviour
         starttime = 100;
         timeleft = starttime;
 		score = 0;
+		scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
     }
     void Update()
     {
@@ -81,6 +84,7 @@ public class MapGenerator : MonoBehaviour
 		if (tile.DidWeWin()) 
 		{
 			score = (int)timeleft * lvl * 100;
+			scoremanager.GetComponent<ScoreHolder> ().memoryscore = score;
 		}
 		if(!tile.DidWeWin())
 		{

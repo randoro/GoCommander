@@ -9,15 +9,15 @@ public class Highscoremanger : MonoBehaviour {
 	public int qwizscore;
 	public int puzzelscore;
 	public int memoryscore;
-	MapGenerator1 memory;
-	MapGenerator puzzel;
-	Manager qwiz;
+
+	GameObject scoremanager;
+	//HighScoreHolder
 
 
 	// Use this for initialization
 	void Start () {
-		
-		//LoadScores ();
+		scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
+		LoadScores ();
 	
 	}
 	
@@ -28,13 +28,9 @@ public class Highscoremanger : MonoBehaviour {
 
 	}
 	public void LoadScores(){
-	memoryscore = memory.score;
-	puzzelscore = puzzel.score;
-		qwizscore = qwiz.score;
-			
-
-
-
+		memoryscore = scoremanager.GetComponent<ScoreHolder> ().memoryscore;
+		puzzelscore= scoremanager.GetComponent<ScoreHolder> ().puzzelscore;
+		qwizscore = scoremanager.GetComponent<ScoreHolder> ().qwizscore;
 	}
 
 }
