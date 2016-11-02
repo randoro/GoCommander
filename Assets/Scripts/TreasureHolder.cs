@@ -22,33 +22,7 @@ public class TreasureHolder : MonoBehaviour
         //this.id = id;
         id = Random.Range(0, 3);
         treasure = new Treasure(id, lat, lng);
-
-        //First try to change treasure chests type and color
-        //SetChestType(id);
     }
-
-    private void SetChestType(int id)
-    {
-        switch (id)
-        {
-            case 0:
-                {
-                    GetComponent<MeshRenderer>().material.color = Color.red;
-                }
-                break;
-            case 1:
-                {
-                    GetComponent<MeshRenderer>().material.color = Color.blue;
-                }
-                break;
-            case 2:
-                {
-                    GetComponent<MeshRenderer>().material.color = Color.green;
-                }
-                break;
-        }
-    }
-
 
     void OnTriggerEnter(Collider collision)
     {
