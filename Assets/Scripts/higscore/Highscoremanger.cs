@@ -9,7 +9,10 @@ public class Highscoremanger : MonoBehaviour {
 	public int qwizscore;
 	public int puzzelscore;
 	public int memoryscore;
-	MapGenerator1 puzzel;
+	MapGenerator1 memory;
+	MapGenerator puzzel;
+	Manager qwiz;
+
 
 	// Use this for initialization
 	void Start () {
@@ -25,7 +28,11 @@ public class Highscoremanger : MonoBehaviour {
 
 	}
 	public void LoadScores(){
-		puzzelscore = puzzel.score;
+	memoryscore = memory.score;
+	puzzelscore = puzzel.score;
+		qwizscore = qwiz.score;
+			
+
 
 
 	}
