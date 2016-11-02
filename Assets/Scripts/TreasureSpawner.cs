@@ -157,4 +157,20 @@ public class TreasureSpawner : MonoBehaviour {
                     0.0f, coordScaleToGameScale(v.lat - GoogleMap.centerLocation.latitude, 90.0f, 9.0f));
         }
     }
+
+
+    public void RemoveTreasure(int id)
+    {
+        for (int i = treasureList.Count; i-- > 0;)
+        {
+            TreasureHolder tempTres = treasureList[i].gameObject.GetComponent<TreasureHolder>();
+            Treasure v = tempTres.treasure;
+            int itsId = v.id;
+            if (itsId == id)
+            {
+                Destroy(tempTres.gameObject);
+            }
+
+        }
+    }
 }

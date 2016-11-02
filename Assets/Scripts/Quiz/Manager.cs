@@ -79,7 +79,6 @@ public class Manager : MonoBehaviour {
         }
         if (randomQuestion == -1)
         {
-            //randomQuestion = Random.Range(0, 2);
             RandomizeQuestion();
         }
         if (randomQuestion > -1)
@@ -92,46 +91,34 @@ public class Manager : MonoBehaviour {
         if (choiceSelected == "y")
         {
             choiceSelected = "n";
-            //Debug.Log("Answer: " + answersID[randomQuestion] + " SelectedAnswer: " + selectedAnswer);
-            //Debug.Log(answersID[randomQuestion].Equals(selectedAnswer));
 
             if (answersID[randomQuestion].Contains(selectedAnswer))
             {
+                
                 resultObj.GetComponent<TextMesh>().text = "Correct";
                 resultObj.GetComponent<TextMesh>().color = Color.green;
 
-                GenerateNewQuestion();
+                StartCoroutine(delayTime());
                 score += 10;
 
                 print(answeredQuestions);
                 print(score);
                 print(randomQuestion);
-
-                //StartCoroutine(delayTime());
-                //SceneManager.LoadScene("mainScene");
-
-                //Debug.Log("Answer: " + answersID[randomQuestion] + " SelectedAnswer: " + selectedAnswer);
-                //Debug.Log("Correct");
             }
             else
             {
                 resultObj.GetComponent<TextMesh>().text = "Wrong Answer";
                 resultObj.GetComponent<TextMesh>().color = Color.red;
 
-                GenerateNewQuestion();
-
-                //Debug.Log("Answer: " + answersID[randomQuestion] + " SelectedAnswer: " + selectedAnswer);
-                //Debug.Log("False");
-
-                //StartCoroutine(delayTime());
-                //SceneManager.LoadScene("mainScene");
+                StartCoroutine(delayTime());
             }
             
         }
     }
     IEnumerator delayTime()
     {
-        yield return new WaitForSeconds(5000);
+        yield return new WaitForSeconds(3);
+        GenerateNewQuestion();
     }
 
     void ReadFromServer()
@@ -147,6 +134,8 @@ public class Manager : MonoBehaviour {
     {
         randomQuestion = -1;
         answeredQuestions++;
+
+        resultObj.GetComponent<TextMesh>().text = "";
     }
 
     void RandomizeQuestion()
