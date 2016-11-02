@@ -42,6 +42,7 @@ public class MapGenerator : MonoBehaviour
     public int showtime;
 	public int score;
 	public int lvl;//hämttar lvl från server (svårihihetsgrad)
+	public static bool win =false;
 	GameObject scoremanager;
 
 	//HighScoreHolder 
@@ -81,12 +82,12 @@ public class MapGenerator : MonoBehaviour
 
             SceneManager.LoadScene("mainScene");
         }
-		if (tile.DidWeWin()) 
+		if (win=true) 
 		{
 			score = (int)timeleft * lvl * 100;
-			scoremanager.GetComponent<ScoreHolder> ().memoryscore = score;
+			scoremanager.GetComponent<ScoreHolder>().setpuzzelscore(score);
 		}
-		if(!tile.DidWeWin())
+		if(win=false)
 		{
 			timeleft = timeleft - Time.deltaTime;
 		}
@@ -396,6 +397,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     //StartCoroutine(delayTime());
                     SceneManager.LoadScene("mainScene");
+					MapGenerator.win =true
                 }
             }
         }

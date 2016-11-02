@@ -28,9 +28,9 @@ public class Highscoremanger : MonoBehaviour {
 
 	}
 	public void LoadScores(){
-		memoryscore = scoremanager.GetComponent<ScoreHolder> ().memoryscore;
-		puzzelscore= scoremanager.GetComponent<ScoreHolder> ().puzzelscore;
-		qwizscore = scoremanager.GetComponent<ScoreHolder> ().qwizscore;
+		memoryscore = scoremanager.GetComponent<ScoreHolder> ().Getmemoryscore();
+		puzzelscore= scoremanager.GetComponent<ScoreHolder> ().Getpuzzelscore();
+		qwizscore = scoremanager.GetComponent<ScoreHolder> ().Getqwizscore();
 	}
 
 }

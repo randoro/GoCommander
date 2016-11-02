@@ -96,7 +96,7 @@ public class MapGenerator1 : MonoBehaviour
         if (win == true)
         {
 			score = (int)timeleft * lvl * 100;
-			scoremanager.GetComponent<ScoreHolder> ().memoryscore = score;
+			scoremanager.GetComponent<ScoreHolder> ().setmemoryscore(score);
 
             StartCoroutine(delayTime());
 
