@@ -55,6 +55,7 @@ public class MapGenerator1 : MonoBehaviour
         timeleft = starttime;
 		lvl = 1;
 		score = 0;
+
 }
 
     IEnumerator GetMemory()
