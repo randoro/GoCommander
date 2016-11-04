@@ -119,8 +119,9 @@ public class TreasureSpawner : MonoBehaviour {
             int id = int.Parse(GetDataValue(nav[i], "ID:"));
             double lat = double.Parse(GetDataValue(nav[i], "Latitude:"));
             double lng = double.Parse(GetDataValue(nav[i], "Longitude:"));
+            int type = int.Parse(GetDataValue(nav[i], "Type:"));
 
-            fetchedList.Add(new Treasure(id, lat, lng));
+            fetchedList.Add(new Treasure(id, lat, lng, type));
         }
         fetched = true;
     }
