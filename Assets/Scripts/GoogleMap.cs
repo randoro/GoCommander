@@ -37,7 +37,7 @@ public class GoogleMap : MonoBehaviour {
 
     IEnumerator SendPlayerGPS()
     {
-        string sendGPSURL = "https://ddwap.mah.se/AC3992/get_gps.php";
+        string sendGPSURL = "http://gocommander.sytes.net/scripts/get_gps.php";
 
         WWWForm form = new WWWForm();
         form.AddField("usernamePost", username);

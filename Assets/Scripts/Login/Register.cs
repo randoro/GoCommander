@@ -17,7 +17,7 @@ public class Register : MonoBehaviour {
     private Text Timer;
     private float timerUp;
 
-    private string createUserURL = "https://ddwap.mah.se/AC3992/register.php";
+    private string createUserURL = "http://gocommander.sytes.net/scripts/register.php";
 
     // Use this for initialization
     void Start () {

@@ -4,7 +4,7 @@ using System.Collections;
 public class TreasureHolder : MonoBehaviour
 {
     //int id;
-    int type;
+    //int type;
     public Treasure treasure;
     public bool canBeClicked;
 	// Use this for initialization
@@ -22,8 +22,8 @@ public class TreasureHolder : MonoBehaviour
     {
         //this.id = id;
         id = Random.Range(0, 3);
-        type = Random.Range(0, 3);
-        treasure = new Treasure(id, lat, lng);
+        //type = Random.Range(0, 3);
+        treasure = new Treasure(id, lat, lng, type);
         SetChestCollor();
     }
 

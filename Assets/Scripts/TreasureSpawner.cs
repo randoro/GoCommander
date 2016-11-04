@@ -101,7 +101,7 @@ public class TreasureSpawner : MonoBehaviour {
 
     IEnumerator GetTreasures()
     {
-        string treasureURL = "https://ddwap.mah.se/AC3992/treasure_locations.php";
+        string treasureURL = "http://gocommander.sytes.net/scripts/treasure_locations.php";
 
         WWW www = new WWW(treasureURL);
         yield return www;
@@ -128,7 +128,7 @@ public class TreasureSpawner : MonoBehaviour {
 
     IEnumerator GenerateTreasures()
     {
-        string treasureURL = "https://ddwap.mah.se/AC3992/treasure_spawn.php";
+        string treasureURL = "http://gocommander.sytes.net/scripts/treasure_spawn.php";
 
         WWWForm form = new WWWForm();
         form.AddField("usernamePost", GoogleMap.username);

@@ -37,7 +37,7 @@ public class Manager : MonoBehaviour {
 
     IEnumerator GetQuizes()
     {
-        string quizURL = "https://ddwap.mah.se/AC3992/getQuiz.php";
+        string quizURL = "http://gocommander.sytes.net/scripts/getQuiz.php";
 
         WWW www = new WWW(quizURL);
         yield return www;
