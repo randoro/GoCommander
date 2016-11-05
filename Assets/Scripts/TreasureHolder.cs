@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEditor;
 
 public class TreasureHolder : MonoBehaviour
 {
@@ -18,36 +19,27 @@ public class TreasureHolder : MonoBehaviour
           
     }
 
-    public void Initialize(int id, double lat, double lng)
+    public void Initialize(int id, double lat, double lng, int type)
     {
         //this.id = id;
-        id = Random.Range(0, 3);
+        //id = Random.Range(0, 3);
         //type = Random.Range(0, 3);
         treasure = new Treasure(id, lat, lng, type);
-        SetChestCollor();
+        SetChestColor();
     }
 
-    private void SetChestCollor()
+    private void SetChestColor()
     {
-        GetComponent<MeshRenderer>().material.color = Color.blue;
-
         if (treasure != null)
         {
-            if (type == 0)
+            GameObject p10 = transform.Find("pCube10").gameObject;
+            if (p10 != null)
             {
-                //GetComponent<MeshRenderer>().material.color = Color.red;  
-                Debug.Log("Setting color to type 0");
+                Material[] mats = p10.GetComponent<MeshRenderer>().materials;
+                p10.GetComponent<MeshRenderer>().material = mats[treasure.type];
+                GetComponent<MeshRenderer>().material = mats[treasure.type];
             }
-            if (type == 1)
-            {
-                gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
-                Debug.Log("Setting color to type 1");
-            }
-            if (type == 2)
-            {
-                gameObject.GetComponent<MeshRenderer>().material.color = Color.green;
-                Debug.Log("Setting color to type 2");
-            }
+
         }
     }
 
