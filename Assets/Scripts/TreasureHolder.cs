@@ -1,9 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-<<<<<<< HEAD
-//using UnityEditor;
-=======
->>>>>>> origin/master
 
 public class TreasureHolder : MonoBehaviour
 {
