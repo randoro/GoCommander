@@ -25,8 +25,6 @@ public class Login : MonoBehaviour {
             StartTimer();
             StartCoroutine(LoginUser(Username, Password));
             StopTimer();
-            GoogleMap.username = Username;
-            SceneManager.LoadScene("mainScene");
         }
     }
 
@@ -60,6 +58,7 @@ public class Login : MonoBehaviour {
 
         if (result == "Login success")
         {
+            GoogleMap.username = Username;
             Result.text = "You are Logged in!";
             username.GetComponent<InputField>().text = "";
             password.GetComponent<InputField>().text = "";
