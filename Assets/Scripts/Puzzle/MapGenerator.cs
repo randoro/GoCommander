@@ -25,6 +25,7 @@ public class MapGenerator : MonoBehaviour
     public float gridLinePercent;
 
     public Tile[,] tileArray;
+	public Tile tile;
     public List<Coordinate> tileCoordinates;
     Queue<Coordinate> circleCoordinates;
     List<Tile> usedTiles = new List<Tile>();
@@ -39,7 +40,12 @@ public class MapGenerator : MonoBehaviour
     private int starttime;
     private float timeleft;
     public int showtime;
+	public int score;
+	public int lvl;//hämttar lvl från server (svårihihetsgrad)
+	public static bool win =false;
+	GameObject scoremanager;
 
+	//HighScoreHolder 
     IEnumerator Start()
     {
         //circleCount = Random.Range(5,15);
@@ -64,6 +70,8 @@ public class MapGenerator : MonoBehaviour
         //tid
         starttime = 100;
         timeleft = starttime;
+		score = 0;
+		scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
     }
     void Update()
     {
@@ -74,8 +82,16 @@ public class MapGenerator : MonoBehaviour
 
             SceneManager.LoadScene("mainScene");
         }
-        timeleft = timeleft - Time.deltaTime;
-
+		if (win=true) 
+		{
+			score = (int)timeleft * lvl * 100;
+			//scoremanager.GetComponent<ScoreHolder>().setpuzzelscore(score);
+			scoremanager.GetComponent<ScoreHolder>().puzzelscore=score;
+		}
+		if(win=false)
+		{
+			timeleft = timeleft - Time.deltaTime;
+		}
         // Debug.Log(timeleft);
         showtime = (int)timeleft;
         Thetext.text = showtime.ToString("");
@@ -382,6 +398,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     //StartCoroutine(delayTime());
                     SceneManager.LoadScene("mainScene");
+					MapGenerator.win = true;
                 }
             }
         }
@@ -455,7 +472,7 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        private bool DidWeWin()
+        public bool DidWeWin()
         {
             Tile firstColoredTile = this;
             bool breakAllLoops = false;
@@ -491,6 +508,7 @@ public class MapGenerator : MonoBehaviour
                     else if (tileFamily[i, j] == tileFamily[tileFamily.GetLength(0) - 1, tileFamily.GetLength(1) - 1])
                     {
                         return true;
+
                     }
                 }
                 if (breakAllLoops)

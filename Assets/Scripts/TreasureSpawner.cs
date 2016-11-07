@@ -78,7 +78,7 @@ public class TreasureSpawner : MonoBehaviour {
                             new Vector3(coordScaleToGameScale(v.lng - GoogleMap.centerLocation.longitude, 180.0f, 10.0f),
                                 0.0f, coordScaleToGameScale(v.lat - GoogleMap.centerLocation.latitude, 90.0f, 9.0f)),
                             Quaternion.Euler(new Vector3(0, UnityEngine.Random.value * 360, 0)))).GetComponent<TreasureHolder>();
-                newTreasureHolder.Initialize(v.id, v.lat, v.lng);
+                newTreasureHolder.Initialize(v.id, v.lat, v.lng, v.type);
                 newTreasureHolder.gameObject.transform.localScale = new Vector3(4f, 4f, 4f);
                 treasureList.Add(newTreasureHolder.gameObject);
 
@@ -101,7 +101,7 @@ public class TreasureSpawner : MonoBehaviour {
 
     IEnumerator GetTreasures()
     {
-        string treasureURL = "https://ddwap.mah.se/AC3992/treasure_locations.php";
+        string treasureURL = "http://gocommander.sytes.net/scripts/treasure_locations.php";
 
         WWW www = new WWW(treasureURL);
         yield return www;
@@ -119,15 +119,16 @@ public class TreasureSpawner : MonoBehaviour {
             int id = int.Parse(GetDataValue(nav[i], "ID:"));
             double lat = double.Parse(GetDataValue(nav[i], "Latitude:"));
             double lng = double.Parse(GetDataValue(nav[i], "Longitude:"));
+            int type = int.Parse(GetDataValue(nav[i], "Type:"));
 
-            fetchedList.Add(new Treasure(id, lat, lng));
+            fetchedList.Add(new Treasure(id, lat, lng, type));
         }
         fetched = true;
     }
 
     IEnumerator GenerateTreasures()
     {
-        string treasureURL = "https://ddwap.mah.se/AC3992/treasure_spawn.php";
+        string treasureURL = "http://gocommander.sytes.net/scripts/treasure_spawn.php";
 
         WWWForm form = new WWWForm();
         form.AddField("usernamePost", GoogleMap.username);

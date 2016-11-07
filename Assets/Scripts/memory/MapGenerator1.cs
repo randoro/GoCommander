@@ -24,6 +24,7 @@ public class MapGenerator1 : MonoBehaviour
     public int showtime;
 	public int score;
 	public int lvl;//hämttar lvl från server (svårihihetsgrad)
+	GameObject scoremanager;
 
   [Range(0, 1)]
     public float gridLinePercent;
@@ -54,6 +55,9 @@ public class MapGenerator1 : MonoBehaviour
         starttime = 45;
         timeleft = starttime;
 		lvl = 1;
+		score = 0;
+		scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
+
 }
 
     IEnumerator GetMemory()
@@ -92,6 +96,8 @@ public class MapGenerator1 : MonoBehaviour
         if (win == true)
         {
 			score = (int)timeleft * lvl * 100;
+			//scoremanager.GetComponent<ScoreHolder> ().setmemoryscore(score);
+			scoremanager.GetComponent<ScoreHolder> ().memoryscore=score;
             StartCoroutine(delayTime());
 
             SceneManager.LoadScene("mainScene");
@@ -104,7 +110,7 @@ public class MapGenerator1 : MonoBehaviour
 
             SceneManager.LoadScene("mainScene");
         }		
-		if (win=false)
+		if (win==false)
 		{
 			timeleft = timeleft - Time.deltaTime;
 		}

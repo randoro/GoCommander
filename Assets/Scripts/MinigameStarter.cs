@@ -27,11 +27,12 @@ public class MinigameStarter : MonoBehaviour {
                     if (th.canBeClicked)
                     {
                         Treasure t = th.treasure;
-                        int id = t.id;
+                        int type = t.type;
+                        //int type = t.type;
 
-                        id = Random.Range(0, 3);
+                        //id = Random.Range(0, 3);
 
-                        switch (id)
+                        switch (type)
                         {
                             case 0:
                                 print("loading new scene");
@@ -44,6 +45,10 @@ public class MinigameStarter : MonoBehaviour {
                             case 2:
                                 print("loading new scene");
                                 Application.LoadLevel("MinigameQuiz");
+                                break;
+                            case 3:
+                                print("loading new scene");
+                                Application.LoadLevel("MinigameSprint");
                                 break;
                             default:
                                 print("loading new scene");

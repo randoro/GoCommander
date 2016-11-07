@@ -12,7 +12,6 @@ public class Login : MonoBehaviour {
     public GameObject result;
     public GameObject timer;
 
-
     private string Username;
     private string Password;
     private Text Result;
@@ -27,7 +26,7 @@ public class Login : MonoBehaviour {
             StartCoroutine(LoginUser(Username, Password));
             StopTimer();
             GoogleMap.username = Username;
-            SceneManager.LoadScene("CommanderScene");
+            SceneManager.LoadScene("mainScene");
         }
     }
 
@@ -47,7 +46,7 @@ public class Login : MonoBehaviour {
 
     IEnumerator LoginUser(string name, string pass)
     {
-        string loginUserURL = "https://ddwap.mah.se/AC3992/login.php";
+        string loginUserURL = "http://gocommander.sytes.net/scripts/login.php";
 
         WWWForm form = new WWWForm();
         form.AddField("usernamePost", name);

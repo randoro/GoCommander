@@ -1,30 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEditor;
 
-public class TreasureHolder : MonoBehaviour
-{
+public class GoalHolder : MonoBehaviour {
+
+    // Use this for initialization
     //int id;
     //int type;
     public Treasure treasure;
     public bool canBeClicked;
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start()
     {
-	
-	}
+
+    }
 
     void Update()
     {
-          
+
     }
 
-    public void Initialize(int id, double lat, double lng, int type)
+    public void Initialize(int id, double lat, double lng)
     {
         //this.id = id;
         //id = Random.Range(0, 3);
         //type = Random.Range(0, 3);
-        treasure = new Treasure(id, lat, lng, type);
+        treasure = new Treasure(id, lat, lng, 0);
         SetChestColor();
     }
 
@@ -60,6 +60,4 @@ public class TreasureHolder : MonoBehaviour
             canBeClicked = false;
         }
     }
-
-
 }

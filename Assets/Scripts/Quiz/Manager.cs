@@ -12,8 +12,9 @@ public class Manager : MonoBehaviour {
     private string[] questions, answers, answersID, quiz;
 
     public Transform resultObj;
-
-    int score = 0, answeredQuestions = 0;
+	GameObject scoremanager;
+	public int score = 0;
+	int answeredQuestions = 0;
 
     public static string selectedAnswer;
 
@@ -31,11 +32,12 @@ public class Manager : MonoBehaviour {
         questions = new string[4];
         answers = new string[4];
         answersID = new string[4];
+		scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
     }
 
     IEnumerator GetQuizes()
     {
-        string quizURL = "https://ddwap.mah.se/AC3992/getQuiz.php";
+        string quizURL = "http://gocommander.sytes.net/scripts/getQuiz.php";
 
         WWW www = new WWW(quizURL);
         yield return www;
