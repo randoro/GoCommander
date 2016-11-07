@@ -39,9 +39,19 @@ public class Text3 : MonoBehaviour {
 
     private void ReadThirdOptions()
     {
-        for (int i = 0; i < Manager.listQuiz.Count; i++)
+        if(Manager.isInSkane)
         {
-            thirdChoices[i] = Manager.listQuiz[i].alt3;
+            for (int i = 0; i < Manager.skaneListQuiz.Count; i++)
+            {
+                thirdChoices[i] = Manager.skaneListQuiz[i].alt3;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < Manager.nationalListQuiz.Count; i++)
+            {
+                thirdChoices[i] = Manager.nationalListQuiz[i].alt3;
+            }
         }
     }
 }

@@ -9,6 +9,8 @@ public class Highscoremanger : MonoBehaviour {
 	public int qwizscore;
 	public int puzzelscore;
 	public int memoryscore;
+	int totalscore;
+	public bool shiftscore = false;
 
 	GameObject scoremanager;
 	//HighScoreHolder
@@ -23,14 +25,46 @@ public class Highscoremanger : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		test = "namn efternamn \n qwizscore= "+ qwizscore + "\n puzzelscore= "+ puzzelscore+ "\n memoryscore= "+ memoryscore ;
+		
+		if (shiftscore == false) {
+			Yourscore ();
+		}
+		if (shiftscore == true) {
+			
+			Evreonesscore ();
+		}
+
 		hightext.text = test;
+
 
 	}
 	public void LoadScores(){
 		memoryscore = scoremanager.GetComponent<ScoreHolder> ().Getmemoryscore();
 		puzzelscore= scoremanager.GetComponent<ScoreHolder> ().Getpuzzelscore();
 		qwizscore = scoremanager.GetComponent<ScoreHolder> ().Getqwizscore();
+
 	}
+	public void Yourscore(){
+		test = "dinscore \n qwizscore= "+ qwizscore + "\n puzzelscore= "+ puzzelscore+ "\n memoryscore= "+ memoryscore ;
+	
+
+	}
+	public void Evreonesscore(){
+		totalscore = memoryscore + puzzelscore + qwizscore;
+		//lodescore från server
+		test="user"+totalscore;
+	//http://gocommander.sytes.net/scripts/highscore.php
+
+	}
+	public void Shift(){
+
+		if (shiftscore == false) {
+			shiftscore = true;
+		}
+		if (shiftscore == true) {
+			shiftscore = false;
+		}
+	}
+
 
 }

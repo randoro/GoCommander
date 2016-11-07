@@ -7,9 +7,13 @@ using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour {
 
-    public static List<QuizList> listQuiz = new List<QuizList>();
+    public static List<QuizList> skaneListQuiz = new List<QuizList>();
+    public static List<QuizList> nationalListQuiz = new List<QuizList>();
 
-    private string[] questions, answers, answersID, quiz;
+    public static List<QuizList> allQuestionsList = new List<QuizList>();
+
+    private string[] skaneQuestions, skaneAnswersID, Quiz;
+    private string[] nationalQuestions, nationalAnswersID, nationalQuiz;
 
     public Transform resultObj;
 	GameObject scoremanager;
@@ -24,20 +28,39 @@ public class Manager : MonoBehaviour {
 
     private string line, answerline;
 
+    public static bool isInSkane;
+
     // Use this for initialization
     private void Start () {
 
         StartCoroutine(GetQuizes());
 
-        questions = new string[4];
-        answers = new string[4];
-        answersID = new string[4];
-		scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
+        skaneQuestions = new string[4];
+        skaneAnswersID = new string[4];
+        nationalQuestions = new string[4];
+        nationalAnswersID = new string[4];
+
+		//scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
+
+        isInSkane = false;
+
+        
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+        CheckPlayerPosition();
+        ReadFromServer();
+        SetQuestion();
+        QuizSystem();
+        LoadMainScene();
+
     }
 
     IEnumerator GetQuizes()
     {
-        string quizURL = "http://gocommander.sytes.net/scripts/getQuiz.php";
+        string quizURL = "http://gocommander.sytes.net/scripts/get_quiz.php";
 
         WWW www = new WWW(quizURL);
         yield return www;
@@ -45,22 +68,29 @@ public class Manager : MonoBehaviour {
 
         if (result != null)
         {
-            quiz = result.Split(';');
+            Quiz = result.Split(';');
         }
 
-        for (int i = 0; i < quiz.Length - 1; i++)
+        for (int i = 0; i < Quiz.Length - 1; i++)
         {
-            string city = GetDataValue(quiz[i], "City:");
-            string question = GetDataValue(quiz[i], "Question:");
-            string alt1 = GetDataValue(quiz[i], "Wrong_1:");
-            string alt2 = GetDataValue(quiz[i], "Wrong_2:");
-            string alt3 = GetDataValue(quiz[i], "Wrong_3:");
-            string alt4 = GetDataValue(quiz[i], "Correct:");
-            string answer = GetDataValue(quiz[i], "Answer:");
+            string city = GetDataValue(Quiz[i], "City:");
+            string question = GetDataValue(Quiz[i], "Question:");
+            string alt1 = GetDataValue(Quiz[i], "Wrong_1:");
+            string alt2 = GetDataValue(Quiz[i], "Wrong_2:");
+            string alt3 = GetDataValue(Quiz[i], "Wrong_3:");
+            string alt4 = GetDataValue(Quiz[i], "Correct:");
+            string answer = GetDataValue(Quiz[i], "Answer:");
 
-            //print(city + question + " " + wrong1 + " " + wrong2 + " " + wrong3 + " " + correct);
+            allQuestionsList.Add(new QuizList(city, question, alt1, alt2, alt3, alt4, answer));
 
-            listQuiz.Add(new QuizList(city, question, alt1, alt2, alt3, alt4, answer));
+            if(city == "Skåne")
+            {
+                skaneListQuiz.Add(new QuizList(city, question, alt1, alt2, alt3, alt4, answer));
+            }
+            else
+            {
+                nationalListQuiz.Add(new QuizList(city, question, alt1, alt2, alt3, alt4, answer));
+            }
         }
     }
 
@@ -72,63 +102,106 @@ public class Manager : MonoBehaviour {
         return value;
     }
 
-    // Update is called once per frame
-    private void Update()
+    IEnumerator delayTime()
     {
-        if (answeredQuestions == 4)
-        {
-            SceneManager.LoadScene("mainScene");
-        }
+        yield return new WaitForSeconds(1);
+        GenerateNewQuestion();
+    }
+
+    void SetQuestion()
+    {
         if (randomQuestion == -1)
         {
             RandomizeQuestion();
         }
         if (randomQuestion > -1)
         {
-            GetComponent<TextMesh>().text = questions[randomQuestion];
+            if(isInSkane)
+            {
+                GetComponent<TextMesh>().text = skaneQuestions[randomQuestion];
+            }
+            else
+            {
+                GetComponent<TextMesh>().text = nationalQuestions[randomQuestion];
+            }
         }
+    }
 
-        ReadFromServer();
-
+    void QuizSystem()
+    {
         if (choiceSelected == "y")
         {
             choiceSelected = "n";
 
-            if (answersID[randomQuestion].Contains(selectedAnswer))
+            if(isInSkane)
             {
-                
-                resultObj.GetComponent<TextMesh>().text = "Correct";
-                resultObj.GetComponent<TextMesh>().color = Color.green;
+                if (skaneAnswersID[randomQuestion].Contains(selectedAnswer))
+                {
 
-                StartCoroutine(delayTime());
-                score += 10;
+                    resultObj.GetComponent<TextMesh>().text = "Correct";
+                    resultObj.GetComponent<TextMesh>().color = Color.green;
 
-                print(answeredQuestions);
-                print(score);
-                print(randomQuestion);
+                    StartCoroutine(delayTime());
+                    score += 10;
+
+                    //print(answeredQuestions);
+                    //print(score);
+                    //print(randomQuestion);
+                }
+                else
+                {
+                    resultObj.GetComponent<TextMesh>().text = "Wrong Answer";
+                    resultObj.GetComponent<TextMesh>().color = Color.red;
+
+                    StartCoroutine(delayTime());
+                }
             }
             else
             {
-                resultObj.GetComponent<TextMesh>().text = "Wrong Answer";
-                resultObj.GetComponent<TextMesh>().color = Color.red;
+                if (nationalAnswersID[randomQuestion].Contains(selectedAnswer))
+                {
 
-                StartCoroutine(delayTime());
+                    resultObj.GetComponent<TextMesh>().text = "Correct";
+                    resultObj.GetComponent<TextMesh>().color = Color.green;
+
+                    StartCoroutine(delayTime());
+                    score += 10;
+
+                    //print(answeredQuestions);
+                    //print(score);
+                    //print(randomQuestion);
+                }
+                else
+                {
+                    resultObj.GetComponent<TextMesh>().text = "Wrong Answer";
+                    resultObj.GetComponent<TextMesh>().color = Color.red;
+
+                    StartCoroutine(delayTime());
+                }
             }
-            
         }
     }
-    IEnumerator delayTime()
+
+    void LoadMainScene()
     {
-        yield return new WaitForSeconds(3);
-        GenerateNewQuestion();
+        if (answeredQuestions == 4)
+        {
+            SceneManager.LoadScene("mainScene");
+        }
     }
 
     void ReadFromServer()
     {
-        for (int i = 0; i < listQuiz.Count; i++)
+        for (int i = 0; i < skaneListQuiz.Count; i++)
         {
-            questions[i] = listQuiz[i].question;
-            answersID[i] = listQuiz[i].answer;
+            skaneQuestions[i] = skaneListQuiz[i].question;
+            skaneAnswersID[i] = skaneListQuiz[i].answer;
+        }
+
+        for (int i = 0; i < nationalListQuiz.Count; i++)
+        {
+            nationalQuestions[i] = nationalListQuiz[i].question;
+            nationalAnswersID[i] = nationalListQuiz[i].answer;
         }
     }
 
@@ -142,16 +215,17 @@ public class Manager : MonoBehaviour {
 
     void RandomizeQuestion()
     {
-        int number = randomQuestion;
-
         randomQuestion = Random.Range(0, 2);
+    }
 
-        if (randomQuestion == number)
+    void CheckPlayerPosition()
+    {
+        //print(GoogleMap.centerLocation.latitude.ToString() + " " + GoogleMap.centerLocation.longitude.ToString());
+
+        if(GoogleMap.centerLocation.latitude < 56 && GoogleMap.centerLocation.longitude < 14)
         {
-            randomQuestion = Random.Range(0, 2);
+            //isInSkane = true;
         }
-
-
     }
     
     
