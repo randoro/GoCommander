@@ -56,15 +56,6 @@ public class Highscoremanger : MonoBehaviour {
 	//http://gocommander.sytes.net/scripts/highscore.php
 
 	}
-	public void Shift(){
-
-		if (shiftscore == false) {
-			shiftscore = true;
-		}
-		if (shiftscore == true) {
-			shiftscore = false;
-		}
-	}
 
 
 }
