@@ -23,6 +23,7 @@ public class GoogleMap : MonoBehaviour {
     public Color waterColor = Color.blue;
     public static string username;
     bool settled;
+    bool isPaused;
 
 
     void Start()
@@ -78,104 +79,111 @@ public class GoogleMap : MonoBehaviour {
 
     IEnumerator _Refresh()
     {
-        if (settled)
+        if (!isPaused)
         {
-            StartCoroutine(CheckActive());
-        }
-
-
-        var url = "http://maps.googleapis.com/maps/api/staticmap";
-        var qs = "";
-        
-        // (!autoLocateCenter)
-        //{
-
-
-        //Check for string location
-        if (centerLocation.address != "")
-            qs += "center=" + WWW.UnEscapeURL(centerLocation.address);
-        else
-        {
-            //Otherwise go with decimal location
-            qs += "center=" +
-                  WWW.UnEscapeURL(string.Format("{0},{1}", centerLocation.latitude, centerLocation.longitude));
-        }
-
-
-        //Add zoom argument
-        qs += "&zoom=" + zoom.ToString();
-        
-
-        //Add size argument
-        qs += "&size=" + WWW.UnEscapeURL(string.Format("{0}x{0}", size));
-
-        //Add scale argument
-        qs += "&scale=" + (doubleResolution ? "2" : "1");
-
-        //Add maptype argument
-        qs += "&maptype=" + mapType.ToString().ToLower();
-
-
-        //Add custom style
-        qs += "&style=feature:all|element:labels|visibility:off";
-        qs += "&style=feature:road|element:geometry|visibility:on|color:"+ColorTypeConverter.ToHTMLRGBHex(roadColor);
-        qs += "&style=feature:landscape|element:geometry.fill|visibility:on|color:"+ColorTypeConverter.ToHTMLRGBHex(landscapeColor);
-        qs += "&style=feature:water|element:geometry.fill|visibility:on|color:"+ColorTypeConverter.ToHTMLRGBHex(waterColor);
-        
-        //Added project key
-        qs += "&key=AIzaSyBhEI422RQO4o7HJKWL2seCkkootwbRMfU";
-        
-        WWW req = new WWW(url + "?" + qs);
-        
-        while (!req.isDone)
-            yield return null;
-        if (req.error == null)
-        {
-            var tex = new Texture2D(size, size);
-            tex.LoadImage(req.bytes);
-            GetComponent<Renderer>().material.mainTexture = tex;
-        }
-
-        print("sent GPS");
-        StartCoroutine(SendPlayerGPS());
-
-        GameObject tsG = GameObject.FindGameObjectWithTag("TreasureSpawner");
-        TreasureSpawner ts = null;
-
-        if (tsG != null)
-        {
-            ts = tsG.GetComponent<TreasureSpawner>();
-            ts.UpdateTreasureLocations();
-        }
-        GameObject psG = GameObject.FindGameObjectWithTag("PlayerSpawner");
-        PlayerSpawner ps;
-        if (psG != null)
-        {
-            ps = psG.GetComponent<PlayerSpawner>();
-            ps.UpdatePlayerLocations();
-        }
-        GameObject gsG = GameObject.FindGameObjectWithTag("GoalSpawner");
-        GoalSpawner gs;
-        if (gsG != null)
-        {
-            gs = gsG.GetComponent<GoalSpawner>();
-            gs.UpdateGoalLocation();
-        }
-
-        if (tsG != null)
-        {
-            if (!MinigameStarter.generated)
+            if (settled)
             {
-                MinigameStarter.generated = true;
-                settled = true;
-                print("generated treasures");
-                ts.GenerateNewTreasures();
-                
+                StartCoroutine(CheckActive());
+            }
 
+
+            var url = "http://maps.googleapis.com/maps/api/staticmap";
+            var qs = "";
+
+            // (!autoLocateCenter)
+            //{
+
+
+            //Check for string location
+            if (centerLocation.address != "")
+                qs += "center=" + WWW.UnEscapeURL(centerLocation.address);
+            else
+            {
+                //Otherwise go with decimal location
+                qs += "center=" +
+                      WWW.UnEscapeURL(string.Format("{0},{1}", centerLocation.latitude, centerLocation.longitude));
+            }
+
+
+            //Add zoom argument
+            qs += "&zoom=" + zoom.ToString();
+
+
+            //Add size argument
+            qs += "&size=" + WWW.UnEscapeURL(string.Format("{0}x{0}", size));
+
+            //Add scale argument
+            qs += "&scale=" + (doubleResolution ? "2" : "1");
+
+            //Add maptype argument
+            qs += "&maptype=" + mapType.ToString().ToLower();
+
+
+            //Add custom style
+            qs += "&style=feature:all|element:labels|visibility:off";
+            qs += "&style=feature:road|element:geometry|visibility:on|color:" + ColorTypeConverter.ToHTMLRGBHex(roadColor);
+            qs += "&style=feature:landscape|element:geometry.fill|visibility:on|color:" + ColorTypeConverter.ToHTMLRGBHex(landscapeColor);
+            qs += "&style=feature:water|element:geometry.fill|visibility:on|color:" + ColorTypeConverter.ToHTMLRGBHex(waterColor);
+
+            //Added project key
+            qs += "&key=AIzaSyBhEI422RQO4o7HJKWL2seCkkootwbRMfU";
+
+            WWW req = new WWW(url + "?" + qs);
+
+            while (!req.isDone)
+                yield return null;
+            if (req.error == null)
+            {
+                var tex = new Texture2D(size, size);
+                tex.LoadImage(req.bytes);
+                GetComponent<Renderer>().material.mainTexture = tex;
+            }
+
+            print("sent GPS");
+            StartCoroutine(SendPlayerGPS());
+
+            GameObject tsG = GameObject.FindGameObjectWithTag("TreasureSpawner");
+            TreasureSpawner ts = null;
+
+            if (tsG != null)
+            {
+                ts = tsG.GetComponent<TreasureSpawner>();
+                ts.UpdateTreasureLocations();
+            }
+            GameObject psG = GameObject.FindGameObjectWithTag("PlayerSpawner");
+            PlayerSpawner ps;
+            if (psG != null)
+            {
+                ps = psG.GetComponent<PlayerSpawner>();
+                ps.UpdatePlayerLocations();
+            }
+            GameObject gsG = GameObject.FindGameObjectWithTag("GoalSpawner");
+            GoalSpawner gs;
+            if (gsG != null)
+            {
+                gs = gsG.GetComponent<GoalSpawner>();
+                gs.UpdateGoalLocation();
+            }
+
+            if (tsG != null)
+            {
+                if (!MinigameStarter.generated)
+                {
+                    MinigameStarter.generated = true;
+                    settled = true;
+                    print("generated treasures");
+                    ts.GenerateNewTreasures();
+
+
+                }
             }
         }
 
+    }
 
+    void OnApplicationPause(bool pauseStatus)
+    {
+        isPaused = pauseStatus;
     }
     
 
