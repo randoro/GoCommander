@@ -88,9 +88,9 @@ public class TreasureSpawner : MonoBehaviour {
         }    
     }
 
-    private float coordScaleToGameScale(float inFloat, float total, float multi)
+    private float coordScaleToGameScale(double inFloat, double total, float multi)
     {
-        float returnfloat = (inFloat/total) * (multi * (float)Math.Pow(2, gMap.zoom));
+        float returnfloat = (float)((inFloat / total) * (multi * (double)Math.Pow(2, gMap.zoom)));
         return returnfloat;
     }
 
