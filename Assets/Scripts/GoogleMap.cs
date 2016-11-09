@@ -46,6 +46,8 @@ public class GoogleMap : MonoBehaviour {
 
         WWW www = new WWW(sendGPSURL, form);
         yield return www;
+
+        
     }
 
     IEnumerator _Refresh()
@@ -103,6 +105,9 @@ public class GoogleMap : MonoBehaviour {
             GetComponent<Renderer>().material.mainTexture = tex;
         }
 
+        print("sent GPS");
+        StartCoroutine(SendPlayerGPS());
+
         TreasureSpawner ts = GameObject.FindGameObjectWithTag("TreasureSpawner").GetComponent<TreasureSpawner>();
 
         if (ts != null)
@@ -120,13 +125,13 @@ public class GoogleMap : MonoBehaviour {
             gs.UpdateGoalLocation();
         }
 
-        StartCoroutine(SendPlayerGPS());
+        
 
         if (!generated)
         {
-            generated = true;
             if (ts != null)
             {
+                generated = true;
                 ts.GenerateNewTreasures();
             }
         }

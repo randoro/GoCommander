@@ -101,7 +101,7 @@ public class PlayerSpawner : MonoBehaviour {
 
     IEnumerator GetPlayers()
     {
-        string playerURL = "https://ddwap.mah.se/AC3992/get_player_locations.php";
+        string playerURL = "http://gocommander.sytes.net/scripts/get_player_locations.php";
 
         WWWForm form = new WWWForm();
         form.AddField("usernamePost", GoogleMap.username);
