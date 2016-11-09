@@ -108,31 +108,38 @@ public class GoogleMap : MonoBehaviour {
         print("sent GPS");
         StartCoroutine(SendPlayerGPS());
 
-        TreasureSpawner ts = GameObject.FindGameObjectWithTag("TreasureSpawner").GetComponent<TreasureSpawner>();
+        GameObject tsG = GameObject.FindGameObjectWithTag("TreasureSpawner");
+        TreasureSpawner ts = null;
 
-        if (ts != null)
+        if (tsG != null)
         {
+            ts = tsG.GetComponent<TreasureSpawner>();
             ts.UpdateTreasureLocations();
         }
-        PlayerSpawner ps = GameObject.FindGameObjectWithTag("PlayerSpawner").GetComponent<PlayerSpawner>();
-        if (ps != null)
+        GameObject psG = GameObject.FindGameObjectWithTag("PlayerSpawner");
+        PlayerSpawner ps;
+        if (psG != null)
         {
+            ps = psG.GetComponent<PlayerSpawner>();
             ps.UpdatePlayerLocations();
         }
-        GoalSpawner gs = GameObject.FindGameObjectWithTag("GoalSpawner").GetComponent<GoalSpawner>();
-        if (gs != null)
+        GameObject gsG = GameObject.FindGameObjectWithTag("GoalSpawner");
+        GoalSpawner gs;
+        if (gsG != null)
         {
+            gs = gsG.GetComponent<GoalSpawner>();
             gs.UpdateGoalLocation();
         }
 
-        
 
-        if (!generated)
+        if (tsG != null)
         {
-            if (ts != null)
+            if (!generated)
             {
                 generated = true;
+                print("generated treasures");
                 ts.GenerateNewTreasures();
+
             }
         }
 
