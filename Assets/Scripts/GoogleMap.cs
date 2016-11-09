@@ -79,13 +79,13 @@ public class GoogleMap : MonoBehaviour {
 
     IEnumerator _Refresh()
     {
+        if (settled)
+        {
+            StartCoroutine(CheckActive());
+        }
+
         if (!isPaused)
         {
-            if (settled)
-            {
-                StartCoroutine(CheckActive());
-            }
-
 
             var url = "http://maps.googleapis.com/maps/api/staticmap";
             var qs = "";
