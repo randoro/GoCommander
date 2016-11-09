@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GoogleMap : MonoBehaviour {
 
@@ -21,12 +22,12 @@ public class GoogleMap : MonoBehaviour {
     public Color roadColor = Color.white;
     public Color waterColor = Color.blue;
     public static string username;
+    bool settled;
 
-    private bool generated;
 
     void Start()
     {
-        //Refresh();
+        settled = false;
     }
 
     public void Refresh()
@@ -50,8 +51,38 @@ public class GoogleMap : MonoBehaviour {
         
     }
 
+    IEnumerator CheckActive()
+    {
+        //yield return new WaitForSeconds(5000);
+
+        string sendGPSURL = "http://gocommander.sytes.net/scripts/check_player.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", username);
+
+        WWW www = new WWW(sendGPSURL, form);
+        yield return www;
+
+        string result = www.text;
+
+        if (result != null)
+        {
+            if (result.Contains("INACTIVE"))
+            {
+                SceneManager.LoadScene("login");
+            }
+        }
+
+
+    }
+
     IEnumerator _Refresh()
     {
+        if (settled)
+        {
+            StartCoroutine(CheckActive());
+        }
+
 
         var url = "http://maps.googleapis.com/maps/api/staticmap";
         var qs = "";
@@ -131,14 +162,15 @@ public class GoogleMap : MonoBehaviour {
             gs.UpdateGoalLocation();
         }
 
-
         if (tsG != null)
         {
-            if (!generated)
+            if (!MinigameStarter.generated)
             {
-                generated = true;
+                MinigameStarter.generated = true;
+                settled = true;
                 print("generated treasures");
                 ts.GenerateNewTreasures();
+                
 
             }
         }
