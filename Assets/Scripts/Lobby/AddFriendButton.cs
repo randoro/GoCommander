@@ -7,6 +7,7 @@ public class AddFriendButton : MonoBehaviour
 
     public void AddFriendBtnClicked()
     {
+        Debug.Log("Buttpn clicked");
         Destroy(addFriendBtn);
     }
 
