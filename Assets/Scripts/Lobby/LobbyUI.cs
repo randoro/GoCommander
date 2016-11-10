@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LobbyUI : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class LobbyUI : MonoBehaviour
     Text contentText;
     public Button addFriendBtn;
     public Button backBtn;
+    public Button startMatchBtn;
+    public Button leaveLobbyBtn;
 
     RectTransform listElementTransform;
     RectTransform scrollviewTransform;
@@ -31,6 +34,9 @@ public class LobbyUI : MonoBehaviour
     void Start()
     {
         current_UI = UI_Phase.UI_Main;
+        backBtn.onClick.AddListener(delegate { BackButtonClick(); });
+        startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
+        leaveLobbyBtn.onClick.AddListener(delegate { LeaveButtonClick(); });
         PopulateList();
     }
 
@@ -90,9 +96,19 @@ public class LobbyUI : MonoBehaviour
         current_UI = UI_Phase.UI_AddFriend;
     }
 
-    private void BackBtnClick()
+    private void BackButtonClick()
     {
         current_UI = UI_Phase.UI_Main;
+    }
+
+    private void StartButtonClick()
+    {
+        SceneManager.LoadScene("mainScene");
+    }
+
+    private void LeaveButtonClick()
+    {
+        SceneManager.LoadScene("login");
     }
 }
 
