@@ -4,8 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine.SceneManagement;
+using System.Net;
+using SimpleJSON;
 
-public class Manager : MonoBehaviour {
+public class Manager : MonoBehaviour
+{
 
     public static List<QuizList> skaneListQuiz = new List<QuizList>();
     public static List<QuizList> nationalListQuiz = new List<QuizList>();
@@ -16,9 +19,9 @@ public class Manager : MonoBehaviour {
     private string[] nationalQuestions, nationalAnswersID, nationalQuiz;
 
     public Transform resultObj;
-	GameObject scoremanager;
-	public int score = 0;
-	int answeredQuestions = 0;
+    GameObject scoremanager;
+    public int score = 0;
+    int answeredQuestions = 0;
 
     public static string selectedAnswer;
 
@@ -31,7 +34,8 @@ public class Manager : MonoBehaviour {
     public static bool isInSkane;
 
     // Use this for initialization
-    private void Start () {
+    private void Start()
+    {
 
         StartCoroutine(GetQuizes());
 
@@ -40,11 +44,12 @@ public class Manager : MonoBehaviour {
         nationalQuestions = new string[4];
         nationalAnswersID = new string[4];
 
-		//scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
+        //scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
 
         isInSkane = false;
+        JsonLocation();
 
-        
+
     }
 
     // Update is called once per frame
@@ -83,7 +88,7 @@ public class Manager : MonoBehaviour {
 
             allQuestionsList.Add(new QuizList(city, question, alt1, alt2, alt3, alt4, answer));
 
-            if(city == "Skåne")
+            if (city == "Skåne")
             {
                 skaneListQuiz.Add(new QuizList(city, question, alt1, alt2, alt3, alt4, answer));
             }
@@ -116,7 +121,7 @@ public class Manager : MonoBehaviour {
         }
         if (randomQuestion > -1)
         {
-            if(isInSkane)
+            if (isInSkane)
             {
                 GetComponent<TextMesh>().text = skaneQuestions[randomQuestion];
             }
@@ -133,7 +138,7 @@ public class Manager : MonoBehaviour {
         {
             choiceSelected = "n";
 
-            if(isInSkane)
+            if (isInSkane)
             {
                 if (skaneAnswersID[randomQuestion].Contains(selectedAnswer))
                 {
@@ -222,11 +227,127 @@ public class Manager : MonoBehaviour {
     {
         //print(GoogleMap.centerLocation.latitude.ToString() + " " + GoogleMap.centerLocation.longitude.ToString());
 
-        if(GoogleMap.centerLocation.latitude < 56 && GoogleMap.centerLocation.longitude < 14)
+        if (GoogleMap.centerLocation.latitude < 56 && GoogleMap.centerLocation.longitude < 14)
         {
             //isInSkane = true;
         }
     }
-    
-    
+
+    void JsonLocation()
+    {
+        using (WebClient wc = new WebClient())
+        {
+            string country = "";
+            string city = "";
+
+            double lat = GoogleMap.centerLocation.latitude;
+            double lng = GoogleMap.centerLocation.longitude;
+
+            //string json = wc.DownloadString("http://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224%2C-73.961452&sensor=true");
+            string json = wc.DownloadString("http://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat.ToString() + "%2C" + lng.ToString() + "&sensor=true");
+
+            SimpleJSON.JSONNode item = JSON.Parse(json);
+            var N = JSON.Parse(json);
+            var address_components = N["results"][0]["address_components"];
+            int count = N["results"][0]["address_components"].Count;
+
+            for (int i = 0; i < count; i++)
+            {
+                var longName = address_components[i]["long_name"];
+                var type = address_components[i]["types"][0];
+
+                if (type.Value == "country")
+                {
+                    country = longName.Value;
+                    print("country: "+longName);
+                }
+
+                if (type.Value == "locality")
+                {
+                    city = longName.Value;
+                    print("city: " + longName);
+                }
+
+            }
+
+
+            //RootObject item = JsonUtility.FromJson<RootObject>(json);
+            /*
+            print(versionString);
+            List<Result> rList = item.results;
+            print(rList.Count);
+            List<AddressComponent> aList = rList[0].address_components;
+
+            foreach (AddressComponent c in aList)
+            {
+                if (c.types[0] == "country")
+                {
+                    country = c.long_name;
+                }
+
+                if (c.types[0] == "administrative_area_level_1")
+                {
+                    city = c.long_name;
+                }
+
+            }
+
+            print(country + " " + city);
+            */
+
+        }
+    }
+}
+
+    public class AddressComponent
+{
+    public string long_name { get; set; }
+    public string short_name { get; set; }
+    public List<string> types { get; set; }
+}
+
+public class Location
+{
+    public double lat { get; set; }
+    public double lng { get; set; }
+}
+
+public class Northeast
+{
+    public double lat { get; set; }
+    public double lng { get; set; }
+}
+
+public class Southwest
+{
+    public double lat { get; set; }
+    public double lng { get; set; }
+}
+
+public class Viewport
+{
+    public Northeast northeast { get; set; }
+    public Southwest southwest { get; set; }
+}
+
+public class Geometry
+{
+    public Location location { get; set; }
+    public string location_type { get; set; }
+    public Viewport viewport { get; set; }
+}
+
+public class Result
+{
+    public List<AddressComponent> address_components { get; set; }
+    public string formatted_address { get; set; }
+    public Geometry geometry { get; set; }
+    public string place_id { get; set; }
+    public List<string> types { get; set; }
+}
+
+public class RootObject
+{
+    public List<Result> results { get; set; }
+    public string status { get; set; }
 }

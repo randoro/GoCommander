@@ -92,16 +92,16 @@ public class PlayerSpawner : MonoBehaviour {
 
 
 
-    private float coordScaleToGameScale(float inFloat, float total, float multi)
+    private float coordScaleToGameScale(double inFloat, double total, float multi)
     {
-        float returnfloat = (inFloat / total) * (multi * (float)Math.Pow(2, gMap.zoom));
+        float returnfloat = (float)((inFloat / total) * (multi * (double)Math.Pow(2, gMap.zoom)));
         return returnfloat;
     }
 
 
     IEnumerator GetPlayers()
     {
-        string playerURL = "https://ddwap.mah.se/AC3992/get_player_locations.php";
+        string playerURL = "http://gocommander.sytes.net/scripts/get_player_locations.php";
 
         WWWForm form = new WWWForm();
         form.AddField("usernamePost", GoogleMap.username);

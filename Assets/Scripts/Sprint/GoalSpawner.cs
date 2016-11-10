@@ -87,10 +87,10 @@ public class GoalSpawner : MonoBehaviour
         return middle + adder;
     }
 
-    private float coordScaleToGameScale(double inFloat, double total, double multi)
+    private float coordScaleToGameScale(double inFloat, double total, float multi)
     {
-        double returnfloat = (inFloat / total) * (multi * (double)Math.Pow(2, gMap.zoom));
-        return (float)returnfloat;
+        float returnfloat = (float)((inFloat / total) * (multi * (double)Math.Pow(2, gMap.zoom)));
+        return returnfloat;
     }
 
     public void UpdateGoalLocation()
