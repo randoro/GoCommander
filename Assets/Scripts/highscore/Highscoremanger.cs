@@ -5,13 +5,14 @@ using UnityEngine.UI;
 public class Highscoremanger : MonoBehaviour {
 
 	public Text hightext;
-	public string test;
+	public string result;
 	public int qwizscore;
 	public int puzzelscore;
 	public int memoryscore;
 	int totalscore;
 	public int switchiro = 0;
-	public string[] score;
+	public string[] scoreArray;
+    public string username;
 
 	GameObject scoremanager;
 	//HighScoreHolder
@@ -19,7 +20,8 @@ public class Highscoremanger : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
+        username = GoogleMap.username;
+        scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
 		LoadScores ();
 	
 	}
@@ -48,77 +50,75 @@ public class Highscoremanger : MonoBehaviour {
 			break;
 		}
 
-				
-
-
-		hightext.text = test;
-
-
+		hightext.text = result;
 	}
+
 	public void LoadScores(){
 		memoryscore = scoremanager.GetComponent<ScoreHolder> ().Getmemoryscore();
 		puzzelscore= scoremanager.GetComponent<ScoreHolder> ().Getpuzzelscore();
 		qwizscore = scoremanager.GetComponent<ScoreHolder> ().Getqwizscore();
-
 	}
-	public void Yourscore(){
-		test = "dinscore \n qwizscore= "+ qwizscore + "\n puzzelscore= "+ puzzelscore+ "\n memoryscore= "+ memoryscore ;
-	
 
+	public void Yourscore(){
+		result = "dinscore \n qwizscore= "+ qwizscore + "\n puzzelscore= "+ puzzelscore+ "\n memoryscore= "+ memoryscore ;
 	}
 	public void Evreonesscore(){
 		totalscore = memoryscore + puzzelscore + qwizscore;
 		//lodescore från server
-		test="total"+totalscore;
-	//http://gocommander.sytes.net/scripts/highscore.php
+		result = "total " + totalscore;
 
 	}
 	public void Qscore(){
-		test = "qwisscore";
-			
-		}
+        result = "q";
+        StartCoroutine(GetHighscore("Quiz"));
+    }
 
 	public void Pscore(){
-		test = "p";
-		}
+        result = "s";
+        StartCoroutine(GetHighscore("Puzzle"));
+    }
 
 	public void Mscore(){
-		//test = "m";
-		print ("mscore");
-		StartCoroutine (GetMemory ());
+		StartCoroutine (GetHighscore ("Memory"));
 
 		}
 
 	public void Sscore(){
-		test = "e";
-		}
-	IEnumerator GetMemory()
+        result = "s";
+        StartCoroutine(GetHighscore("Sprint"));
+    }
+
+	IEnumerator GetHighscore(string in_game)
 	{
 		string memoryURL = "http://gocommander.sytes.net/scripts/get_highscore.php";
-		//WWWForm form = new WWWForm();
-		//form.AddField("usernamePost", name);
-		WWW www = new WWW(memoryURL);
+		
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", username);
+        form.AddField("userGamePost", in_game);
+
+        WWW www = new WWW(memoryURL, form);
 		yield return www;
 		string result = www.text;
 
 		if (result != null)
 		{
-			score = result.Split(';');
+			scoreArray = result.Split(';');
 		}
 
-		for (int i = 0; i < score.Length - 1; i++)
+		for (int i = 0; i < scoreArray.Length - 1; i++)
 		{
 
-			int id = int.Parse(GetDataValue(score[i], "ID:"));
-			string game = GetDataValue (score [i], "Game:");
-			int point=int.Parse(GetDataValue(score[i],"Score:"));
-			string name = GetDataValue (score [i], "Username:");
-			test = name + "  " + game+ "  "+point.ToString();
+			int id = int.Parse(GetDataValue(scoreArray[i], "ID:"));
+			string game = GetDataValue (scoreArray [i], "Game:");
+			int point = int.Parse(GetDataValue(scoreArray[i],"Score:"));
+			string name = GetDataValue (scoreArray [i], "Username:");
+			this.result = name + "  " + game+ "  "+ point.ToString();
 
 			//print(level);
 			//listPuzzle.Add(new PuzzleList(id, level));
 		}
 	}
+
 	string GetDataValue(string data, string index)
 	{
 		string value = data.Substring(data.IndexOf(index) + index.Length);
@@ -126,7 +126,4 @@ public class Highscoremanger : MonoBehaviour {
 			value = value.Remove(value.IndexOf("|"));
 		return value;
 	}
-
-
-
 }

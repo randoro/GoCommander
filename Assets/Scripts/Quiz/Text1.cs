@@ -41,19 +41,23 @@ public class Text1 : MonoBehaviour {
 
     private void ReadFirstOptions()
     {
-        if(Manager.isInSkane)
+        for (int i = 0; i < Manager.allQuestionsList.Count; i++)
         {
-            for (int i = 0; i < Manager.skaneListQuiz.Count; i++)
-            {
-                firstChoices[i] = Manager.skaneListQuiz[i].alt1;
-            }
+            firstChoices[i] = Manager.allQuestionsList[i].alt1;
         }
-        else
-        {
-            for (int i = 0; i < Manager.nationalListQuiz.Count; i++)
-            {
-                firstChoices[i] = Manager.nationalListQuiz[i].alt1;
-            }
-        }
+        //if (Manager.isInSkane)
+        //{
+        //    for (int i = 0; i < Manager.skaneListQuiz.Count; i++)
+        //    {
+        //        firstChoices[i] = Manager.skaneListQuiz[i].alt1;
+        //    }
+        //}
+        //else
+        //{
+        //    for (int i = 0; i < Manager.nationalListQuiz.Count; i++)
+        //    {
+        //        firstChoices[i] = Manager.nationalListQuiz[i].alt1;
+        //    }
+        //}
     }
 }

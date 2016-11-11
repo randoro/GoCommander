@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class QuizList
 {
-    public string city;
+    public string position;
     public string question;
     public string alt1;
     public string alt2;
@@ -13,9 +13,9 @@ public class QuizList
     public string alt4;
     public string answer;
 
-    public QuizList(string city, string question, string alt1, string alt2, string alt3, string alt4, string answer)
+    public QuizList(string position, string question, string alt1, string alt2, string alt3, string alt4, string answer)
     {
-        this.city = city;
+        this.position = position;
         this.question = question;
         this.alt1 = alt1;
         this.alt2 = alt2;

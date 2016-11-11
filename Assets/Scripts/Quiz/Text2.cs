@@ -38,19 +38,23 @@ public class Text2 : MonoBehaviour {
 
     void ReadSecondOptions()
     {
-        if(Manager.isInSkane)
+        for (int i = 0; i < Manager.allQuestionsList.Count; i++)
         {
-            for (int i = 0; i < Manager.skaneListQuiz.Count; i++)
-            {
-                secondChoices[i] = Manager.skaneListQuiz[i].alt2;
-            }
+            secondChoices[i] = Manager.allQuestionsList[i].alt2;
         }
-        else
-        {
-            for (int i = 0; i < Manager.nationalListQuiz.Count; i++)
-            {
-                secondChoices[i] = Manager.nationalListQuiz[i].alt2;
-            }
-        }
+        //if (Manager.isInSkane)
+        //{
+        //    for (int i = 0; i < Manager.skaneListQuiz.Count; i++)
+        //    {
+        //        secondChoices[i] = Manager.skaneListQuiz[i].alt2;
+        //    }
+        //}
+        //else
+        //{
+        //    for (int i = 0; i < Manager.nationalListQuiz.Count; i++)
+        //    {
+        //        secondChoices[i] = Manager.nationalListQuiz[i].alt2;
+        //    }
+        //}
     }
 }

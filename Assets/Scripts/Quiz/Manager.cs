@@ -10,13 +10,14 @@ using SimpleJSON;
 public class Manager : MonoBehaviour
 {
 
-    public static List<QuizList> skaneListQuiz = new List<QuizList>();
-    public static List<QuizList> nationalListQuiz = new List<QuizList>();
+    //public static List<QuizList> skaneListQuiz = new List<QuizList>();
+    //public static List<QuizList> nationalListQuiz = new List<QuizList>();
 
     public static List<QuizList> allQuestionsList = new List<QuizList>();
+    private string[] allQuestions, allAnswersID, Quiz;
 
-    private string[] skaneQuestions, skaneAnswersID, Quiz;
-    private string[] nationalQuestions, nationalAnswersID, nationalQuiz;
+    //private string[] skaneQuestions, skaneAnswersID, Quiz;
+    //private string[] nationalQuestions, nationalAnswersID, nationalQuiz;
 
     public Transform resultObj;
     GameObject scoremanager;
@@ -31,31 +32,38 @@ public class Manager : MonoBehaviour
 
     private string line, answerline;
 
-    public static bool isInSkane;
+    //public static bool isInSkane;
+
+    private string city;
+    private string country;
+    private string username = GoogleMap.username;
 
     // Use this for initialization
     private void Start()
     {
+        city = "";
+        country = "";
 
+        allQuestions = new string[4];
+        allAnswersID = new string[4];
+
+        StartCoroutine(JsonLocation());
+        StartCoroutine(SendUserLocation());
         StartCoroutine(GetQuizes());
 
-        skaneQuestions = new string[4];
-        skaneAnswersID = new string[4];
-        nationalQuestions = new string[4];
-        nationalAnswersID = new string[4];
+        //skaneQuestions = new string[4];
+        //skaneAnswersID = new string[4];
+        //nationalQuestions = new string[4];
+        //nationalAnswersID = new string[4];
 
         //scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
-
-        isInSkane = false;
-        JsonLocation();
-
-
+        //isInSkane = false;
     }
 
     // Update is called once per frame
     private void Update()
     {
-        CheckPlayerPosition();
+        //CheckPlayerPosition();
         ReadFromServer();
         SetQuestion();
         QuizSystem();
@@ -63,11 +71,29 @@ public class Manager : MonoBehaviour
 
     }
 
+    IEnumerator SendUserLocation()
+    {
+        string playerURL = "http://gocommander.sytes.net/scripts/get_city_country.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", username);
+        form.AddField("userCityPost", city);
+        form.AddField("userCountryPost", country);
+
+        WWW www = new WWW(playerURL, form);
+        yield return www;
+    }
+
     IEnumerator GetQuizes()
     {
+        //string name = "milan";
         string quizURL = "http://gocommander.sytes.net/scripts/get_quiz.php";
 
-        WWW www = new WWW(quizURL);
+        WWWForm form = new WWWForm();
+        //form.AddField("usernamePost", name);
+        form.AddField("usernamePost", username);
+
+        WWW www = new WWW(quizURL, form);
         yield return www;
         string result = www.text;
 
@@ -78,7 +104,7 @@ public class Manager : MonoBehaviour
 
         for (int i = 0; i < Quiz.Length - 1; i++)
         {
-            string city = GetDataValue(Quiz[i], "City:");
+            string position = GetDataValue(Quiz[i], "Position:");
             string question = GetDataValue(Quiz[i], "Question:");
             string alt1 = GetDataValue(Quiz[i], "Wrong_1:");
             string alt2 = GetDataValue(Quiz[i], "Wrong_2:");
@@ -86,16 +112,16 @@ public class Manager : MonoBehaviour
             string alt4 = GetDataValue(Quiz[i], "Correct:");
             string answer = GetDataValue(Quiz[i], "Answer:");
 
-            allQuestionsList.Add(new QuizList(city, question, alt1, alt2, alt3, alt4, answer));
+            allQuestionsList.Add(new QuizList(position, question, alt1, alt2, alt3, alt4, answer));
 
-            if (city == "Skåne")
-            {
-                skaneListQuiz.Add(new QuizList(city, question, alt1, alt2, alt3, alt4, answer));
-            }
-            else
-            {
-                nationalListQuiz.Add(new QuizList(city, question, alt1, alt2, alt3, alt4, answer));
-            }
+            //if (city == "Skåne")
+            //{
+            //    skaneListQuiz.Add(new QuizList(city, question, alt1, alt2, alt3, alt4, answer));
+            //}
+            //else
+            //{
+            //    nationalListQuiz.Add(new QuizList(city, question, alt1, alt2, alt3, alt4, answer));
+            //}
         }
     }
 
@@ -121,14 +147,15 @@ public class Manager : MonoBehaviour
         }
         if (randomQuestion > -1)
         {
-            if (isInSkane)
-            {
-                GetComponent<TextMesh>().text = skaneQuestions[randomQuestion];
-            }
-            else
-            {
-                GetComponent<TextMesh>().text = nationalQuestions[randomQuestion];
-            }
+            //if (isInSkane)
+            //{
+                GetComponent<TextMesh>().text = allQuestions[randomQuestion];
+                //GetComponent<TextMesh>().text = skaneQuestions[randomQuestion];
+            //}
+            //else
+            //{
+            //GetComponent<TextMesh>().text = nationalQuestions[randomQuestion];
+            //}
         }
     }
 
@@ -138,52 +165,73 @@ public class Manager : MonoBehaviour
         {
             choiceSelected = "n";
 
-            if (isInSkane)
+            if (allAnswersID[randomQuestion].Contains(selectedAnswer))
             {
-                if (skaneAnswersID[randomQuestion].Contains(selectedAnswer))
-                {
 
-                    resultObj.GetComponent<TextMesh>().text = "Correct";
-                    resultObj.GetComponent<TextMesh>().color = Color.green;
+                resultObj.GetComponent<TextMesh>().text = "Correct";
+                resultObj.GetComponent<TextMesh>().color = Color.green;
 
-                    StartCoroutine(delayTime());
-                    score += 10;
+                StartCoroutine(delayTime());
+                score += 10;
 
-                    //print(answeredQuestions);
-                    //print(score);
-                    //print(randomQuestion);
-                }
-                else
-                {
-                    resultObj.GetComponent<TextMesh>().text = "Wrong Answer";
-                    resultObj.GetComponent<TextMesh>().color = Color.red;
-
-                    StartCoroutine(delayTime());
-                }
+                //print(answeredQuestions);
+                //print(score);
+                //print(randomQuestion);
             }
             else
             {
-                if (nationalAnswersID[randomQuestion].Contains(selectedAnswer))
-                {
+                resultObj.GetComponent<TextMesh>().text = "Wrong Answer";
+                resultObj.GetComponent<TextMesh>().color = Color.red;
 
-                    resultObj.GetComponent<TextMesh>().text = "Correct";
-                    resultObj.GetComponent<TextMesh>().color = Color.green;
-
-                    StartCoroutine(delayTime());
-                    score += 10;
-
-                    //print(answeredQuestions);
-                    //print(score);
-                    //print(randomQuestion);
-                }
-                else
-                {
-                    resultObj.GetComponent<TextMesh>().text = "Wrong Answer";
-                    resultObj.GetComponent<TextMesh>().color = Color.red;
-
-                    StartCoroutine(delayTime());
-                }
+                StartCoroutine(delayTime());
             }
+
+            //if (isInSkane)
+            //{
+            //    if (skaneAnswersID[randomQuestion].Contains(selectedAnswer))
+            //    {
+
+            //        resultObj.GetComponent<TextMesh>().text = "Correct";
+            //        resultObj.GetComponent<TextMesh>().color = Color.green;
+
+            //        StartCoroutine(delayTime());
+            //        score += 10;
+
+            //        //print(answeredQuestions);
+            //        //print(score);
+            //        //print(randomQuestion);
+            //    }
+            //    else
+            //    {
+            //        resultObj.GetComponent<TextMesh>().text = "Wrong Answer";
+            //        resultObj.GetComponent<TextMesh>().color = Color.red;
+
+            //        StartCoroutine(delayTime());
+            //    }
+            //}
+            //else
+            //{
+            //    if (nationalAnswersID[randomQuestion].Contains(selectedAnswer))
+            //    {
+
+            //        resultObj.GetComponent<TextMesh>().text = "Correct";
+            //        resultObj.GetComponent<TextMesh>().color = Color.green;
+
+            //        StartCoroutine(delayTime());
+            //        score += 10;
+
+            //        //print(answeredQuestions);
+            //        //print(score);
+            //        //print(randomQuestion);
+            //    }
+            //    else
+            //    {
+            //        resultObj.GetComponent<TextMesh>().text = "Wrong Answer";
+            //        resultObj.GetComponent<TextMesh>().color = Color.red;
+
+            //        StartCoroutine(delayTime());
+            //    }
+            //}
         }
     }
 
@@ -197,17 +245,23 @@ public class Manager : MonoBehaviour
 
     void ReadFromServer()
     {
-        for (int i = 0; i < skaneListQuiz.Count; i++)
+        for (int i = 0; i < allQuestionsList.Count; i++)
         {
-            skaneQuestions[i] = skaneListQuiz[i].question;
-            skaneAnswersID[i] = skaneListQuiz[i].answer;
+            allQuestions[i] = allQuestionsList[i].question;
+            allAnswersID[i] = allQuestionsList[i].answer;
         }
 
-        for (int i = 0; i < nationalListQuiz.Count; i++)
-        {
-            nationalQuestions[i] = nationalListQuiz[i].question;
-            nationalAnswersID[i] = nationalListQuiz[i].answer;
-        }
+        //for (int i = 0; i < skaneListQuiz.Count; i++)
+        //{
+        //    skaneQuestions[i] = skaneListQuiz[i].question;
+        //    skaneAnswersID[i] = skaneListQuiz[i].answer;
+        //}
+
+        //for (int i = 0; i < nationalListQuiz.Count; i++)
+        //{
+        //    nationalQuestions[i] = nationalListQuiz[i].question;
+        //    nationalAnswersID[i] = nationalListQuiz[i].answer;
+        //}
     }
 
     void GenerateNewQuestion()
@@ -223,23 +277,20 @@ public class Manager : MonoBehaviour
         randomQuestion = Random.Range(0, 2);
     }
 
-    void CheckPlayerPosition()
-    {
-        //print(GoogleMap.centerLocation.latitude.ToString() + " " + GoogleMap.centerLocation.longitude.ToString());
+    //void CheckPlayerPosition()
+    //{
+    //    //print(GoogleMap.centerLocation.latitude.ToString() + " " + GoogleMap.centerLocation.longitude.ToString());
 
-        if (GoogleMap.centerLocation.latitude < 56 && GoogleMap.centerLocation.longitude < 14)
-        {
-            //isInSkane = true;
-        }
-    }
+    //    if (GoogleMap.centerLocation.latitude < 56 && GoogleMap.centerLocation.longitude < 14)
+    //    {
+    //        //isInSkane = true;
+    //    }
+    //}
 
-    void JsonLocation()
+    IEnumerator JsonLocation()
     {
         using (WebClient wc = new WebClient())
         {
-            string country = "";
-            string city = "";
-
             double lat = GoogleMap.centerLocation.latitude;
             double lng = GoogleMap.centerLocation.longitude;
 
@@ -267,39 +318,14 @@ public class Manager : MonoBehaviour
                     city = longName.Value;
                     print("city: " + longName);
                 }
-
             }
 
-
-            //RootObject item = JsonUtility.FromJson<RootObject>(json);
-            /*
-            print(versionString);
-            List<Result> rList = item.results;
-            print(rList.Count);
-            List<AddressComponent> aList = rList[0].address_components;
-
-            foreach (AddressComponent c in aList)
-            {
-                if (c.types[0] == "country")
-                {
-                    country = c.long_name;
-                }
-
-                if (c.types[0] == "administrative_area_level_1")
-                {
-                    city = c.long_name;
-                }
-
-            }
-
-            print(country + " " + city);
-            */
-
+            yield return new WaitForSeconds(1);
         }
     }
 }
 
-    public class AddressComponent
+public class AddressComponent
 {
     public string long_name { get; set; }
     public string short_name { get; set; }

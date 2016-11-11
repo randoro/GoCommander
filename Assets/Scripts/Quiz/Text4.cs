@@ -39,20 +39,25 @@ public class Text4 : MonoBehaviour {
 
     private void ReadFourthOptions()
     {
-        if(Manager.isInSkane)
+        for (int i = 0; i < Manager.allQuestionsList.Count; i++)
         {
-            for (int i = 0; i < Manager.skaneListQuiz.Count; i++)
-            {
-                fourthChoices[i] = Manager.skaneListQuiz[i].alt4;
-            }
+            fourthChoices[i] = Manager.allQuestionsList[i].alt4;
         }
-        else
-        {
-            for (int i = 0; i < Manager.nationalListQuiz.Count; i++)
-            {
-                fourthChoices[i] = Manager.nationalListQuiz[i].alt4;
-            }
-        }
+        
+        //if(Manager.isInSkane)
+        //{
+        //    for (int i = 0; i < Manager.skaneListQuiz.Count; i++)
+        //    {
+        //        fourthChoices[i] = Manager.skaneListQuiz[i].alt4;
+        //    }
+        //}
+        //else
+        //{
+        //    for (int i = 0; i < Manager.nationalListQuiz.Count; i++)
+        //    {
+        //        fourthChoices[i] = Manager.nationalListQuiz[i].alt4;
+        //    }
+        //}
     }
 
 }
