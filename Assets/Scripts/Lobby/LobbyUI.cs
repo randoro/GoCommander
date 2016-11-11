@@ -21,6 +21,7 @@ public class LobbyUI : MonoBehaviour
 
     List<GameObject> memberList;
     List<GameObject> teamList;
+    List<LobbyList> lobbyList = new List<LobbyList>();
 
     public GameObject memberListContent;
     public GameObject teamListContent;
@@ -42,10 +43,12 @@ public class LobbyUI : MonoBehaviour
 
     int amountofMembers = 10;
     int amountOfTeams = 10;
+    private string[] groups;
 
     // Use this for initialization
     void Start()
     {
+        StartCoroutine(GetGroupFromServer());
         current_UI = UI_Phase.UI_Join_Create;
         leaveLobbyBtn.onClick.AddListener(delegate { BackToLobbyButtonClick(); });
         startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
@@ -79,6 +82,38 @@ public class LobbyUI : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    IEnumerator GetGroupFromServer()
+    {
+        string getGroupURL = "http://gocommander.sytes.net/scripts/show_group.php";
+
+        WWW www = new WWW(getGroupURL);
+
+        yield return www;
+
+        string result = www.text;
+
+        if (result != null)
+        {
+            groups = result.Split(';');
+        }
+
+        for (int i = 0; i < groups.Length - 1; i++)
+        {
+            int id = int.Parse(GetDataValue(groups[i], "ID:"));
+            string groupName = GetDataValue(groups[i], "Groupname:");
+
+            lobbyList.Add(new LobbyList(id, groupName));
+        }
+    }
+
+    string GetDataValue(string data, string index)
+    {
+        string value = data.Substring(data.IndexOf(index) + index.Length);
+        if (value.Contains("|"))
+            value = value.Remove(value.IndexOf("|"));
+        return value;
     }
 
     public void PopulateMemberList()
@@ -125,7 +160,7 @@ public class LobbyUI : MonoBehaviour
         scrollviewTransform = teamListContent.GetComponent<RectTransform>();
 
         int j = 0;
-        for (int i = 0; i < amountofMembers; i++)
+        for (int i = 0; i < lobbyList.Count; i++)
         {
             j++;
 
@@ -134,7 +169,7 @@ public class LobbyUI : MonoBehaviour
             teamButton = newTeamElement.GetComponent<Button>();
             teamButton.enabled = true;
             contentText = newTeamElement.GetComponentInChildren<Text>();
-            contentText.text = "Test Team";
+            contentText.text = "Test";
             contentText.fontSize = 10;
 
             RectTransform rectTransform = newTeamElement.GetComponent<RectTransform>();
