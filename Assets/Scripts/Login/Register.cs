@@ -15,9 +15,7 @@ public class Register : MonoBehaviour {
     private string Password;
     private Text Result;
     private Text Timer;
-    private float timerUp;
-
-    private string createUserURL = "http://gocommander.sytes.net/scripts/register.php";
+    private float timerUp; 
 
     // Use this for initialization
     void Start () {
@@ -43,6 +41,8 @@ public class Register : MonoBehaviour {
 
     IEnumerator CreateUser(string name, string pass)
     {
+        string createUserURL = "http://gocommander.sytes.net/scripts/register.php";
+
         WWWForm form = new WWWForm();
         form.AddField("usernamePost", name);
         form.AddField("passwordPost", pass);
