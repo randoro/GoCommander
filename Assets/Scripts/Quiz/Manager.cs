@@ -111,8 +111,9 @@ public class Manager : MonoBehaviour
             string alt3 = GetDataValue(Quiz[i], "Wrong_3:");
             string alt4 = GetDataValue(Quiz[i], "Correct:");
             string answer = GetDataValue(Quiz[i], "Answer:");
+            string image = GetDataValue(Quiz[i], "Image");
 
-            allQuestionsList.Add(new QuizList(position, question, alt1, alt2, alt3, alt4, answer));
+            allQuestionsList.Add(new QuizList(position, question, alt1, alt2, alt3, alt4, answer, image));
 
             //if (city == "Skåne")
             //{
@@ -123,6 +124,8 @@ public class Manager : MonoBehaviour
             //    nationalListQuiz.Add(new QuizList(city, question, alt1, alt2, alt3, alt4, answer));
             //}
         }
+
+        //yield return new WaitForSeconds(1);
     }
 
     string GetDataValue(string data, string index)
@@ -274,7 +277,8 @@ public class Manager : MonoBehaviour
 
     void RandomizeQuestion()
     {
-        randomQuestion = Random.Range(0, 2);
+        randomQuestion = Random.Range(0, 3);
+        LoadImage.loadImage = true;
     }
 
     //void CheckPlayerPosition()
