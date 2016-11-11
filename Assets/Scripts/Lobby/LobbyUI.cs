@@ -21,7 +21,9 @@ public class LobbyUI : MonoBehaviour
 
     List<GameObject> memberList;
     List<GameObject> teamList;
-    List<LobbyList> lobbyList = new List<LobbyList>();
+
+    LobbyItem lobbyItem;
+    List<LobbyItem> lobbyList = new List<LobbyItem>();
 
     public GameObject memberListContent;
     public GameObject teamListContent;
@@ -44,20 +46,19 @@ public class LobbyUI : MonoBehaviour
     RectTransform teamScrollTransform;
 
     int amountofMembers = 10;
-    int amountOfTeams = 10;
+    int amountOfTeams;
     private string[] groups;
 
     // Use this for initialization
     void Start()
     {
-        //StartCoroutine(GetGroupFromServer());
+        StartCoroutine(GetGroupFromServer());
         current_UI = UI_Phase.UI_Join_Create;
         leaveLobbyBtn.onClick.AddListener(delegate { BackToLobbyButtonClick(); });
         startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
         backToLobbyBtn.onClick.AddListener(delegate { LeaveLobbyClick(); });
         teamButton.onClick.AddListener(delegate { TeamBtnClick(); });
         PopulateTeamList();
-
     }
 
     void Update()
@@ -94,7 +95,7 @@ public class LobbyUI : MonoBehaviour
 
         WWW www = new WWW(getGroupURL);
 
-        yield return www;
+        //yield return www;
 
         string result = www.text;
 
@@ -108,11 +109,21 @@ public class LobbyUI : MonoBehaviour
             int id = int.Parse(GetDataValue(groups[i], "ID:"));
             string groupName = GetDataValue(groups[i], "Groupname:");
 
-            lobbyList.Add(new LobbyList(id, groupName));
-           
+            lobbyItem = new LobbyItem(id, groupName);
+            lobbyList.Add(lobbyItem); 
+                      
         }
-       
+        amountOfTeams = lobbyList.Count;
+        yield return new WaitForSeconds(5);
     }
+
+    private int GetLobbyListSize()
+    {
+        amountOfTeams = lobbyList.Count;
+        print(amountOfTeams);
+        return amountOfTeams;
+    }
+
 
     string GetDataValue(string data, string index)
     {
@@ -157,18 +168,15 @@ public class LobbyUI : MonoBehaviour
         }
     }
 
-    public void PopulateTeamList()
+    private void PopulateTeamList()
     {
-        Debug.Log("Method called");
         teamList = new List<GameObject>();
-
-        int lobbyAmount = lobbyList.Count;
 
         teamElementTransform = teamElementPrefab.GetComponent<RectTransform>();
         teamScrollTransform = teamListContent.GetComponent<RectTransform>();
 
         int j = 0;
-        for (int i = 0; i < amountofMembers; i++)
+        for (int i = 0; i < amountOfTeams; i++)
         {
             j++;
 
@@ -201,7 +209,7 @@ public class LobbyUI : MonoBehaviour
 
     public void TeamBtnClick()
     {
-
+        Debug.Log("Joining selected team..");
     }
 
     public void BackToLobbyButtonClick()
