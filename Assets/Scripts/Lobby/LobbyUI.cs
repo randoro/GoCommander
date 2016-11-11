@@ -3,10 +3,10 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using System;
 
 public class LobbyUI : MonoBehaviour
 {
-
     enum UI_Phase
     {
         UI_Join_Create,
@@ -28,18 +28,20 @@ public class LobbyUI : MonoBehaviour
     public GameObject teamElementPrefab;
     public GameObject memberElementPrefab;
 
-    Text contentText;
+    Text memberNameText;
+    Text teamNameText;
+
     public Button addFriendBtn;
     public Button teamButton;
     public Button leaveLobbyBtn;
     public Button startMatchBtn;
     public Button backToLobbyBtn;
     public Button createTeamBtn;
-    public Button joinTeamBtn;
 
     RectTransform memberElementTransform;
     RectTransform teamElementTransform;
-    RectTransform scrollviewTransform;
+    RectTransform memberScrollTransform;
+    RectTransform teamScrollTransform;
 
     int amountofMembers = 10;
     int amountOfTeams = 10;
@@ -48,12 +50,14 @@ public class LobbyUI : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        StartCoroutine(GetGroupFromServer());
+        //StartCoroutine(GetGroupFromServer());
         current_UI = UI_Phase.UI_Join_Create;
         leaveLobbyBtn.onClick.AddListener(delegate { BackToLobbyButtonClick(); });
         startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
         backToLobbyBtn.onClick.AddListener(delegate { LeaveLobbyClick(); });
+        teamButton.onClick.AddListener(delegate { TeamBtnClick(); });
         PopulateTeamList();
+
     }
 
     void Update()
@@ -105,7 +109,9 @@ public class LobbyUI : MonoBehaviour
             string groupName = GetDataValue(groups[i], "Groupname:");
 
             lobbyList.Add(new LobbyList(id, groupName));
+           
         }
+       
     }
 
     string GetDataValue(string data, string index)
@@ -121,31 +127,30 @@ public class LobbyUI : MonoBehaviour
         memberList = new List<GameObject>();
 
         memberElementTransform = memberElementPrefab.GetComponent<RectTransform>();
-        scrollviewTransform = memberListContent.GetComponent<RectTransform>();
+        memberScrollTransform = memberListContent.GetComponent<RectTransform>();
 
         int j = 0;
         for (int i = 0; i < amountofMembers; i++)
         {
             j++;
 
-            GameObject newMemberElement = Instantiate(memberElementPrefab, scrollviewTransform) as GameObject;
-            newMemberElement.transform.SetParent(scrollviewTransform, false);
+            GameObject newMemberElement = Instantiate(memberElementPrefab, memberScrollTransform) as GameObject;
+            newMemberElement.transform.SetParent(memberScrollTransform, false);
             addFriendBtn = newMemberElement.GetComponentInChildren<Button>();
             addFriendBtn.enabled = true;
-            contentText = newMemberElement.GetComponentInChildren<Text>();
-            contentText.text = "Test Member";
-            contentText.fontSize = 10;
+            memberNameText = newMemberElement.GetComponentInChildren<Text>();
+            memberNameText.text = "Test Member";
+            memberNameText.fontSize = 10;
 
             RectTransform rectTransform = newMemberElement.GetComponent<RectTransform>();
 
-            float x = -scrollviewTransform.rect.width / 2 * (i % 1);
-            float y = scrollviewTransform.rect.height / 2 - 30 * j;
+            float x = -memberScrollTransform.rect.width / 2 * (i % 1);
+            float y = memberScrollTransform.rect.height / 2 - 30 * j;
             rectTransform.offsetMin = new Vector2(x, y);
 
             x = rectTransform.offsetMin.x;
             y = rectTransform.offsetMin.y + 30;
             rectTransform.offsetMax = new Vector2(x, y);
-
 
             memberList.Add(newMemberElement);
             addFriendBtn.onClick.AddListener(delegate { AddFriendButtonClick(); });
@@ -154,32 +159,35 @@ public class LobbyUI : MonoBehaviour
 
     public void PopulateTeamList()
     {
+        Debug.Log("Method called");
         teamList = new List<GameObject>();
 
+        int lobbyAmount = lobbyList.Count;
+
         teamElementTransform = teamElementPrefab.GetComponent<RectTransform>();
-        scrollviewTransform = teamListContent.GetComponent<RectTransform>();
+        teamScrollTransform = teamListContent.GetComponent<RectTransform>();
 
         int j = 0;
-        for (int i = 0; i < lobbyList.Count; i++)
+        for (int i = 0; i < amountofMembers; i++)
         {
             j++;
 
-            GameObject newTeamElement = Instantiate(memberElementPrefab, scrollviewTransform) as GameObject;
-            newTeamElement.transform.SetParent(scrollviewTransform, false);
-            teamButton = newTeamElement.GetComponent<Button>();
+            GameObject newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform) as GameObject;
+            newTeamElement.transform.SetParent(teamScrollTransform, false);
+            teamButton = newTeamElement.GetComponentInChildren<Button>();
             teamButton.enabled = true;
-            contentText = newTeamElement.GetComponentInChildren<Text>();
-            contentText.text = "Test";
-            contentText.fontSize = 10;
+            teamNameText = teamButton.GetComponentInChildren<Text>();
+            teamNameText.text = "Test Team";
+            teamNameText.fontSize = 10;
 
             RectTransform rectTransform = newTeamElement.GetComponent<RectTransform>();
 
-            float x = -scrollviewTransform.rect.width / 2 * (i % 1);
-            float y = scrollviewTransform.rect.height / 2 - 30 * j;
+            float x = -teamScrollTransform.rect.width / 2 * (i % 1);
+            float y = teamScrollTransform.rect.height / 2 - 50 * j;
             rectTransform.offsetMin = new Vector2(x, y);
 
             x = rectTransform.offsetMin.x;
-            y = rectTransform.offsetMin.y + 30;
+            y = rectTransform.offsetMin.y + 50;
             rectTransform.offsetMax = new Vector2(x, y);
 
             teamList.Add(newTeamElement);
@@ -191,9 +199,9 @@ public class LobbyUI : MonoBehaviour
         current_UI = UI_Phase.UI_AddFriend;
     }
 
-    private void JoinTeamButtonClick()
+    public void TeamBtnClick()
     {
-        current_UI = UI_Phase.UI_Lobby;   
+
     }
 
     public void BackToLobbyButtonClick()

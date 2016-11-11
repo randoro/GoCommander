@@ -5,7 +5,7 @@ public class PlayerHolder : MonoBehaviour {
 
     public Player player;
     public int id;
-    public string name;
+    public string Name;
     public double lat;
     public double lng;
     // Use this for initialization
@@ -23,7 +23,7 @@ public class PlayerHolder : MonoBehaviour {
     {
         player = new Player(id, name, lat, lng);
         this.id = id;
-        this.name = name;
+        this.Name = name;
         this.lat = lat;
         this.lng = lng;
     }
