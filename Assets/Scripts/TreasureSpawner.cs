@@ -170,8 +170,21 @@ public class TreasureSpawner : MonoBehaviour {
             if (itsId == id)
             {
                 Destroy(tempTres.gameObject);
+                StartCoroutine(RemoveChosenTreasure(id));
             }
 
         }
+    }
+
+    IEnumerator RemoveChosenTreasure(int id)
+    {
+        string removeChosenTreasure = "http://gocommander.sytes.net/scripts/remove_chosen_treasure.php"; // EJ AKTIV JUST NU
+
+        WWWForm form = new WWWForm();
+        form.AddField("treasurePost", id); // Här ska det vara treasure id
+
+        WWW www = new WWW(removeChosenTreasure, form);
+
+        yield return www;
     }
 }

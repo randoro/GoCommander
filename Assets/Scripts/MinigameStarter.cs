@@ -36,9 +36,16 @@ public class MinigameStarter : MonoBehaviour {
                         {
                             Treasure t = th.treasure;
                             int type = t.type;
-                            //int type = t.type;
+                            int id = t.id;
 
-                            //id = Random.Range(0, 3);
+                            GameObject tsG = GameObject.FindGameObjectWithTag("TreasureSpawner");
+                            TreasureSpawner ts = null;
+
+                            if (tsG != null)
+                            {
+                                ts = tsG.GetComponent<TreasureSpawner>();
+                                ts.RemoveTreasure(id);
+                            }
 
                             switch (type)
                             {
