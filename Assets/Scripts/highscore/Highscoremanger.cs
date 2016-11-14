@@ -6,15 +6,10 @@ using UnityEngine.UI;
 public class Highscoremanger : MonoBehaviour {
 
 	public Text hightext;
-<<<<<<< HEAD
 	private string result;
-
-=======
-	public string result="";
 	public int qwizscore;
 	public int puzzelscore;
 	public int memoryscore;
->>>>>>> e59340c65261605777e1201209d7fe4855b5da76
 	int totalscore;
 
     List<HighscoreList> highscoreList;
@@ -53,7 +48,6 @@ public class Highscoremanger : MonoBehaviour {
 
 		hightext.text = "total " + totalscore;
 	}
-<<<<<<< HEAD
 
 	public void QuizScore(){
         for (int i = 0; i < highscoreList.Count; i++)
@@ -64,16 +58,6 @@ public class Highscoremanger : MonoBehaviour {
             }
         }
         hightext.text = result;
-=======
-	public void Qscore(){
-       /// result = "q";
-        StartCoroutine(GetHighscore("Quiz"));
-    }
-
-	public void Pscore(){
-       // result = "s";
-        StartCoroutine(GetHighscore("Puzzle"));
->>>>>>> e59340c65261605777e1201209d7fe4855b5da76
     }
 
 	public void PuzzleScore(){
@@ -98,7 +82,6 @@ public class Highscoremanger : MonoBehaviour {
         hightext.text = result;
 	}
 
-<<<<<<< HEAD
 	public void SprintScore(){
         for (int i = 0; i < highscoreList.Count; i++)
         {
@@ -108,11 +91,6 @@ public class Highscoremanger : MonoBehaviour {
             }
         }
         hightext.text = result;
-=======
-	public void Sscore(){
-        //result = "s";
-        StartCoroutine(GetHighscore("Sprint"));
->>>>>>> e59340c65261605777e1201209d7fe4855b5da76
     }
 
     IEnumerator GetScore(string in_name)
