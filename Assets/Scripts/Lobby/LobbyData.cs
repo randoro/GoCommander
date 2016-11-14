@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class LobbyItem {
+public class LobbyData {
 
     public int id;
     public string name;
 
-    public LobbyItem(int id, string name)
+    public LobbyData(int id, string name)
     {
         this.id = id;
         this.name = name;
