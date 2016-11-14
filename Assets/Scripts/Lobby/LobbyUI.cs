@@ -19,12 +19,10 @@ public class LobbyUI : MonoBehaviour
     public Canvas UI_Lobby;
     public Canvas UI_AddFriend;
 
-    List<GameObject> memberElementList;
-    List<GameObject> teamElementList;
-
-    TeamData teamData;
-    List<TeamData> teamDataList = new List<TeamData>();
-    List<TeamData> teamMemberList = new List<TeamData>();
+    LobbyData teamData;
+    LobbyData memberData;
+    List<LobbyData> teamList = new List<LobbyData>();
+    List<LobbyData> memberList = new List<LobbyData>();
 
     public GameObject memberListContent;
     public GameObject teamListContent;
@@ -35,26 +33,26 @@ public class LobbyUI : MonoBehaviour
     Text teamNameText;
 
     public Button addFriendBtn;
-    public Button teamButton;
+    public Button teamJoinBtn;
     public Button leaveLobbyBtn;
     public Button startMatchBtn;
     public Button backToLobbyBtn;
     public Button createTeamBtn;
+
+    Button[] teamJoinButtons;
+    Button[] addFriendButtons;
 
     RectTransform memberElementTransform;
     RectTransform teamElementTransform;
     RectTransform memberScrollTransform;
     RectTransform teamScrollTransform;
 
-    int amountofMembers = 10;
-    int amountOfTeams = 10;
-    private string[] groups;
+    private string[] teamArray;
 
     // Use this for initialization
     void Start()
     {
-        amountOfTeams = 0;
-        StartCoroutine(GetGroupFromServer());
+        StartCoroutine(GetTeamFromServer());
         current_UI = UI_Phase.UI_Join_Create;
         leaveLobbyBtn.onClick.AddListener(delegate { BackToLobbyButtonClick(); });
         startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
@@ -89,12 +87,11 @@ public class LobbyUI : MonoBehaviour
         }
     }
 
-    IEnumerator GetGroupFromServer()
+    IEnumerator GetTeamFromServer()
     {
-        print("GET FROM SERVER");
-        string getGroupURL = "http://gocommander.sytes.net/scripts/show_group.php";
+        string getTeamsURL = "http://gocommander.sytes.net/scripts/show_group.php";
 
-        WWW www = new WWW(getGroupURL);
+        WWW www = new WWW(getTeamsURL);
 
         yield return www;
 
@@ -102,35 +99,24 @@ public class LobbyUI : MonoBehaviour
 
         if (result != null)
         {
-            groups = result.Split(';');
+            teamArray = result.Split(';');
         }
-        print("BEFORE FOR LOOP");
-        print(groups.Length);
+
         int id = 0;
-        for (int i = 0; i < groups.Length - 1; i++)
+        for (int i = 0; i < teamArray.Length - 1; i++)
         {
-            print("BEFORE INT PARSE");
-            //string id = GetDataValue(groups[i], "ID:");
-            print("AFTER PARSE");
-            string groupName = GetDataValue(groups[i], "Groupname:");
+
+            string teamName = GetLobbyData(teamArray[i], "Groupname:");
             id++;
-            print(groupName);
-            teamData = new TeamData(id, groupName);
-            teamDataList.Add(teamData);
-            print("ADD TO LIST");
-            //yield return null;
+            teamData = new LobbyData(id, teamName);
+            teamList.Add(teamData);
                       
         }
-        amountOfTeams = teamDataList.Count;
-        print(amountOfTeams);
-        //yield return new WaitForSeconds(10);
         PopulateTeamList();
-        //yield return null;
     }
 
     IEnumerator GetMembersInTeam()
     {
-        print("GET FROM TEAM");
         string getMembersURL = "http://gocommander.sytes.net/scripts/show_group_members.php";
 
         WWWForm form = new WWWForm();
@@ -143,31 +129,20 @@ public class LobbyUI : MonoBehaviour
 
         if (result != null)
         {
-            groups = result.Split(';');
+            teamArray = result.Split(';');
         }
-        print("BEFORE FOR LOOP");
-        print(groups.Length);
 
-        for (int i = 0; i < groups.Length - 1; i++)
+        for (int i = 0; i < teamArray.Length - 1; i++)
         {
-            print("BEFORE INT PARSE");
-            int id = int.Parse(GetDataValue(groups[i], "ID:"));
-            print("AFTER PARSE");
-            string groupMember = GetDataValue(groups[i], "Groupusers:");
-            print(groupMember);
-            //teamData = new TeamData(id, groupMember);
-            teamMemberList.Add(new TeamData(id, groupMember));
-            print("ADD TO LIST");
-            //yield return null;
-
+            int id = int.Parse(GetLobbyData(teamArray[i], "ID:"));
+            string member = GetLobbyData(teamArray[i], "Groupusers:");
+            memberData = new LobbyData(id, member);
+            memberList.Add(memberData);
         }
-        print(amountOfTeams);
-        //yield return new WaitForSeconds(10);
-        //yield return null;
     }
 
 
-    string GetDataValue(string data, string index)
+    string GetLobbyData(string data, string index)
     {
         string value = data.Substring(data.IndexOf(index) + index.Length);
         if (value.Contains("|"))
@@ -177,24 +152,22 @@ public class LobbyUI : MonoBehaviour
 
     private void PopulateTeamList()
     {
-        print(amountOfTeams);
-
-        teamElementList = new List<GameObject>();
+        teamJoinButtons = new Button[teamList.Count];
 
         teamElementTransform = teamElementPrefab.GetComponent<RectTransform>();
         teamScrollTransform = teamListContent.GetComponent<RectTransform>();
 
         int j = 0;
-        for (int i = 0; i < teamDataList.Count; i++)
+        for (int i = 0; i < teamList.Count; i++)
         {
             j++;
 
             GameObject newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform) as GameObject;
             newTeamElement.transform.SetParent(teamScrollTransform, false);
-            teamButton = newTeamElement.GetComponentInChildren<Button>();
-            teamButton.enabled = true;
-            teamNameText = teamButton.GetComponentInChildren<Text>();
-            teamNameText.text = teamDataList[i].name;
+            teamJoinButtons[i] = newTeamElement.GetComponentInChildren<Button>();
+            teamJoinButtons[i].enabled = true;
+            teamNameText = teamJoinButtons[i].GetComponentInChildren<Text>();
+            teamNameText.text = teamList[i].name;
             teamNameText.fontSize = 10;
 
             RectTransform rectTransform = newTeamElement.GetComponent<RectTransform>();
@@ -207,14 +180,12 @@ public class LobbyUI : MonoBehaviour
             y = rectTransform.offsetMin.y + 50;
             rectTransform.offsetMax = new Vector2(x, y);
 
-            teamElementList.Add(newTeamElement);
-            teamButton.onClick.AddListener(delegate { TeamBtnClick(teamDataList[i].name); });
+            teamJoinButtons[i].onClick.AddListener(delegate { TeamBtnClick(teamNameText.text); });
         }
     }
 
     public void PopulateMemberList(string selectedTeam)
     {
-        memberElementList = new List<GameObject>();
 
         memberElementTransform = memberElementPrefab.GetComponent<RectTransform>();
         memberScrollTransform = memberListContent.GetComponent<RectTransform>();
@@ -222,7 +193,7 @@ public class LobbyUI : MonoBehaviour
         StartCoroutine(GetMembersInTeam());
 
         int j = 0;
-        for (int i = 0; i < teamMemberList.Count; i++)
+        for (int i = 0; i < memberList.Count; i++)
         {
             j++;
 
@@ -231,7 +202,7 @@ public class LobbyUI : MonoBehaviour
             addFriendBtn = newMemberElement.GetComponentInChildren<Button>();
             addFriendBtn.enabled = true;
             memberNameText = newMemberElement.GetComponentInChildren<Text>();
-            memberNameText.text = teamMemberList[i].name;
+            memberNameText.text = memberList[i].name;
             memberNameText.fontSize = 10;
 
             RectTransform rectTransform = newMemberElement.GetComponent<RectTransform>();
@@ -244,10 +215,8 @@ public class LobbyUI : MonoBehaviour
             y = rectTransform.offsetMin.y + 30;
             rectTransform.offsetMax = new Vector2(x, y);
 
-            memberElementList.Add(newMemberElement);
             addFriendBtn.onClick.AddListener(delegate { AddFriendButtonClick(); });
         }
-        print(memberElementList.Count);
     }
 
     private void AddFriendButtonClick()
