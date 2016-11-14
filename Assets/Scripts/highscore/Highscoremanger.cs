@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class Highscoremanger : MonoBehaviour {
 
 	public Text hightext;
-	public string result;
+	public string result="";
 	public int qwizscore;
 	public int puzzelscore;
 	public int memoryscore;
@@ -69,12 +69,12 @@ public class Highscoremanger : MonoBehaviour {
 
 	}
 	public void Qscore(){
-        result = "q";
+       /// result = "q";
         StartCoroutine(GetHighscore("Quiz"));
     }
 
 	public void Pscore(){
-        result = "s";
+       // result = "s";
         StartCoroutine(GetHighscore("Puzzle"));
     }
 
@@ -84,7 +84,7 @@ public class Highscoremanger : MonoBehaviour {
 		}
 
 	public void Sscore(){
-        result = "s";
+        //result = "s";
         StartCoroutine(GetHighscore("Sprint"));
     }
 
