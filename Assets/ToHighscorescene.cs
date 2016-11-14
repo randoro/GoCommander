@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class Shiftscene : MonoBehaviour {
+public class ToHighscorescene : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -13,10 +13,8 @@ public class Shiftscene : MonoBehaviour {
 	void Update () {
 	
 	}
-	public void ShiftscenetoHighscore(){
+	public void Switch(){
 
 		SceneManager.LoadScene("highscoreScene");
-
-
 	}
 }

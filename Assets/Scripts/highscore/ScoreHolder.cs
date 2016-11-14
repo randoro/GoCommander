@@ -36,13 +36,5 @@ public class ScoreHolder : MonoBehaviour {
 	{
 		return memoryscore;
 	}
-	public void setpuzzelscore(int s )
-	{
-		s = puzzelscore;
-	}
 
-	public void setmemoryscore(int p )
-	{
-		p = memoryscore;
-	}
 }
