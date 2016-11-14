@@ -26,6 +26,8 @@ public class Manager : MonoBehaviour
     private string line, answerline;
     private string username = GoogleMap.username;
 
+    public static bool isGameCompleted;
+
     // Use this for initialization
     private void Start()
     {
@@ -33,6 +35,8 @@ public class Manager : MonoBehaviour
         allAnswersID = new string[4];
 
         StartCoroutine(GetQuizes());
+
+        isGameCompleted = false;
     }
 
     // Update is called once per frame
@@ -131,6 +135,8 @@ public class Manager : MonoBehaviour
         if (answeredQuestions == 4)
         {
             SceneManager.LoadScene("mainScene");
+
+            isGameCompleted = true;
         }
     }
 
@@ -156,4 +162,5 @@ public class Manager : MonoBehaviour
         randomQuestion = Random.Range(0, 3);
         LoadImage.loadImage = true;
     }
+    
 }
