@@ -70,6 +70,7 @@ public class GoalSpawner : MonoBehaviour
                         if (id == 0)
                         {
                             print("game won");
+                            InformativeMessage.isSprintCompleted = true;
                             Application.LoadLevel("mainScene");
                         }
                     }

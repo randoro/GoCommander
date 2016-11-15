@@ -24,9 +24,7 @@ public class Manager : MonoBehaviour
     public static int randomQuestion = -1;
 
     private string line, answerline;
-    private string username = GoogleMap.username;
-
-    public static bool isGameCompleted;
+    public static string username = GoogleMap.username;
 
     // Use this for initialization
     private void Start()
@@ -35,8 +33,7 @@ public class Manager : MonoBehaviour
         allAnswersID = new string[4];
 
         StartCoroutine(GetQuizes());
-
-        isGameCompleted = false;
+        
     }
 
     // Update is called once per frame
@@ -134,9 +131,8 @@ public class Manager : MonoBehaviour
     {
         if (answeredQuestions == 4)
         {
+            InformativeMessage.isQuizCompleted = true;
             SceneManager.LoadScene("mainScene");
-
-            isGameCompleted = true;
         }
     }
 

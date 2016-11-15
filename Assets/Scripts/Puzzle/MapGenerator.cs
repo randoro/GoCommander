@@ -397,6 +397,7 @@ public class MapGenerator : MonoBehaviour
                 if (DidWeWin())
                 {
                     //StartCoroutine(delayTime());
+                    InformativeMessage.isPuzzleCompleted = true;
                     SceneManager.LoadScene("mainScene");
 					MapGenerator.win = true;
                 }

@@ -92,7 +92,6 @@ public class MapGenerator1 : MonoBehaviour
 
     void Update()
     {
-     
         if (win == true)
         {
 			score = (int)timeleft * lvl * 100;
@@ -100,6 +99,7 @@ public class MapGenerator1 : MonoBehaviour
 			scoremanager.GetComponent<ScoreHolder> ().memoryscore=score;
             StartCoroutine(delayTime());
 
+            InformativeMessage.isMemoryCompleted = true;
             SceneManager.LoadScene("mainScene");
         }
         if (timeleft < -1)
