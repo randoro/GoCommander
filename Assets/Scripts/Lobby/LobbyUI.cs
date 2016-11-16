@@ -28,13 +28,14 @@ public class LobbyUI : MonoBehaviour
     public GameObject teamListContent;
     public GameObject teamElementPrefab;
     public GameObject memberElementPrefab;
+    GameObject newMemberElement;
 
-    Text memberNameText;
-    Text teamNameText;
     Text[] teamNameTexts;
+    Text[] memberNameTexts;
 
-    public Button addFriendBtn;
-    public Button teamJoinBtn;
+    //public Button addFriendBtn;
+
+
     public Button leaveLobbyBtn;
     public Button startMatchBtn;
     public Button backToLobbyBtn;
@@ -48,6 +49,8 @@ public class LobbyUI : MonoBehaviour
     RectTransform memberScrollTransform;
     RectTransform teamScrollTransform;
 
+    bool populateList = false;
+
     private string[] teamArray;
 
     // Use this for initialization
@@ -55,7 +58,7 @@ public class LobbyUI : MonoBehaviour
     {
         StartCoroutine(GetTeamFromServer());
         current_UI = UI_Phase.UI_Join_Create;
-        leaveLobbyBtn.onClick.AddListener(delegate { BackToLobbyButtonClick(); });
+        //leaveLobbyBtn.onClick.AddListener(delegate { BackToLobbyButtonClick(); });
         startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
         backToLobbyBtn.onClick.AddListener(delegate { LeaveLobbyClick(); });
     }
@@ -171,7 +174,7 @@ public class LobbyUI : MonoBehaviour
             teamJoinButtons[i].enabled = true;
             teamNameTexts[i] = teamJoinButtons[i].GetComponentInChildren<Text>();
             teamNameTexts[i].text = teamList[i].name;
-            //teamNameText.fontSize = 10;
+            teamNameTexts[i].fontSize = 8;
 
             RectTransform rectTransform = newTeamElement.GetComponent<RectTransform>();
 
@@ -183,17 +186,14 @@ public class LobbyUI : MonoBehaviour
             y = rectTransform.offsetMin.y + 50;
             rectTransform.offsetMax = new Vector2(x, y);
 
-            AddButtonListeners(teamJoinButtons[i], teamNameTexts[i].text);
+            AddTeamButtonListeners(teamJoinButtons[i], teamNameTexts[i].text);
         }
-    }
-
-    public void AddButtonListeners(Button button, string ID)
-    {
-        button.onClick.AddListener(delegate { TeamBtnClick(ID); });
     }
 
     public void PopulateMemberList(string selectedTeam)
     {
+            addFriendButtons = new Button[memberList.Count];
+            memberNameTexts = new Text[memberList.Count];
 
         memberElementTransform = memberElementPrefab.GetComponent<RectTransform>();
         memberScrollTransform = memberListContent.GetComponent<RectTransform>();
@@ -203,39 +203,52 @@ public class LobbyUI : MonoBehaviour
         {
             j++;
 
-            GameObject newMemberElement = Instantiate(memberElementPrefab, memberScrollTransform) as GameObject;
-            newMemberElement.transform.SetParent(memberScrollTransform, false);
-            addFriendBtn = newMemberElement.GetComponentInChildren<Button>();
-            addFriendBtn.enabled = true;
-            memberNameText = newMemberElement.GetComponentInChildren<Text>();
-            memberNameText.text = memberList[i].name;
-            memberNameText.fontSize = 10;
+                newMemberElement = Instantiate(memberElementPrefab, memberScrollTransform) as GameObject;
+                newMemberElement.transform.SetParent(memberScrollTransform, false);
+                addFriendButtons[i] = newMemberElement.GetComponentInChildren<Button>();
+                addFriendButtons[i].enabled = true;
+                memberNameTexts[i] = newMemberElement.GetComponentInChildren<Text>();
+                memberNameTexts[i].text = memberList[i].name;
+                memberNameTexts[i].fontSize = 8;
 
-            RectTransform rectTransform = newMemberElement.GetComponent<RectTransform>();
+                RectTransform rectTransform = newMemberElement.GetComponent<RectTransform>();
 
-            float x = -memberScrollTransform.rect.width / 2 * (i % 1);
-            float y = memberScrollTransform.rect.height / 2 - 30 * j;
-            rectTransform.offsetMin = new Vector2(x, y);
+                float x = -memberScrollTransform.rect.width / 2 * (i % 1);
+                float y = memberScrollTransform.rect.height / 2 - 30 * j;
+                rectTransform.offsetMin = new Vector2(x, y);
 
-            x = rectTransform.offsetMin.x;
-            y = rectTransform.offsetMin.y + 30;
-            rectTransform.offsetMax = new Vector2(x, y);
+                x = rectTransform.offsetMin.x;
+                y = rectTransform.offsetMin.y + 30;
+                rectTransform.offsetMax = new Vector2(x, y);
 
-            addFriendBtn.onClick.AddListener(delegate { AddFriendButtonClick(); });
+            AddFriendButtonListeners(addFriendButtons[i], memberNameTexts[i].text);
         }
     }
 
-    private void AddFriendButtonClick()
+    public void AddTeamButtonListeners(Button button, string ID)
     {
-        current_UI = UI_Phase.UI_AddFriend;
+        button.onClick.AddListener(delegate { TeamBtnClick(ID); });
+    }
+
+    public void AddFriendButtonListeners(Button button, string ID)
+    {
+        button.onClick.AddListener(delegate { AddFriendButtonClick(ID); });
     }
 
     public void TeamBtnClick(string selectedTeam)
     {
-        Debug.Log("Joining selected team.." + name);
+        Debug.Log("Joining selected team.." + selectedTeam);
+        newMemberElement = null;
         current_UI = UI_Phase.UI_Lobby;
         StartCoroutine(GetMembersInTeam(selectedTeam));
     }
+
+    private void AddFriendButtonClick(string selectedMember)
+    {
+        Debug.Log("Opening user" + selectedMember + "'s profile");
+        current_UI = UI_Phase.UI_AddFriend;
+    }
+
 
     public void BackToLobbyButtonClick()
     {
@@ -245,6 +258,7 @@ public class LobbyUI : MonoBehaviour
     public void LeaveLobbyClick()
     {
         current_UI = UI_Phase.UI_Join_Create;
+        teamJoinButtons = null;
     }
 
     public void StartButtonClick()
