@@ -18,6 +18,9 @@ public class Login : MonoBehaviour {
     private Text Timer;
     private float timerUp;
 
+    //TEMPRARY FOR TESTING ENTERING THE LOBBY SCENE
+    public Button lobbyTestBtn;
+
     public void LoginButton()
     {
         if (Username != "" && Password != "")
@@ -90,5 +93,11 @@ public class Login : MonoBehaviour {
         print("Timer Stop!");
         float finalTime = timerUp;
         Timer.text = "Timer: " + finalTime.ToString("F3");
+    }
+
+    //TEMPORARY METHOD FOR TESTING ENTERING THE LOBBY SCENE
+    public void LobbyTestClick()
+    {
+        SceneManager.LoadScene("LobbyScene");
     }
 }
