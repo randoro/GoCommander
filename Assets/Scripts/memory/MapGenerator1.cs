@@ -20,11 +20,14 @@ public class MapGenerator1 : MonoBehaviour
     //tiden man har på sig att klara spelet
    private int starttime;
     //tid som är kvar
-    private float timeleft;
+    public float timeleft;
     public int showtime;
 	public int score;
 	public int lvl;//hämttar lvl från server (svårihihetsgrad)
 	GameObject scoremanager;
+//	List<Cerclecolerchencher> changecolor = new List<>();
+
+
 
   [Range(0, 1)]
     public float gridLinePercent;
@@ -56,7 +59,8 @@ public class MapGenerator1 : MonoBehaviour
         timeleft = starttime;
 		lvl = 1;
 		score = 0;
-		scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
+//		scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
+		//changecolor = FindObjectOfType<Cerclecolerchencher> ();
 
 }
 
@@ -89,7 +93,11 @@ public class MapGenerator1 : MonoBehaviour
             value = value.Remove(value.IndexOf("|"));
         return value;
     }
-
+	public void Circel(){
+	
+	//	changecolor.ChangeColor(Color.blue);
+	
+	}
     void Update()
     {
         if (win == true)
@@ -114,6 +122,8 @@ public class MapGenerator1 : MonoBehaviour
 		{
 			timeleft = timeleft - Time.deltaTime;
 		}
+	
+
         // Debug.Log(timeleft);
         showtime = (int)timeleft;
         Thetext.text = showtime.ToString("");
@@ -188,6 +198,8 @@ public class MapGenerator1 : MonoBehaviour
                 Transform newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
                 newCircle.parent = mapHolder;
 
+		//	changecolor.Add
+
                 tileArray[x, y].Obstacle = true;
                 break;
             case 'S':
@@ -221,6 +233,7 @@ public class MapGenerator1 : MonoBehaviour
 
         Coordinate coordinate;
         ColorTile colorTile;
+	
 
         public Tile(Coordinate coordinate)
         {
@@ -235,6 +248,8 @@ public class MapGenerator1 : MonoBehaviour
             set
             {
                 obstacle = value;
+
+
             }
         }
         public ColorTile ColorTile
