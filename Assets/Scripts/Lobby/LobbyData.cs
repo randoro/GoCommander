@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class LobbyData {
-
+public class LobbyData
+{
     public int id;
     public string name;
 
@@ -13,5 +13,4 @@ public class LobbyData {
         this.id = id;
         this.name = name;
     }
-
 }

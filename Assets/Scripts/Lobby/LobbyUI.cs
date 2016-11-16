@@ -180,7 +180,7 @@ public class LobbyUI : MonoBehaviour
             y = rectTransform.offsetMin.y + 50;
             rectTransform.offsetMax = new Vector2(x, y);
 
-            teamJoinButtons[i].onClick.AddListener(delegate { TeamBtnClick(teamNameText.text); });
+            teamJoinButtons[i].onClick.AddListener(delegate { TeamBtnClick(teamList[i].name); });
         }
     }
 
@@ -190,7 +190,9 @@ public class LobbyUI : MonoBehaviour
         memberElementTransform = memberElementPrefab.GetComponent<RectTransform>();
         memberScrollTransform = memberListContent.GetComponent<RectTransform>();
 
+        print("Before coroutine");
         StartCoroutine(GetMembersInTeam());
+        print("after");
 
         int j = 0;
         for (int i = 0; i < memberList.Count; i++)
