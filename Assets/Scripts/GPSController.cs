@@ -152,6 +152,8 @@ public class GPSController : MonoBehaviour
 
             WWW www = new WWW(playerURL, form);
 
+            InformativeMessage.run = true;
+
             yield return www;
             //yield return new WaitForSeconds(5);
         }

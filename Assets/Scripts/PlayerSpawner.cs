@@ -125,13 +125,13 @@ public class PlayerSpawner : MonoBehaviour {
             double lng = double.Parse(GetDataValue(nav[i], "Longitude:"));
             string message = GetDataValue(nav[i], "Minimessage:");
 
-            if(message != "")
+            if(message.Equals(""))
             {
-                fetchedList.Add(new Player(id, username, lat, lng, message));
+                fetchedList.Add(new Player(id, username, lat, lng));
             }
             else
             {
-                fetchedList.Add(new Player(id, username, lat, lng));
+                fetchedList.Add(new Player(id, username, lat, lng, message));             
             }
         }
         fetched = true;
