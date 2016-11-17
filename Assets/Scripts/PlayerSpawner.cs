@@ -12,7 +12,7 @@ public class PlayerSpawner : MonoBehaviour {
     private string[] nav;
     public GameObject prefab;
     public List<GameObject> playerList;
-    List<Player> fetchedList;
+    public static List<Player> fetchedList;
 
     private GameObject map;
     private GoogleMap gMap;
@@ -123,8 +123,16 @@ public class PlayerSpawner : MonoBehaviour {
             string username = GetDataValue(nav[i], "Username:");
             double lat = double.Parse(GetDataValue(nav[i], "Latitude:"));
             double lng = double.Parse(GetDataValue(nav[i], "Longitude:"));
+            string message = GetDataValue(nav[i], "Minimessage:");
 
-            fetchedList.Add(new Player(id, username, lat, lng));
+            if(message != "")
+            {
+                fetchedList.Add(new Player(id, username, lat, lng, message));
+            }
+            else
+            {
+                fetchedList.Add(new Player(id, username, lat, lng));
+            }
         }
         fetched = true;
     }

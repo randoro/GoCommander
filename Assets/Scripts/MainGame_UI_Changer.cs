@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MainGame_UI_Changer : MonoBehaviour
 {
+    private string[] messageList = new string[4];
 
     public enum ActiveUI
     {
@@ -52,5 +54,13 @@ public class MainGame_UI_Changer : MonoBehaviour
     public void BackBtnClick()
     {
         activeUI = ActiveUI.inGameUI;
+    }
+
+    private void SetMessages()
+    {
+        messageList[0] = "Good work!";
+        messageList[1] = "I need a power up";
+        messageList[2] = "Message 3";
+        messageList[3] = "Message 4";
     }
 }

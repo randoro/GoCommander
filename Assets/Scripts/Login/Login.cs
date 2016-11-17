@@ -67,7 +67,8 @@ public class Login : MonoBehaviour {
             password.GetComponent<InputField>().text = "";
             username.GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Username";
             password.GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Password";
-            SceneManager.LoadScene("mainScene");
+            //SceneManager.LoadScene("mainScene");
+            SceneManager.LoadScene("MinigameQuiz");
         }
         if (result == "User not found")
         {

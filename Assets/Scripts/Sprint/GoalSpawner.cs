@@ -71,6 +71,8 @@ public class GoalSpawner : MonoBehaviour
                         {
                             print("game won");
                             InformativeMessage.isSprintCompleted = true;
+                            InformativeMessage.ShowCompletedMinigame();
+
                             Application.LoadLevel("mainScene");
                         }
                     }

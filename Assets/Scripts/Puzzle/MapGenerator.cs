@@ -398,6 +398,8 @@ public class MapGenerator : MonoBehaviour
                 {
                     //StartCoroutine(delayTime());
                     InformativeMessage.isPuzzleCompleted = true;
+                    InformativeMessage.ShowCompletedMinigame();
+
                     SceneManager.LoadScene("mainScene");
 					MapGenerator.win = true;
                 }

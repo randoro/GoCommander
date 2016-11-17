@@ -4,10 +4,12 @@ using UnityEngine.UI;
 
 public class InformativeMessage : MonoBehaviour {
 
-    public GameObject window;
-    public Text notificationText;
+    public static GameObject window;
+    public static Text notificationText;
 
     public static bool isQuizCompleted, isPuzzleCompleted, isMemoryCompleted, isSprintCompleted;
+
+    public static string s;
 
     private void Start()
     {
@@ -15,13 +17,17 @@ public class InformativeMessage : MonoBehaviour {
 
         InitializeComponents();
 
-        ShowCompletedMinigame();
-        StartCoroutine(RemoveNotification());
+        
+
+        //ShowCompletedMinigame();
+        //StartCoroutine(RemoveNotification());
     }
 
     private void Update()
     {
-        ShowCompletedMinigame();
+        //ShowCompletedMinigame();
+
+        //StartCoroutine(GetCompletedMinigame());
     }
 
     private void InitializeComponents()
@@ -31,12 +37,16 @@ public class InformativeMessage : MonoBehaviour {
         StartCoroutine(RemoveNotification());
     }
 
-    public void ShowCompletedMinigame()
+    public static void ShowCompletedMinigame()
     {
         if(isQuizCompleted)
         {
             window.SetActive(true);
             notificationText.text = Manager.username + " completed a Quiz!";
+
+            s = Manager.username + " completed a Quiz!";
+
+            //StartCoroutine(SendCompletedMinigame(s));
         }
         else if(isMemoryCompleted)
         {
@@ -53,6 +63,34 @@ public class InformativeMessage : MonoBehaviour {
             window.SetActive(true);
             notificationText.text = Manager.username + " completed a Sprint!";
         }
+    }
+
+    IEnumerator GetCompletedMinigame()
+    {
+        for (int i = 0; i < PlayerSpawner.fetchedList.Count; i++)
+        {
+            if(PlayerSpawner.fetchedList[i].name == Manager.username)
+            {
+                if(PlayerSpawner.fetchedList[i].message != "")
+                {
+                    window.SetActive(true);
+                    notificationText.text = Manager.username + " completed a Memory!";
+
+                    yield return new WaitForSeconds(10);
+                    window.SetActive(false);
+                }
+            }
+        }
+
+        //string loginUserURL = "http://gocommander.sytes.net/scripts/login.php";
+
+        //WWWForm form = new WWWForm();
+        //form.AddField("usernamePost", name);
+
+
+        //WWW www = new WWW(loginUserURL, form);
+
+        //yield return www;
     }
 
     IEnumerator RemoveNotification()

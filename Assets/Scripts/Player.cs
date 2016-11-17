@@ -7,6 +7,7 @@ public class Player  {
     public string name;
     public double lat;
     public double lng;
+    public string message;
 
     public Player(int id, string name, double lat, double lng)
     {
@@ -14,5 +15,14 @@ public class Player  {
         this.name = name;
         this.lat = lat;
         this.lng = lng;
+    }
+
+    public Player(int id, string name, double lat, double lng, string message)
+    {
+        this.id = id;
+        this.name = name;
+        this.lat = lat;
+        this.lng = lng;
+        this.message = message;
     }
 }
