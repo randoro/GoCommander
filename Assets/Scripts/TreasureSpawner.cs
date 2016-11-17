@@ -20,11 +20,16 @@ public class TreasureSpawner : MonoBehaviour {
     private float lastTime = 0;
     private bool fetched;
 
+    private const double radius = 0.003;
+
     // Use this for initialization
     void Start ()
     {
         map = GameObject.FindGameObjectWithTag("Map");
         gMap = map.GetComponent<GoogleMap>();
+
+        GameObject playerArea = GameObject.FindGameObjectWithTag("PlayerArea");
+        playerArea.transform.localScale = new Vector3(coordScaleToGameScale(radius * 2, 90, 9), 0, coordScaleToGameScale(radius * 2, 90, 9)); 
 
         treasureList = new List<GameObject>();
         fetchedList = new List<Treasure>();

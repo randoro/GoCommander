@@ -125,33 +125,6 @@ public class CommanderSpawner : MonoBehaviour
         fetched = true;
     }
 
-    IEnumerator GetTreasures()
-    {
-        string treasureURL = "http://gocommander.sytes.net/scripts/treasure_locations.php";
-
-        WWW www = new WWW(treasureURL);
-        yield return www;
-        string result = www.text;
-
-        if (result != null)
-        {
-            nav = result.Split(';');
-        }
-
-        fetchedList.Clear();
-
-        for (int i = 0; i < nav.Length - 1; i++)
-        {
-            int id = int.Parse(GetDataValue(nav[i], "ID:"));
-            double lat = double.Parse(GetDataValue(nav[i], "Latitude:"));
-            double lng = double.Parse(GetDataValue(nav[i], "Longitude:"));
-            int type = int.Parse(GetDataValue(nav[i], "Type:"));
-
-            fetchedList.Add(new Treasure(id, lat, lng, type));
-        }
-        fetched = true;
-    }
-
     IEnumerator GenerateTreasures()
     {
         string treasureURL = "http://gocommander.sytes.net/scripts/treasure_spawn.php";
