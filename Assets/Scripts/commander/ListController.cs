@@ -14,17 +14,19 @@ public class ListController : MonoBehaviour {
 
     private GoogleMap gMap;
     private GPSController gps;
+    private bool fetched = false;
     public int refreshDelay = 10;
 
 	void Start () {
         contentRT = this.GetComponent<RectTransform>();
-        playerSpawnerObj = GameObject.FindGameObjectWithTag("PlayerSpawner");
 
+        playerSpawnerObj = GameObject.FindGameObjectWithTag("PlayerSpawner");
         playerSpawner = playerSpawnerObj.GetComponent<PlayerSpawner>();
         playerList = playerSpawner.playerList;
 
         gMap = GameObject.FindGameObjectWithTag("Map").GetComponent<GoogleMap>();
-        CreateListObjects();
+
+        GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Orbit>().enabled = false;
 
         StartCoroutine(UpdatePlayers());
 	}
@@ -43,6 +45,12 @@ public class ListController : MonoBehaviour {
     {
         while (true)
         {
+            print("We're here!");
+            while (playerList.Count == 0)
+            {
+                yield return null;
+            }
+
             listObjects.Clear();
             for (int i = 0; i < listGameObjects.Count; i++)
             {
@@ -115,6 +123,12 @@ public class ListController : MonoBehaviour {
             GoogleMap.centerLocation.longitude = (float)player.lng;
             Debug.Log(player.lng);
             gMap.Refresh();
+
+            GameObject canvasGO = GameObject.FindGameObjectWithTag("MemberCanvas");
+
+            canvasGO.SetActive(false);
+
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Orbit>().enabled = true;
         }
     }
 }

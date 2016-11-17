@@ -17,10 +17,12 @@ public class MemberButton : MonoBehaviour {
         if (canvasGO.activeInHierarchy)
         {
             canvasGO.SetActive(false);
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Orbit>().enabled = true;
         }
         else
         {
             canvasGO.SetActive(true);
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Orbit>().enabled = false;
         }
     }
 }

@@ -22,6 +22,7 @@ public class GoogleMap : MonoBehaviour {
     public Color roadColor = Color.white;
     public Color waterColor = Color.blue;
     public static string username;
+    public static string groupName;
     bool settled;
     bool isPaused;
 
@@ -45,7 +46,7 @@ public class GoogleMap : MonoBehaviour {
         form.AddField("usernamePost", username);
         form.AddField("userLatPost", centerLocation.latitude.ToString());
         form.AddField("userLongPost", centerLocation.longitude.ToString());
-
+        form.AddField("userGroupPost", groupName);
         WWW www = new WWW(sendGPSURL, form);
         yield return www;
 

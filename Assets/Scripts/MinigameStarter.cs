@@ -75,6 +75,9 @@ public class MinigameStarter : MonoBehaviour {
                 }
             }
         }
+        else if (s.name == "CommanderScene")
+        {
+        }
 
         if (s.name == "login")
         {
