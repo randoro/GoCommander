@@ -14,7 +14,7 @@ public class ListController : MonoBehaviour {
 
     private GoogleMap gMap;
     private GPSController gps;
-    public int refreshDelay = 20;
+    public int refreshDelay = 10;
 
 	void Start () {
         contentRT = this.GetComponent<RectTransform>();
@@ -35,15 +35,8 @@ public class ListController : MonoBehaviour {
         for (int i = 0; i < playerList.Count; i++)
         {
             currPH = playerList[i].GetComponent<PlayerHolder>();
-            listObjects.Add(new ListItem(contentRT, currPH, gMap, new Vector2(100, 100 * -i), listGameObjects));
-            Debug.Log(currPH.name);
-        }
-    }
-    private void DestroyGameObjects()
-    {
-        for (int i = 0; i < listGameObjects.Count; i++)
-        {
-            Destroy(listGameObjects[i]);
+            listObjects.Add(new ListItem(contentRT, currPH, gMap, new Vector2(100, 100 * i), listGameObjects));
+            Debug.Log(currPH.Name);
         }
     }
     IEnumerator UpdatePlayers()
@@ -51,7 +44,10 @@ public class ListController : MonoBehaviour {
         while (true)
         {
             listObjects.Clear();
-            DestroyGameObjects();
+            for (int i = 0; i < listGameObjects.Count; i++)
+            {
+                Destroy(listGameObjects[i]);
+            }
             CreateListObjects();
             yield return new WaitForSeconds(refreshDelay);
         }
@@ -86,7 +82,8 @@ public class ListController : MonoBehaviour {
 
             RectTransform buttonRT = clickItem.AddComponent<RectTransform>();
             buttonRT.SetParent(contentRT);
-            buttonRT.sizeDelta = new Vector2(500.0f, 50.0f);
+            Vector2 parentLocalScale = new Vector2(buttonRT.parent.localScale.x, buttonRT.parent.localScale.y);
+            buttonRT.sizeDelta = new Vector2(500.0f * parentLocalScale.x, 50.0f * parentLocalScale.y);
             buttonRT.position = pos;
 
             Button buttonBU = clickItem.AddComponent<Button>();
@@ -94,8 +91,7 @@ public class ListController : MonoBehaviour {
             buttonBU.colors = ColorBlock.defaultColorBlock;
 
             Text text = clickItem.AddComponent<Text>();
-            text.text = player.name;
-            Debug.Log(player.name);
+            text.text = player.Name;
             text.color = Color.black;
             text.fontSize = 20;
             text.alignment = TextAnchor.MiddleCenter;
