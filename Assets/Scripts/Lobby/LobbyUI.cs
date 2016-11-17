@@ -106,7 +106,6 @@ public class LobbyUI : MonoBehaviour
         int id = 0;
         for (int i = 0; i < teamArray.Length - 1; i++)
         {
-
             string teamName = GetLobbyData(teamArray[i], "Groupname:");
             id++;
             teamData = new LobbyData(id, teamName);
@@ -141,6 +140,7 @@ public class LobbyUI : MonoBehaviour
             memberList.Add(memberData);
         }
         PopulateMemberList(selectedTeam);
+
     }
 
 
@@ -189,8 +189,8 @@ public class LobbyUI : MonoBehaviour
 
     public void PopulateMemberList(string selectedTeam)
     {
-            addFriendButtons = new Button[memberList.Count];
-            memberNameTexts = new Text[memberList.Count];
+        addFriendButtons = new Button[memberList.Count];
+        memberNameTexts = new Text[memberList.Count];
 
         memberElementTransform = memberElementPrefab.GetComponent<RectTransform>();
         memberScrollTransform = memberListContent.GetComponent<RectTransform>();
@@ -218,7 +218,8 @@ public class LobbyUI : MonoBehaviour
                 y = rectTransform.offsetMin.y + 30;
                 rectTransform.offsetMax = new Vector2(x, y);
 
-            AddFriendButtonListeners(addFriendButtons[i], memberNameTexts[i].text);
+                AddFriendButtonListeners(addFriendButtons[i], memberNameTexts[i].text);
+            
         }
     }
 
@@ -235,7 +236,7 @@ public class LobbyUI : MonoBehaviour
     public void TeamButtonClick(string selectedTeam)
     {
         Debug.Log("Joining selected team.." + selectedTeam);
-        newMemberElement = null;
+
         current_UI = UI_Phase.UI_Lobby;
         StartCoroutine(GetMembersInTeam(selectedTeam));
     }
