@@ -28,18 +28,17 @@ public class LobbyUI : MonoBehaviour
     public GameObject teamListContent;
     public GameObject teamElementPrefab;
     public GameObject memberElementPrefab;
+    public Text userInfo;
     GameObject newMemberElement;
 
     Text[] teamNameTexts;
     Text[] memberNameTexts;
-
-    //public Button addFriendBtn;
-
-
+   
     public Button leaveLobbyBtn;
     public Button startMatchBtn;
     public Button backToLobbyBtn;
     public Button createTeamBtn;
+    public Button logOutBtn;
 
     Button[] teamJoinButtons;
     Button[] addFriendButtons;
@@ -60,7 +59,7 @@ public class LobbyUI : MonoBehaviour
         current_UI = UI_Phase.UI_Join_Create;
         //leaveLobbyBtn.onClick.AddListener(delegate { BackToLobbyButtonClick(); });
         startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
-        backToLobbyBtn.onClick.AddListener(delegate { LeaveLobbyClick(); });
+        backToLobbyBtn.onClick.AddListener(delegate { LeaveLobbyButtonClick(); });
     }
 
     void Update()
@@ -77,8 +76,8 @@ public class LobbyUI : MonoBehaviour
             case UI_Phase.UI_Lobby:
                 {
                     UI_Join_Create.enabled = false;
-                    UI_Lobby.enabled = true;
                     UI_AddFriend.enabled = false;
+                    UI_Lobby.enabled = true;
                 }
                 break;
             case UI_Phase.UI_AddFriend:
@@ -227,7 +226,7 @@ public class LobbyUI : MonoBehaviour
 
     public void AddTeamButtonListeners(Button button, string ID)
     {
-        button.onClick.AddListener(delegate { TeamBtnClick(ID); });
+        button.onClick.AddListener(delegate { TeamButtonClick(ID); });
     }
 
     public void AddFriendButtonListeners(Button button, string ID)
@@ -235,7 +234,7 @@ public class LobbyUI : MonoBehaviour
         button.onClick.AddListener(delegate { AddFriendButtonClick(ID); });
     }
 
-    public void TeamBtnClick(string selectedTeam)
+    public void TeamButtonClick(string selectedTeam)
     {
         Debug.Log("Joining selected team.." + selectedTeam);
         newMemberElement = null;
@@ -245,17 +244,16 @@ public class LobbyUI : MonoBehaviour
 
     private void AddFriendButtonClick(string selectedMember)
     {
-        Debug.Log("Opening user" + selectedMember + "'s profile");
         current_UI = UI_Phase.UI_AddFriend;
+        userInfo.text = selectedMember;
     }
-
 
     public void BackToLobbyButtonClick()
     {
         current_UI = UI_Phase.UI_Lobby;
     }
 
-    public void LeaveLobbyClick()
+    public void LeaveLobbyButtonClick()
     {
         current_UI = UI_Phase.UI_Join_Create;
         teamJoinButtons = null;
@@ -264,6 +262,11 @@ public class LobbyUI : MonoBehaviour
     public void StartButtonClick()
     {
         SceneManager.LoadScene("mainScene");
+    }
+
+    public void LogOutButtonClick()
+    {
+        SceneManager.LoadScene("login");
     }
 }
 
