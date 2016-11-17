@@ -27,7 +27,7 @@ public class InformativeMessage : MonoBehaviour {
     {
         //ShowCompletedMinigame();
 
-        //StartCoroutine(GetCompletedMinigame());
+        StartCoroutine(GetCompletedMinigame());
     }
 
     private void InitializeComponents()

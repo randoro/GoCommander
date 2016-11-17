@@ -29,10 +29,14 @@ public class Manager : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
+        //StartCoroutine(SendCompletedMinigame());
+
         allQuestions = new string[4];
         allAnswersID = new string[4];
 
         StartCoroutine(GetQuizes());
+
+
         
     }
 
@@ -142,12 +146,12 @@ public class Manager : MonoBehaviour
 
     IEnumerator SendCompletedMinigame()
     {
-        string message = " completed minigame";
+        string message = "completed minigame";
         string loginUserURL = "http://gocommander.sytes.net/scripts/send_minimessage.php";
 
         WWWForm form = new WWWForm();
-        form.AddField("userGroupPost", "Obanana");
-        form.AddField("userMiniMessage", message);
+        form.AddField("userGroupPost", "Killerbunnies");
+        form.AddField("userMiniMessagePost", message);
 
         WWW www = new WWW(loginUserURL, form);
 
