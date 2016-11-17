@@ -57,9 +57,7 @@ public class LobbyUI : MonoBehaviour
     {
         StartCoroutine(GetTeamFromServer());
         current_UI = UI_Phase.UI_Join_Create;
-        //leaveLobbyBtn.onClick.AddListener(delegate { BackToLobbyButtonClick(); });
         startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
-        backToLobbyBtn.onClick.AddListener(delegate { LeaveLobbyButtonClick(); });
     }
 
     void Update()
@@ -173,7 +171,7 @@ public class LobbyUI : MonoBehaviour
             teamJoinButtons[i].enabled = true;
             teamNameTexts[i] = teamJoinButtons[i].GetComponentInChildren<Text>();
             teamNameTexts[i].text = teamList[i].name;
-            teamNameTexts[i].fontSize = 8;
+            teamNameTexts[i].fontSize = 12;
 
             RectTransform rectTransform = newTeamElement.GetComponent<RectTransform>();
 
@@ -208,7 +206,7 @@ public class LobbyUI : MonoBehaviour
                 addFriendButtons[i].enabled = true;
                 memberNameTexts[i] = newMemberElement.GetComponentInChildren<Text>();
                 memberNameTexts[i].text = memberList[i].name;
-                memberNameTexts[i].fontSize = 8;
+                memberNameTexts[i].fontSize = 12;
 
                 RectTransform rectTransform = newMemberElement.GetComponent<RectTransform>();
 
