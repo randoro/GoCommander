@@ -21,7 +21,8 @@ public class GoogleMap : MonoBehaviour {
     public Color landscapeColor = Color.green;
     public Color roadColor = Color.white;
     public Color waterColor = Color.blue;
-    public static string username;
+    public static string username = "fdfss";
+    
     public static string groupName;
     bool settled;
     bool isPaused;
@@ -29,6 +30,7 @@ public class GoogleMap : MonoBehaviour {
 
     void Start()
     {
+        groupName = "Killerbunnies";
         settled = false;
     }
 
@@ -164,6 +166,13 @@ public class GoogleMap : MonoBehaviour {
             {
                 gs = gsG.GetComponent<GoalSpawner>();
                 gs.UpdateGoalLocation();
+            }
+            GameObject csG = GameObject.FindGameObjectWithTag("CommanderSpawner");
+            CommanderSpawner cs = null;
+            if (csG != null)
+            {
+                cs = csG.GetComponent<CommanderSpawner>();
+                cs.UpdateTreasureLocations();
             }
 
             if (tsG != null)
