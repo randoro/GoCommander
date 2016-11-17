@@ -27,7 +27,6 @@ public class MinigameStarter : MonoBehaviour {
 
                 if (Physics.Raycast(ray, out hit))
                 {
-
                     if (hit.transform.tag == "Treasure")
                     {
                         GameObject treasure = hit.transform.root.gameObject;

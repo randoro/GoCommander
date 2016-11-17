@@ -103,7 +103,9 @@ public class TreasureSpawner : MonoBehaviour {
     {
         string treasureURL = "http://gocommander.sytes.net/scripts/treasure_locations.php";
 
-        WWW www = new WWW(treasureURL);
+        WWWForm form = new WWWForm();
+        form.AddField("userGroupPost", GoogleMap.groupName);
+        WWW www = new WWW(treasureURL, form);
         yield return www;
         string result = www.text;
 

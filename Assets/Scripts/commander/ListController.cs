@@ -18,7 +18,7 @@ public class ListController : MonoBehaviour {
     public int refreshDelay = 10;
 
 	void Start () {
-        contentRT = this.GetComponent<RectTransform>();
+        contentRT = GetComponent<RectTransform>();
 
         playerSpawnerObj = GameObject.FindGameObjectWithTag("PlayerSpawner");
         playerSpawner = playerSpawnerObj.GetComponent<PlayerSpawner>();
@@ -37,7 +37,7 @@ public class ListController : MonoBehaviour {
         for (int i = 0; i < playerList.Count; i++)
         {
             currPH = playerList[i].GetComponent<PlayerHolder>();
-            listObjects.Add(new ListItem(contentRT, currPH, gMap, new Vector2(100, 100 * i), listGameObjects));
+            listObjects.Add(new ListItem(contentRT, currPH, gMap, new Vector2(0, 100 * i), listGameObjects));
             Debug.Log(currPH.Name);
         }
     }
@@ -45,7 +45,6 @@ public class ListController : MonoBehaviour {
     {
         while (true)
         {
-            print("We're here!");
             while (playerList.Count == 0)
             {
                 yield return null;
@@ -90,9 +89,11 @@ public class ListController : MonoBehaviour {
 
             RectTransform buttonRT = clickItem.AddComponent<RectTransform>();
             buttonRT.SetParent(contentRT);
-            Vector2 parentLocalScale = new Vector2(buttonRT.parent.localScale.x, buttonRT.parent.localScale.y);
-            buttonRT.sizeDelta = new Vector2(500.0f * parentLocalScale.x, 50.0f * parentLocalScale.y);
-            buttonRT.position = pos;
+            Vector2 canvasScale = new Vector2(contentRT.lossyScale.x, contentRT.lossyScale.y);
+
+            buttonRT.sizeDelta = Vector2.Scale(new Vector2(500.0f, 75.0f), canvasScale);
+            buttonRT.position = Vector2.Scale(pos, canvasScale);
+            buttonRT.pivot = contentRT.pivot;
 
             Button buttonBU = clickItem.AddComponent<Button>();
             buttonBU.onClick.AddListener(() => ButtonClicked());
@@ -101,7 +102,7 @@ public class ListController : MonoBehaviour {
             Text text = clickItem.AddComponent<Text>();
             text.text = player.Name;
             text.color = Color.black;
-            text.fontSize = 20;
+            text.fontSize = 20 * (int)canvasScale.x * 2;
             text.alignment = TextAnchor.MiddleCenter;
             text.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
 
@@ -124,10 +125,7 @@ public class ListController : MonoBehaviour {
             Debug.Log(player.lng);
             gMap.Refresh();
 
-            GameObject canvasGO = GameObject.FindGameObjectWithTag("MemberCanvas");
-
-            canvasGO.SetActive(false);
-
+            GameObject.FindGameObjectWithTag("MemberCanvas").SetActive(false);
             GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Orbit>().enabled = true;
         }
     }
