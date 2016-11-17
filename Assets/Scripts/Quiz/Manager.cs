@@ -132,8 +132,26 @@ public class Manager : MonoBehaviour
         if (answeredQuestions == 4)
         {
             InformativeMessage.isQuizCompleted = true;
+
+            //InformativeMessage.ShowCompletedMinigame();
+            StartCoroutine(SendCompletedMinigame());
+
             SceneManager.LoadScene("mainScene");
         }
+    }
+
+    IEnumerator SendCompletedMinigame()
+    {
+        string message = " completed minigame";
+        string loginUserURL = "http://gocommander.sytes.net/scripts/send_minimessage.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("userGroupPost", "Obanana");
+        form.AddField("userMiniMessage", message);
+
+        WWW www = new WWW(loginUserURL, form);
+
+        yield return www;
     }
 
     void ReadFromServer()

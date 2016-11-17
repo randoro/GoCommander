@@ -108,6 +108,8 @@ public class MapGenerator1 : MonoBehaviour
             StartCoroutine(delayTime());
 
             InformativeMessage.isMemoryCompleted = true;
+            InformativeMessage.ShowCompletedMinigame();
+
             SceneManager.LoadScene("mainScene");
         }
         if (timeleft < -1)
