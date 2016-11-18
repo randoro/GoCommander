@@ -48,8 +48,6 @@ public class LobbyUI : MonoBehaviour
     RectTransform memberScrollTransform;
     RectTransform teamScrollTransform;
 
-    bool populateList = false;
-
     private string[] teamArray;
 
     // Use this for initialization
@@ -109,14 +107,15 @@ public class LobbyUI : MonoBehaviour
             string teamName = GetLobbyData(teamArray[i], "Groupname:");
             id++;
             teamData = new LobbyData(id, teamName);
-            teamList.Add(teamData);
-                      
+            teamList.Add(teamData);                    
         }
         PopulateTeamList();
     }
 
     IEnumerator GetMembersInTeam(string selectedTeam)
     {
+        memberList.Clear();
+
         string getMembersURL = "http://gocommander.sytes.net/scripts/show_group_members.php";
 
         WWWForm form = new WWWForm();
@@ -139,7 +138,7 @@ public class LobbyUI : MonoBehaviour
             memberData = new LobbyData(id, member);
             memberList.Add(memberData);
         }
-        PopulateMemberList(selectedTeam);
+        PopulateMemberList();
 
     }
 
@@ -187,8 +186,13 @@ public class LobbyUI : MonoBehaviour
         }
     }
 
-    public void PopulateMemberList(string selectedTeam)
+    public void PopulateMemberList()
     {
+        //addFriendButtons = null;
+        //memberNameTexts = null;
+        //newMemberElement = null;
+        //addFriendButtons = null;
+
         addFriendButtons = new Button[memberList.Count];
         memberNameTexts = new Text[memberList.Count];
 
@@ -254,8 +258,7 @@ public class LobbyUI : MonoBehaviour
 
     public void LeaveLobbyButtonClick()
     {
-        current_UI = UI_Phase.UI_Join_Create;
-        teamJoinButtons = null;
+        SceneManager.LoadScene("LobbyScene");
     }
 
     public void StartButtonClick()
