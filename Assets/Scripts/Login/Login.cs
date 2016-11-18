@@ -18,7 +18,7 @@ public class Login : MonoBehaviour {
     private Text Timer;
     private float timerUp;
 
-    //TEMPRARY FOR TESTING ENTERING THE LOBBY SCENE
+    //TEMPORARY FOR TESTING ENTERING THE LOBBY SCENE
     public Button lobbyTestBtn;
 
     public void LoginButton()
@@ -67,8 +67,8 @@ public class Login : MonoBehaviour {
             password.GetComponent<InputField>().text = "";
             username.GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Username";
             password.GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Password";
-            //SceneManager.LoadScene("mainScene");
-            SceneManager.LoadScene("MinigameQuiz");
+            SceneManager.LoadScene("mainScene");
+            //SceneManager.LoadScene("LobbyScene");
         }
         if (result == "User not found")
         {
@@ -95,6 +95,7 @@ public class Login : MonoBehaviour {
         float finalTime = timerUp;
         Timer.text = "Timer: " + finalTime.ToString("F3");
     }
+
 
     //TEMPORARY METHOD FOR TESTING ENTERING THE LOBBY SCENE
     public void LobbyTestClick()

@@ -10,12 +10,14 @@ public class LobbyUI : MonoBehaviour
     enum UI_Phase
     {
         UI_Join_Create,
+        UI_Create,
         UI_Lobby,
         UI_AddFriend
     }
     UI_Phase current_UI;
 
     public Canvas UI_Join_Create;
+    public Canvas UI_Create;
     public Canvas UI_Lobby;
     public Canvas UI_AddFriend;
 
@@ -28,6 +30,8 @@ public class LobbyUI : MonoBehaviour
     public GameObject teamListContent;
     public GameObject teamElementPrefab;
     public GameObject memberElementPrefab;
+    public GameObject teamInputField;
+
     GameObject newMemberElement;
 
     public Text userInfo;
@@ -41,6 +45,7 @@ public class LobbyUI : MonoBehaviour
     public Button backToLobbyBtn;
     public Button createTeamBtn;
     public Button logOutBtn;
+    public Button createTeamMenuOptionBtn;
 
     Button[] teamJoinButtons;
     Button[] addFriendButtons;
@@ -51,6 +56,7 @@ public class LobbyUI : MonoBehaviour
     RectTransform teamScrollTransform;
 
     private string[] teamArray;
+    string newTeamName;
 
     // Use this for initialization
     void Start()
@@ -67,6 +73,15 @@ public class LobbyUI : MonoBehaviour
             case UI_Phase.UI_Join_Create:
                 {
                     UI_Join_Create.enabled = true;
+                    UI_Create.enabled = false;
+                    UI_Lobby.enabled = false;
+                    UI_AddFriend.enabled = false;
+                }
+                break;
+            case UI_Phase.UI_Create:
+                {
+                    UI_Join_Create.enabled = false;
+                    UI_Create.enabled = true;
                     UI_Lobby.enabled = false;
                     UI_AddFriend.enabled = false;
                 }
@@ -74,6 +89,7 @@ public class LobbyUI : MonoBehaviour
             case UI_Phase.UI_Lobby:
                 {
                     UI_Join_Create.enabled = false;
+                    UI_Create.enabled = false;
                     UI_AddFriend.enabled = false;
                     UI_Lobby.enabled = true;
                 }
@@ -81,12 +97,38 @@ public class LobbyUI : MonoBehaviour
             case UI_Phase.UI_AddFriend:
                 {
                     UI_Join_Create.enabled = false;
+                    UI_Create.enabled = false;
                     UI_Lobby.enabled = false;
                     UI_AddFriend.enabled = true;
                 }
                 break;
         }
     }
+
+    //IEnumerator LoginTeam(string teamName)
+    //{
+    //    string loginUserURL = "http://gocommander.sytes.net/scripts/login.php";
+
+    //    WWWForm form = new WWWForm();
+    //    form.AddField("usernamePost", name);
+
+    //    WWW www = new WWW(loginUserURL, form);
+
+    //    yield return www;
+
+    //    string result = www.text;
+
+    //    if (result == "Login success")
+    //    {
+    //        GoogleMap.groupName = teamName;
+    //        //Result.text = "You are Logged in!";
+    //        //username.GetComponent<InputField>().text = "";
+    //        //password.GetComponent<InputField>().text = "";
+    //        //username.GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Username";
+    //        //password.GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Password";
+    //        SceneManager.LoadScene("mainScene");
+    //    }
+    //}
 
     IEnumerator GetTeamFromServer()
     {
@@ -235,6 +277,17 @@ public class LobbyUI : MonoBehaviour
         button.onClick.AddListener(delegate { AddFriendButtonClick(ID); });
     }
 
+    public void CreateTeamMenuOptionClick()
+    {
+        current_UI = UI_Phase.UI_Create;
+    }
+
+    public void CreateTeamClick()
+    {
+            newTeamName = teamInputField.GetComponent<Text>().text;
+            SceneManager.LoadScene("LobbyScene");
+    }
+
     public void TeamButtonClick(string selectedTeam)
     {
         current_UI = UI_Phase.UI_Lobby;
@@ -260,7 +313,10 @@ public class LobbyUI : MonoBehaviour
 
     public void StartButtonClick()
     {
-        SceneManager.LoadScene("mainScene");
+        if (memberList.Count > 0)
+        {
+            SceneManager.LoadScene("mainScene");
+        }
     }
 
     public void LogOutButtonClick()
