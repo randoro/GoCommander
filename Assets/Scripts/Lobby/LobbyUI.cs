@@ -28,8 +28,10 @@ public class LobbyUI : MonoBehaviour
     public GameObject teamListContent;
     public GameObject teamElementPrefab;
     public GameObject memberElementPrefab;
-    public Text userInfo;
     GameObject newMemberElement;
+
+    public Text userInfo;
+    public Text teamInfo;
 
     Text[] teamNameTexts;
     Text[] memberNameTexts;
@@ -188,10 +190,6 @@ public class LobbyUI : MonoBehaviour
 
     public void PopulateMemberList()
     {
-        //addFriendButtons = null;
-        //memberNameTexts = null;
-        //newMemberElement = null;
-        //addFriendButtons = null;
 
         addFriendButtons = new Button[memberList.Count];
         memberNameTexts = new Text[memberList.Count];
@@ -239,9 +237,8 @@ public class LobbyUI : MonoBehaviour
 
     public void TeamButtonClick(string selectedTeam)
     {
-        Debug.Log("Joining selected team.." + selectedTeam);
-
         current_UI = UI_Phase.UI_Lobby;
+        teamInfo.text = "Team: " + selectedTeam + "";
         StartCoroutine(GetMembersInTeam(selectedTeam));
     }
 
