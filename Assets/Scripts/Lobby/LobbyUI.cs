@@ -131,44 +131,56 @@ public class LobbyUI : MonoBehaviour
         PopulateTeamList();
     }
 
-    IEnumerator GetMembersInTeam(string selectedTeam)
+    IEnumerator JoinSelectedTeam(string selectedTeam)
     {
         memberList.Clear();
 
-        string getMembersURL = "http://gocommander.sytes.net/scripts/show_group_members.php";
+        string getTeamURL = "http://gocommander.sytes.net/scripts/join_group.php";
 
         WWWForm form = new WWWForm();
         form.AddField("userGroupPost", selectedTeam);
-        WWW www = new WWW(getMembersURL, form);
+        form.AddField("usernamePost", GoogleMap.username);
+        WWW www = new WWW(getTeamURL, form);
 
         yield return www;
 
-        string result = www.text;
+        StartCoroutine(GetMembersInTeam(selectedTeam));
+    }
 
-        if (result != null)
-        {
-            teamArray = result.Split(';');
-        }
+    IEnumerator GetMembersInTeam(string selectedTeam)
+    {
+            string getMembersURL = "http://gocommander.sytes.net/scripts/show_group_members.php";
 
-        for (int i = 0; i < teamArray.Length - 1; i++)
-        {
-            int id = int.Parse(GetLobbyData(teamArray[i], "ID:"));
-            string member = GetLobbyData(teamArray[i], "Groupusers:");
-            memberData = new LobbyData(id, member);
-            memberList.Add(memberData);
-        }
-        PopulateMemberList();
+            WWWForm form = new WWWForm();
+            form.AddField("userGroupPost", selectedTeam);
+            WWW www = new WWW(getMembersURL, form);
+
+            yield return www;
+
+            string result = www.text;
+
+            if (result != null)
+            {
+                teamArray = result.Split(';');
+            }
+
+            for (int i = 0; i < teamArray.Length - 1; i++)
+            {
+                int id = int.Parse(GetLobbyData(teamArray[i], "ID:"));
+                string member = GetLobbyData(teamArray[i], "Groupusers:");
+                memberData = new LobbyData(id, member);
+                memberList.Add(memberData);
+            }
+            PopulateMemberList(selectedTeam);
     }
 
     IEnumerator CreateNewTeam(string newTeamName)
     {
-        //memberList.Clear();
-
         string getMembersURL = "http://gocommander.sytes.net/scripts/create_group.php";
    
         WWWForm form = new WWWForm();
         form.AddField("userGroupPost", newTeamName);
-        form.AddField("usernamePost", userInfo.ToString());
+        form.AddField("usernamePost", GoogleMap.username);
         WWW www = new WWW(getMembersURL, form);
 
         yield return www;
@@ -222,9 +234,9 @@ public class LobbyUI : MonoBehaviour
         }
     }
 
-    public void PopulateMemberList()
+    public void PopulateMemberList(string selectedTeam)
     {
-
+        
         addFriendButtons = new Button[memberList.Count];
         memberNameTexts = new Text[memberList.Count];
 
@@ -256,6 +268,10 @@ public class LobbyUI : MonoBehaviour
 
                 AddFriendButtonListeners(addFriendButtons[i], memberNameTexts[i].text);
             
+            //if(memberList.Count < 10)
+            //{
+
+            //}          
         }
     }
 
@@ -284,7 +300,7 @@ public class LobbyUI : MonoBehaviour
     {
         current_UI = UI_Phase.UI_Lobby;
         teamInfo.text = "Team: " + selectedTeam + "";
-        StartCoroutine(GetMembersInTeam(selectedTeam));
+        StartCoroutine(JoinSelectedTeam(selectedTeam));
     }
 
     private void AddFriendButtonClick(string selectedMember)
