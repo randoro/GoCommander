@@ -160,6 +160,24 @@ public class LobbyUI : MonoBehaviour
         PopulateMemberList();
     }
 
+    IEnumerator CreateNewTeam(string newTeamName)
+    {
+        //memberList.Clear();
+
+        string getMembersURL = "http://gocommander.sytes.net/scripts/create_group.php";
+   
+        WWWForm form = new WWWForm();
+        form.AddField("userGroupPost", newTeamName);
+        form.AddField("usernamePost", userInfo.ToString());
+        WWW www = new WWW(getMembersURL, form);
+
+        yield return www;
+
+        string result = www.text;
+
+        TeamButtonClick(newTeamName);
+    }
+
 
     string GetLobbyData(string data, string index)
     {
@@ -259,7 +277,7 @@ public class LobbyUI : MonoBehaviour
     public void CreateTeamClick()
     {
         newTeamName = teamInputField.GetComponent<InputField>().text;
-        TeamButtonClick(newTeamName);
+        StartCoroutine(CreateNewTeam(newTeamName));
     }
 
     public void TeamButtonClick(string selectedTeam)
