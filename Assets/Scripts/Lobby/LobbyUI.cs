@@ -201,6 +201,7 @@ public class LobbyUI : MonoBehaviour
 
     private void PopulateTeamList()
     {
+
         teamJoinButtons = new Button[teamList.Count];
         teamNameTexts = new Text[teamList.Count];
 
@@ -230,7 +231,9 @@ public class LobbyUI : MonoBehaviour
             y = rectTransform.offsetMin.y + 50;
             rectTransform.offsetMax = new Vector2(x, y);
 
+            //teamListContent.GetComponent<RectTransform>().sizeDelta += new Vector2(x, y);
             AddTeamButtonListeners(teamJoinButtons[i], teamNameTexts[i].text);
+
         }
     }
 
