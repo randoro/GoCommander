@@ -38,7 +38,6 @@ public class TreasureHolder : MonoBehaviour
                 p10.GetComponent<MeshRenderer>().material = mats[treasure.type];
                 GetComponent<MeshRenderer>().material = mats[treasure.type];
             }
-
         }
     }
 
