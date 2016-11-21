@@ -223,15 +223,17 @@ public class LobbyUI : MonoBehaviour
 
             RectTransform rectTransform = newTeamElement.GetComponent<RectTransform>();
 
-            float x = -teamScrollTransform.rect.width / 2 * (i % 1);
+            //float x = -teamScrollTransform.rect.width / 2 * (i % 1);
+            //float y = teamScrollTransform.rect.height / 2 - 50 * j;
+            float x = 0;
             float y = teamScrollTransform.rect.height / 2 - 50 * j;
             rectTransform.offsetMin = new Vector2(x, y);
 
             x = rectTransform.offsetMin.x;
-            y = rectTransform.offsetMin.y + 50;
+            y = rectTransform.offsetMin.y;
             rectTransform.offsetMax = new Vector2(x, y);
 
-            //teamListContent.GetComponent<RectTransform>().sizeDelta += new Vector2(x, y);
+            //teamListContent.GetComponent<RectTransform>().sizeDelta += new Vector2(0, teamScrollTransform.rect.height / 2 - 50);
             AddTeamButtonListeners(teamJoinButtons[i], teamNameTexts[i].text);
 
         }
