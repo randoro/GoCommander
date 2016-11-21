@@ -101,7 +101,7 @@ public class MinigameStarter : MonoBehaviour {
                         if (csG != null)
                         {
                             cs = csG.GetComponent<CommanderSpawner>();
-                            cs.RemoveTreasure(id);
+                            //cs.RemoveTreasure(id);
                         }
                     }
                 }

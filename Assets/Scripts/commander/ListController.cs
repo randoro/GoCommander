@@ -13,8 +13,6 @@ public class ListController : MonoBehaviour {
     private PlayerSpawner playerSpawner;
 
     private GoogleMap gMap;
-    private GPSController gps;
-    private bool fetched = false;
     public int refreshDelay = 10;
 
 	void Start () {
@@ -37,18 +35,18 @@ public class ListController : MonoBehaviour {
         for (int i = 0; i < playerList.Count; i++)
         {
             currPH = playerList[i].GetComponent<PlayerHolder>();
-            listObjects.Add(new ListItem(contentRT, currPH, gMap, new Vector2(0, contentRT.position.y + 100 * i), listGameObjects, this));
+            listObjects.Add(new ListItem(contentRT, currPH, gMap, new Vector2(0, contentRT.position.y - 100 * i), listGameObjects, this));
             Debug.Log(currPH.Name);
         }
     }
-    public void RestartTreasureSpawner()
-    {
-        CommanderSpawner commanderSpawner = GameObject.FindGameObjectWithTag("CommanderSpawner").GetComponent<CommanderSpawner>();
-        commanderSpawner.fetched = false;
-        IEnumerator co = commanderSpawner.UpdateTreasures();
-        StopCoroutine(co);
-        StartCoroutine(co);
-    }
+    //public void RestartTreasureSpawner()
+    //{
+    //    CommanderSpawner commanderSpawner = GameObject.FindGameObjectWithTag("CommanderSpawner").GetComponent<CommanderSpawner>();
+    //    commanderSpawner.fetched = false;
+    //    IEnumerator co = commanderSpawner.UpdateTreasures();
+    //    StopCoroutine(co);
+    //    StartCoroutine(co);
+    //}
     IEnumerator UpdatePlayers()
     {
         while (true)
@@ -129,7 +127,7 @@ public class ListController : MonoBehaviour {
 
             //gps.StopRefreshing();
 
-            listController.RestartTreasureSpawner();
+            //listController.RestartTreasureSpawner();
 
             GoogleMap.centerLocation.address = "";
             GoogleMap.centerLocation.latitude = (float)player.lat;

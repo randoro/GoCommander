@@ -22,15 +22,14 @@ public class GoogleMap : MonoBehaviour {
     public Color roadColor = Color.white;
     public Color waterColor = Color.blue;
     public static string username = "fdfss";
-    
-    public static string groupName;
+
+    public static string groupName = "Killerbunnies";
     bool settled;
     bool isPaused;
 
 
     void Start()
     {
-        groupName = "Killerbunnies";
         settled = false;
     }
 

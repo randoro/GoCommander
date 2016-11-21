@@ -26,7 +26,7 @@ public class TreasureHolder : MonoBehaviour
         treasure = new Treasure(id, lat, lng, type, visible);
         SetChestColor();
     }
-
+    
     private void SetChestColor()
     {
         if (treasure != null)

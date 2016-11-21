@@ -86,13 +86,23 @@ public class TreasureSpawner : MonoBehaviour {
                 newTreasureHolder.Initialize(v.id, v.lat, v.lng, v.type, v.visible);
                 newTreasureHolder.gameObject.transform.localScale = new Vector3(4f, 4f, 4f);
                 treasureList.Add(newTreasureHolder.gameObject);
+                StartCoroutine(SetAsVisible(v.id));
 
             }
             fetched = false;
             yield return new WaitForSeconds(refreshDelay);
         }    
     }
+    IEnumerator SetAsVisible(int id)
+    {
+        string IDsendURL = "http://gocommander.sytes.net/scripts/visible_treasure_locations.php";
 
+        WWWForm form = new WWWForm();
+        form.AddField("treasureidPost", id);
+        WWW www = new WWW(IDsendURL, form);
+
+        yield return www;
+    }
     private float coordScaleToGameScale(double inFloat, double total, float multi)
     {
         float returnfloat = (float)((inFloat / total) * (multi * (double)Math.Pow(2, gMap.zoom)));

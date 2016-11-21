@@ -33,7 +33,7 @@ public class CommanderSpawner : MonoBehaviour
         StartCoroutine(UpdateTreasures());
     }
 
-    public IEnumerator UpdateTreasures()
+    IEnumerator UpdateTreasures()
     {
         while (true)
         {
@@ -77,7 +77,6 @@ public class CommanderSpawner : MonoBehaviour
                 newTreasureHolder.Initialize(v.id, v.lat, v.lng, v.type, v.visible);
                 newTreasureHolder.gameObject.transform.localScale = new Vector3(4f, 4f, 4f);
                 treasureList.Add(newTreasureHolder.gameObject);
-
             }
             fetched = false;
             yield return new WaitForSeconds(refreshDelay);
@@ -99,7 +98,9 @@ public class CommanderSpawner : MonoBehaviour
     {
         string treasureURL = "http://gocommander.sytes.net/scripts/treasure_locations.php";
 
-        WWW www = new WWW(treasureURL);
+        WWWForm form = new WWWForm();
+        form.AddField("userGroupPost", GoogleMap.groupName);
+        WWW www = new WWW(treasureURL, form);
         yield return www;
         string result = www.text;
 
@@ -114,10 +115,10 @@ public class CommanderSpawner : MonoBehaviour
         {
             double lat = double.Parse(GetDataValue(nav[i], "Latitude:"));
             double lng = double.Parse(GetDataValue(nav[i], "Longitude:"));
-            int visible = int.Parse(GetDataValue(nav[i], "Visible:"));
 
             if (OutsideRadiusLatLng(lng, lat, GoogleMap.centerLocation.longitude, GoogleMap.centerLocation.latitude))
             {
+                int visible = int.Parse(GetDataValue(nav[i], "Visible:"));
                 int id = int.Parse(GetDataValue(nav[i], "ID:"));
                 int type = int.Parse(GetDataValue(nav[i], "Type:"));
 
