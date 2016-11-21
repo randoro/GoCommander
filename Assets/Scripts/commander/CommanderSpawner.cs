@@ -12,12 +12,12 @@ public class CommanderSpawner : MonoBehaviour
 
     private string[] nav;
     public List<GameObject> treasureList;
-    List<Treasure> fetchedList;
+    public List<Treasure> fetchedList;
     private GameObject map;
     private GoogleMap gMap;
 
     private float lastTime = 0;
-    private bool fetched;
+    public bool fetched;
 
     // Use this for initialization
     void Start()
@@ -36,7 +36,7 @@ public class CommanderSpawner : MonoBehaviour
 
     }
 
-    IEnumerator UpdateTreasures()
+    public IEnumerator UpdateTreasures()
     {
         while (true)
         {
