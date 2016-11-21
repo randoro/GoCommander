@@ -123,6 +123,7 @@ public class TreasureSpawner : MonoBehaviour {
 
         for (int i = 0; i < nav.Length - 1; i++)
         {
+            print("GETTING TREASURES");
             double lat = double.Parse(GetDataValue(nav[i], "Latitude:"));
             double lng = double.Parse(GetDataValue(nav[i], "Longitude:"));
             int id = int.Parse(GetDataValue(nav[i], "ID:"));
@@ -130,6 +131,8 @@ public class TreasureSpawner : MonoBehaviour {
             int visible = int.Parse(GetDataValue(nav[i], "Visible:"));
 
             fetchedList.Add(new Treasure(id, lat, lng, type, visible));
+
+            //print(fetchedList.Count.ToString());
             //if (WithinRadiusLatLng(lng, lat, GoogleMap.centerLocation.longitude, GoogleMap.centerLocation.latitude))
             //{
                 
@@ -181,8 +184,8 @@ public class TreasureSpawner : MonoBehaviour {
             int itsId = v.id;
             if (itsId == id)
             {
-                Destroy(tempTres.gameObject);
-                StartCoroutine(RemoveChosenTreasure(id));
+                //Destroy(tempTres.gameObject);
+                //StartCoroutine(RemoveChosenTreasure(id));
             }
 
         }
