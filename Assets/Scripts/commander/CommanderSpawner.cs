@@ -19,6 +19,8 @@ public class CommanderSpawner : MonoBehaviour
     private float lastTime = 0;
     public bool fetched;
 
+    private const double radius = 0.003;
+
     // Use this for initialization
     void Start()
     {
@@ -29,11 +31,6 @@ public class CommanderSpawner : MonoBehaviour
         fetchedList = new List<Treasure>();
 
         StartCoroutine(UpdateTreasures());
-    }
-
-    void Update()
-    {
-
     }
 
     public IEnumerator UpdateTreasures()
@@ -115,12 +112,15 @@ public class CommanderSpawner : MonoBehaviour
 
         for (int i = 0; i < nav.Length - 1; i++)
         {
-            int id = int.Parse(GetDataValue(nav[i], "ID:"));
             double lat = double.Parse(GetDataValue(nav[i], "Latitude:"));
             double lng = double.Parse(GetDataValue(nav[i], "Longitude:"));
-            int type = int.Parse(GetDataValue(nav[i], "Type:"));
+            if (OutsideRadiusLatLng(lng, lat, GoogleMap.centerLocation.longitude, GoogleMap.centerLocation.latitude))
+            {
+                int id = int.Parse(GetDataValue(nav[i], "ID:"));
+                int type = int.Parse(GetDataValue(nav[i], "Type:"));
 
-            fetchedList.Add(new Treasure(id, lat, lng, type));
+                fetchedList.Add(new Treasure(id, lat, lng, type));
+            }
         }
         fetched = true;
     }
@@ -185,5 +185,19 @@ public class CommanderSpawner : MonoBehaviour
         WWW www = new WWW(removeChosenTreasure, form);
 
         yield return www;
+    }
+    bool OutsideRadiusLatLng(double treasureLng, double treasureLat, double playerLng, double playerLat)
+    {
+        Vector2 playerLngLat = new Vector2((float)playerLng / 2, (float)playerLat);
+        Vector2 treasureLngLat = new Vector2((float)treasureLng / 2, (float)treasureLat);
+
+        if (Vector2.Distance(playerLngLat, treasureLngLat) > radius - 0.002)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
