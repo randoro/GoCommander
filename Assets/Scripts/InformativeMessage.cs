@@ -20,11 +20,15 @@ public class InformativeMessage : MonoBehaviour {
     //public static string s;
 
     public static bool run = false;
-    float timer = 5f;
+    float timer = 7f;
     float messagetimer = 10f;
 
     private void Start()
     {
+        isQuizCompleted = false;
+        isPuzzleCompleted = false;
+        isMemoryCompleted = false;
+        isSprintCompleted = false;
         //notificationText.text = "A minigame was completed by " + Manager.username;
 
         //window.GetComponent<Image>().enabled = false;
@@ -45,31 +49,41 @@ public class InformativeMessage : MonoBehaviour {
 
         //ShowCompletedMinigame();
         //StartCoroutine(RemoveNotification());
+
+        //StartCoroutine(TimerPause());
     }
 
     private void Update()
     {
-        messagetimer -= Time.deltaTime;
+        //messagetimer -= Time.deltaTime;
 
-        if(messagetimer < 0)
-        {
-            StartCoroutine(GetCompletedMinigame());
-            //messagetimer = 15f;
-        }
+        //if(messagetimer < 0)
+        //{
+        //    messagetimer = 10f;
+        //    StartCoroutine(GetCompletedMinigame());
+        //    //messagetimer = 15f;
+        //}
 
-        if (isQuizCompleted || isMemoryCompleted || isPuzzleCompleted || isSprintCompleted)
-        {
-            timer -= Time.deltaTime;
-            //StartCoroutine(GetCompletedMinigame());
-            notificationWindow.SetActive(true);
-            notificationText.text = GoogleMap.username + " " + minimessage;
-            
-            StartCoroutine(RemoveNotification());
-            if (timer < 0)
-            {
-                StartCoroutine(DeleteMinimessage());               
-            }
-        }
+            //if (isQuizCompleted) //|| isMemoryCompleted || isPuzzleCompleted || isSprintCompleted)
+            //{
+            StartCoroutine(TimerPause());
+            //    timer -= Time.deltaTime;
+            //    StartCoroutine(GetCompletedMinigame());
+            //if (!minimessage.Equals(""))
+            //{
+            //    print(minimessage);                
+            //    notificationWindow.SetActive(true);
+            //    notificationText.text = minimessage;
+            //}
+
+
+            //    //StartCoroutine(RemoveNotification());
+            //    if (timer < 0)
+            //    {
+            //        StartCoroutine(DeleteMinimessage());               
+            //    }
+            //}
+        
         //    else if (isMemoryCompleted)
         //    {
         //        window.SetActive(true);
@@ -85,6 +99,29 @@ public class InformativeMessage : MonoBehaviour {
         //        window.SetActive(true);
         //        notificationText.text = Manager.username + " completed a Sprint!";
         //    }
+    }
+
+    IEnumerator TimerPause()
+    {      
+        StartCoroutine(GetCompletedMinigame());
+
+        if (!minimessage.Equals(""))
+        {
+            timer -= Time.deltaTime;
+            notificationText.text = minimessage;
+            notificationWindow.SetActive(true);
+            
+            if (timer < 0)
+            {
+                StartCoroutine(DeleteMinimessage());
+            }
+        }
+
+
+        //StartCoroutine(RemoveNotification());
+        yield return new WaitForSeconds(10);
+        //notificationText.text = "";
+        //notificationWindow.SetActive(false);
     }
 
     private void InitializeComponents()
@@ -168,7 +205,7 @@ public class InformativeMessage : MonoBehaviour {
     IEnumerator GetCompletedMinigame()
     {
         //string name = "milan";
-        print("Beginning");
+        //minimessage = "TEST!!!";
 
         string loginUserURL = "http://gocommander.sytes.net/scripts/get_minimessage.php";
 
@@ -183,57 +220,67 @@ public class InformativeMessage : MonoBehaviour {
 
         if (result.Equals(""))
         {
-            messagetimer = 10f;            
+            print("NULL");
+            notificationText.text = "";
+            notificationWindow.SetActive(false);           
         }
         else
         {
-            minimessage = www.text;
-            isQuizCompleted = true;
+            minimessage = result;
+            print(minimessage);
+            //isQuizCompleted = true;
         }
+        //yield return result;
     }
 
     IEnumerator DeleteMinimessage()
     {
+        minimessage = "";
+        //notificationText.text = "";
+        //notificationWindow.SetActive(false);
+        
+        
+        timer = 7f;
         //string name = "milan";
-        print("Beginning");
 
         string loginUserURL = "http://gocommander.sytes.net/scripts/delete_minigamemessage.php";
 
         WWWForm form = new WWWForm();
-        form.AddField("usernamePost", GoogleMap.username);
+        form.AddField("usernamePost", Manager.username);
 
         WWW www = new WWW(loginUserURL, form);
 
         yield return www;
-        timer = 5f;
-        isQuizCompleted = false;
+        
+        
+        //isQuizCompleted = false;
     }
 
     IEnumerator RemoveNotification()
     {
         if (isQuizCompleted)
         {
-            yield return new WaitForSeconds(10);
+            yield return new WaitForSeconds(5);
             notificationWindow.SetActive(false);
-            //isQuizCompleted = false;
+            isQuizCompleted = false;
         }
-        else if (isMemoryCompleted)
-        {
-            yield return new WaitForSeconds(10);
-            notificationWindow.SetActive(false);
-            isMemoryCompleted = false;
-        }
-        else if (isPuzzleCompleted)
-        {
-            yield return new WaitForSeconds(10);
-            notificationWindow.SetActive(false);
-            isPuzzleCompleted = false;
-        }
-        else if (isSprintCompleted)
-        {
-            yield return new WaitForSeconds(10);
-            notificationWindow.SetActive(false);
-            isSprintCompleted = false;
-        }
+        //else if (isMemoryCompleted)
+        //{
+        //    yield return new WaitForSeconds(10);
+        //    notificationWindow.SetActive(false);
+        //    isMemoryCompleted = false;
+        //}
+        //else if (isPuzzleCompleted)
+        //{
+        //    yield return new WaitForSeconds(10);
+        //    notificationWindow.SetActive(false);
+        //    isPuzzleCompleted = false;
+        //}
+        //else if (isSprintCompleted)
+        //{
+        //    yield return new WaitForSeconds(10);
+        //    notificationWindow.SetActive(false);
+        //    isSprintCompleted = false;
+        //}
     }
 }

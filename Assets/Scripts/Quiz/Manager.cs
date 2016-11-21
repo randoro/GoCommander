@@ -135,7 +135,7 @@ public class Manager : MonoBehaviour
     {
         if (answeredQuestions == 4)
         {
-            InformativeMessage.isQuizCompleted = true;
+            //InformativeMessage.isQuizCompleted = true;
 
             //InformativeMessage.ShowCompletedMinigame();
             StartCoroutine(SendCompletedMinigame());
