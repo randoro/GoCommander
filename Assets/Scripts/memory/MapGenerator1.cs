@@ -109,8 +109,10 @@ public class MapGenerator1 : MonoBehaviour
 
             InformativeMessage.isMemoryCompleted = true;
             //InformativeMessage.ShowCompletedMinigame();
+		
+           SceneManager.LoadScene("mainScene");
 
-            SceneManager.LoadScene("mainScene");
+
         }
 		showtime = (int)timeoblsticale;
 		if (timeoblsticale < 0) {
@@ -128,7 +130,7 @@ public class MapGenerator1 : MonoBehaviour
         {
         
             StartCoroutine(delayTime());
-
+		
             SceneManager.LoadScene("mainScene");
         }		
 		if (win==false&&timestartcolers < 0)
