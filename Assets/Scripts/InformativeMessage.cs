@@ -67,8 +67,7 @@ public class InformativeMessage : MonoBehaviour {
             StartCoroutine(RemoveNotification());
             if (timer < 0)
             {
-                StartCoroutine(DeleteMinimessage());
-                
+                StartCoroutine(DeleteMinimessage());               
             }
         }
         //    else if (isMemoryCompleted)
@@ -182,14 +181,14 @@ public class InformativeMessage : MonoBehaviour {
 
         string result = www.text;
 
-        if (result != null)
+        if (result.Equals(""))
         {
-            minimessage = www.text;
-            isQuizCompleted = true;
+            messagetimer = 10f;            
         }
         else
         {
-            messagetimer = 10f;
+            minimessage = www.text;
+            isQuizCompleted = true;
         }
     }
 
