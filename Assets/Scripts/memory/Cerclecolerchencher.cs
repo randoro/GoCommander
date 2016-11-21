@@ -19,7 +19,7 @@ public class Cerclecolerchencher : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		if (mapGenerator1.timeleft < 40&&onetimeuse==true) {
+		if (mapGenerator1.timeoblsticale < 0 &&onetimeuse==true) {
 			gameObject.transform.localScale = new Vector3 (0, 0, 0);
 			onetimeuse = false;
 		}
