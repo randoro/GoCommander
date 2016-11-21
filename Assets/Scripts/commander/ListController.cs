@@ -37,7 +37,7 @@ public class ListController : MonoBehaviour {
         for (int i = 0; i < playerList.Count; i++)
         {
             currPH = playerList[i].GetComponent<PlayerHolder>();
-            listObjects.Add(new ListItem(contentRT, currPH, gMap, new Vector2(0, 100 * i), listGameObjects, this));
+            listObjects.Add(new ListItem(contentRT, currPH, gMap, new Vector2(0, contentRT.position.y + 100 * i), listGameObjects, this));
             Debug.Log(currPH.Name);
         }
     }
@@ -102,6 +102,8 @@ public class ListController : MonoBehaviour {
             buttonRT.sizeDelta = Vector2.Scale(new Vector2(500.0f, 75.0f), canvasScale);
             buttonRT.position = Vector2.Scale(pos, canvasScale);
             buttonRT.pivot = contentRT.pivot;
+
+            contentRT.sizeDelta -= new Vector2(0, buttonRT.sizeDelta.y);
 
             Button buttonBU = clickItem.AddComponent<Button>();
             buttonBU.onClick.AddListener(() => ButtonClicked());
