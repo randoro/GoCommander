@@ -105,31 +105,6 @@ public class LobbyUI : MonoBehaviour
         }
     }
 
-    //IEnumerator LoginTeam(string teamName)
-    //{
-    //    string loginUserURL = "http://gocommander.sytes.net/scripts/login.php";
-
-    //    WWWForm form = new WWWForm();
-    //    form.AddField("usernamePost", name);
-
-    //    WWW www = new WWW(loginUserURL, form);
-
-    //    yield return www;
-
-    //    string result = www.text;
-
-    //    if (result == "Login success")
-    //    {
-    //        GoogleMap.groupName = teamName;
-    //        //Result.text = "You are Logged in!";
-    //        //username.GetComponent<InputField>().text = "";
-    //        //password.GetComponent<InputField>().text = "";
-    //        //username.GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Username";
-    //        //password.GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Password";
-    //        SceneManager.LoadScene("mainScene");
-    //    }
-    //}
-
     IEnumerator GetTeamFromServer()
     {
         string getTeamsURL = "http://gocommander.sytes.net/scripts/show_group.php";
@@ -183,7 +158,6 @@ public class LobbyUI : MonoBehaviour
             memberList.Add(memberData);
         }
         PopulateMemberList();
-
     }
 
 
@@ -284,8 +258,8 @@ public class LobbyUI : MonoBehaviour
 
     public void CreateTeamClick()
     {
-            newTeamName = teamInputField.GetComponent<Text>().text;
-            SceneManager.LoadScene("LobbyScene");
+        newTeamName = teamInputField.GetComponent<InputField>().text;
+        TeamButtonClick(newTeamName);
     }
 
     public void TeamButtonClick(string selectedTeam)
