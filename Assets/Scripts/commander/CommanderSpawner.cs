@@ -114,11 +114,12 @@ public class CommanderSpawner : MonoBehaviour
         {
             double lat = double.Parse(GetDataValue(nav[i], "Latitude:"));
             double lng = double.Parse(GetDataValue(nav[i], "Longitude:"));
+            int visible = int.Parse(GetDataValue(nav[i], "Visible:"));
+
             if (OutsideRadiusLatLng(lng, lat, GoogleMap.centerLocation.longitude, GoogleMap.centerLocation.latitude))
             {
                 int id = int.Parse(GetDataValue(nav[i], "ID:"));
                 int type = int.Parse(GetDataValue(nav[i], "Type:"));
-                int visible = int.Parse(GetDataValue(nav[i], "Visible:"));
 
                 fetchedList.Add(new Treasure(id, lat, lng, type, visible));
             }

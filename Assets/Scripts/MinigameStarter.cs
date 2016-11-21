@@ -76,6 +76,36 @@ public class MinigameStarter : MonoBehaviour {
         }
         else if (s.name == "CommanderScene")
         {
+            if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
+            {
+                print("found0");
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out hit))
+                {
+                    if (hit.transform.tag == "Treasure")
+                    {
+                        GameObject treasure = hit.transform.root.gameObject;
+                        TreasureHolder th = treasure.GetComponent<TreasureHolder>();
+
+                        Treasure t = th.treasure;
+                        int type = t.type;
+                        int id = t.id;
+
+                        StartCoroutine(MakeTheTreasureVisible(id));
+
+                        GameObject csG = GameObject.FindGameObjectWithTag("CommanderSpawner");
+                        CommanderSpawner cs = null;
+
+                        if (csG != null)
+                        {
+                            cs = csG.GetComponent<CommanderSpawner>();
+                            cs.RemoveTreasure(id);
+                        }
+                    }
+                }
+            }
         }
 
         if (s.name == "login")
@@ -85,5 +115,15 @@ public class MinigameStarter : MonoBehaviour {
                 generated = false;
             }
         }
+    }
+    IEnumerator MakeTheTreasureVisible(int id)
+    {
+        string IDsendURL = "http://gocommander.sytes.net/scripts/visible_treasure_locations.php";
+        WWWForm form = new WWWForm();
+
+        form.AddField("treasureidPost", id);
+        WWW www = new WWW(IDsendURL, form);
+
+        yield return www;
     }
 }

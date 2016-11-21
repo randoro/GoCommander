@@ -123,20 +123,17 @@ public class TreasureSpawner : MonoBehaviour {
 
         for (int i = 0; i < nav.Length - 1; i++)
         {
-            print("GETTING TREASURES");
             double lat = double.Parse(GetDataValue(nav[i], "Latitude:"));
             double lng = double.Parse(GetDataValue(nav[i], "Longitude:"));
-            int id = int.Parse(GetDataValue(nav[i], "ID:"));
-            int type = int.Parse(GetDataValue(nav[i], "Type:"));
             int visible = int.Parse(GetDataValue(nav[i], "Visible:"));
+            
+            if (WithinRadiusLatLng(lng, lat, GoogleMap.centerLocation.longitude, GoogleMap.centerLocation.latitude) || visible == 1)
+            {
+                int id = int.Parse(GetDataValue(nav[i], "ID:"));
+                int type = int.Parse(GetDataValue(nav[i], "Type:"));
 
-            fetchedList.Add(new Treasure(id, lat, lng, type, visible));
-
-            //print(fetchedList.Count.ToString());
-            //if (WithinRadiusLatLng(lng, lat, GoogleMap.centerLocation.longitude, GoogleMap.centerLocation.latitude))
-            //{
-                
-            //}
+                fetchedList.Add(new Treasure(id, lat, lng, type, visible));
+            }
         }
         fetched = true;
     }
