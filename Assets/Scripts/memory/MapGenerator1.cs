@@ -65,7 +65,7 @@ public class MapGenerator1 : MonoBehaviour
 		score = 0;
 //		scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
 		//changecolor = FindObjectOfType<Cerclecolerchencher> ();
-
+	
 }
 
     IEnumerator GetMemory()
@@ -104,13 +104,13 @@ public class MapGenerator1 : MonoBehaviour
         {
 			score = (int)timeleft * lvl * 100;
 			//scoremanager.GetComponent<ScoreHolder> ().setmemoryscore(score);
-			scoremanager.GetComponent<ScoreHolder> ().memoryscore=score;
+//			scoremanager.GetComponent<ScoreHolder> ().memoryscore=score;
             StartCoroutine(delayTime());
-
+			SceneManager.LoadScene("mainScene");
             InformativeMessage.isMemoryCompleted = true;
             //InformativeMessage.ShowCompletedMinigame();
 		
-           SceneManager.LoadScene("mainScene");
+      
 
 
         }
