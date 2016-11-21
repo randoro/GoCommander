@@ -74,7 +74,7 @@ public class CommanderSpawner : MonoBehaviour
                             new Vector3(coordScaleToGameScale(v.lng - GoogleMap.centerLocation.longitude, 180.0f, 10.0f),
                                 0.0f, coordScaleToGameScale(v.lat - GoogleMap.centerLocation.latitude, 90.0f, 9.0f)),
                             Quaternion.Euler(new Vector3(0, UnityEngine.Random.value * 360, 0)))).GetComponent<TreasureHolder>();
-                newTreasureHolder.Initialize(v.id, v.lat, v.lng, v.type);
+                newTreasureHolder.Initialize(v.id, v.lat, v.lng, v.type, v.visible);
                 newTreasureHolder.gameObject.transform.localScale = new Vector3(4f, 4f, 4f);
                 treasureList.Add(newTreasureHolder.gameObject);
 
@@ -118,8 +118,9 @@ public class CommanderSpawner : MonoBehaviour
             {
                 int id = int.Parse(GetDataValue(nav[i], "ID:"));
                 int type = int.Parse(GetDataValue(nav[i], "Type:"));
+                int visible = int.Parse(GetDataValue(nav[i], "Visible:"));
 
-                fetchedList.Add(new Treasure(id, lat, lng, type));
+                fetchedList.Add(new Treasure(id, lat, lng, type, visible));
             }
         }
         fetched = true;

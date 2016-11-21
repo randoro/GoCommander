@@ -18,12 +18,12 @@ public class TreasureHolder : MonoBehaviour
           
     }
 
-    public void Initialize(int id, double lat, double lng, int type)
+    public void Initialize(int id, double lat, double lng, int type, int visible)
     {
         //this.id = id;
         //id = Random.Range(0, 3);
         //type = Random.Range(0, 3);
-        treasure = new Treasure(id, lat, lng, type);
+        treasure = new Treasure(id, lat, lng, type, visible);
         SetChestColor();
     }
 

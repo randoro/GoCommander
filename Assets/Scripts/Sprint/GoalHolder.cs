@@ -24,7 +24,7 @@ public class GoalHolder : MonoBehaviour {
         //this.id = id;
         //id = Random.Range(0, 3);
         //type = Random.Range(0, 3);
-        treasure = new Treasure(id, lat, lng, 0);
+        treasure = new Treasure(id, lat, lng, 0, 0);
         SetChestColor();
     }
 
