@@ -37,9 +37,17 @@ public class ListController : MonoBehaviour {
         for (int i = 0; i < playerList.Count; i++)
         {
             currPH = playerList[i].GetComponent<PlayerHolder>();
-            listObjects.Add(new ListItem(contentRT, currPH, gMap, new Vector2(0, 100 * i), listGameObjects));
+            listObjects.Add(new ListItem(contentRT, currPH, gMap, new Vector2(0, 100 * i), listGameObjects, this));
             Debug.Log(currPH.Name);
         }
+    }
+    public void RestartTreasureSpawner()
+    {
+        CommanderSpawner commanderSpawner = GameObject.FindGameObjectWithTag("CommanderSpawner").GetComponent<CommanderSpawner>();
+        commanderSpawner.fetched = false;
+        IEnumerator co = commanderSpawner.UpdateTreasures();
+        StopCoroutine(co);
+        StartCoroutine(co);
     }
     IEnumerator UpdatePlayers()
     {
@@ -78,11 +86,11 @@ public class ListController : MonoBehaviour {
 
     public class ListItem
     {
-        private GameObject clickItem;
+        private GameObject clickItem, treasureCaller;
         private ListController listController;
         private GoogleMap gMap;
         private PlayerHolder player;
-        public ListItem(RectTransform contentRT, PlayerHolder player, GoogleMap gMap, Vector2 pos, List<GameObject> listGameObjects)
+        public ListItem(RectTransform contentRT, PlayerHolder player, GoogleMap gMap, Vector2 pos, List<GameObject> listGameObjects, ListController treasureCaller)
         {
             clickItem = new GameObject();
             listGameObjects.Add(clickItem);
@@ -111,6 +119,7 @@ public class ListController : MonoBehaviour {
 
             this.gMap = gMap;
             this.player = player;
+            listController = treasureCaller;
         }
         public void ButtonClicked()
         {
@@ -118,11 +127,14 @@ public class ListController : MonoBehaviour {
 
             //gps.StopRefreshing();
 
+            listController.RestartTreasureSpawner();
+
             GoogleMap.centerLocation.address = "";
             GoogleMap.centerLocation.latitude = (float)player.lat;
             Debug.Log(player.lat);
             GoogleMap.centerLocation.longitude = (float)player.lng;
             Debug.Log(player.lng);
+
             gMap.Refresh();
 
             GameObject.FindGameObjectWithTag("MemberCanvas").SetActive(false);

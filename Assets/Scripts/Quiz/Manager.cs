@@ -139,6 +139,7 @@ public class Manager : MonoBehaviour
 
             //InformativeMessage.ShowCompletedMinigame();
             StartCoroutine(SendCompletedMinigame());
+            InformativeMessage.finished = true;
 
             SceneManager.LoadScene("mainScene");
         }

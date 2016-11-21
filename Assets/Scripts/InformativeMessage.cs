@@ -19,12 +19,12 @@ public class InformativeMessage : MonoBehaviour {
 
     //public static string s;
 
-    public static bool run = false;
-    float timer = 7f;
-    float messagetimer = 10f;
+    public static bool finished;
+    float timer = 6f;
 
     private void Start()
     {
+        finished = false;
         isQuizCompleted = false;
         isPuzzleCompleted = false;
         isMemoryCompleted = false;
@@ -51,22 +51,24 @@ public class InformativeMessage : MonoBehaviour {
         //StartCoroutine(RemoveNotification());
 
         //StartCoroutine(TimerPause());
+
+        InvokeRepeating("StartMethod", 8.0f, 10f);
+    }
+
+    void StartMethod()
+    {
+        StartCoroutine(TimerPause());
     }
 
     private void Update()
     {
-        //messagetimer -= Time.deltaTime;
-
-        //if(messagetimer < 0)
+        //if (finished)
         //{
-        //    messagetimer = 10f;
-        //    StartCoroutine(GetCompletedMinigame());
-        //    //messagetimer = 15f;
+        //    finished = false;
+        //    StartCoroutine(TimerPause());
+        //    finished = true;
         //}
 
-            //if (isQuizCompleted) //|| isMemoryCompleted || isPuzzleCompleted || isSprintCompleted)
-            //{
-            StartCoroutine(TimerPause());
             //    timer -= Time.deltaTime;
             //    StartCoroutine(GetCompletedMinigame());
             //if (!minimessage.Equals(""))
@@ -119,7 +121,7 @@ public class InformativeMessage : MonoBehaviour {
 
 
         //StartCoroutine(RemoveNotification());
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(8);
         //notificationText.text = "";
         //notificationWindow.SetActive(false);
     }
