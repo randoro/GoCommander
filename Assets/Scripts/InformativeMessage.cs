@@ -13,11 +13,15 @@ public class InformativeMessage : MonoBehaviour {
 
     private string[] messages;
 
+    string minimessage;
+
     private List<MessageList> ListOfMessages = new List<MessageList>();
 
     //public static string s;
 
     public static bool run = false;
+    float timer = 5f;
+    float messagetimer = 10f;
 
     private void Start()
     {
@@ -45,59 +49,85 @@ public class InformativeMessage : MonoBehaviour {
 
     private void Update()
     {
-        //ShowCompletedMinigame();
-        //if (run)
-        //{
-        //    print("START UPDATE");
-        //    StartCoroutine(GetCompletedMinigame());
-        //    run = false;
-        //}
+        messagetimer -= Time.deltaTime;
+
+        if(messagetimer < 0)
+        {
+            StartCoroutine(GetCompletedMinigame());
+            //messagetimer = 15f;
+        }
+
+        if (isQuizCompleted || isMemoryCompleted || isPuzzleCompleted || isSprintCompleted)
+        {
+            timer -= Time.deltaTime;
+            //StartCoroutine(GetCompletedMinigame());
+            notificationWindow.SetActive(true);
+            notificationText.text = GoogleMap.username + " " + minimessage;
+            
+            StartCoroutine(RemoveNotification());
+            if (timer < 0)
+            {
+                StartCoroutine(DeleteMinimessage());               
+            }
+        }
+        //    else if (isMemoryCompleted)
+        //    {
+        //        window.SetActive(true);
+        //        notificationText.text = Manager.username + " completed a Memory!";
+        //    }
+        //    else if (isPuzzleCompleted)
+        //    {
+        //        window.SetActive(true);
+        //        notificationText.text = Manager.username + " completed a Puzzle!";
+        //    }
+        //    else if (isSprintCompleted)
+        //    {
+        //        window.SetActive(true);
+        //        notificationText.text = Manager.username + " completed a Sprint!";
+        //    }
     }
 
     private void InitializeComponents()
     {
         notificationWindow.SetActive(false);
-
-        //ShowCompletedMinigame();
-        //StartCoroutine(RemoveNotification());
     }
 
-    IEnumerator GetMessages()
-    {
-        string messagesURL = "";
+    //IEnumerator GetMessages()
+    //{
+    //    string messagesURL = "";
 
-        WWWForm form = new WWWForm();
-        //form.AddField("", );
+    //    WWWForm form = new WWWForm();
+    //    //form.AddField("", );
 
-        WWW www = new WWW(messagesURL, form);
+    //    WWW www = new WWW(messagesURL, form);
 
-        yield return www;
+    //    yield return www;
 
-        string result = www.text;
+    //    string result = www.text;
 
-        if(result != null)
-        {
-            messages = result.Split(';');
+    //    if(result != null)
+    //    {
+    //        messages = result.Split(';');
 
-        }
+    //    }
 
-        for (int i = 0; i < messages.Length - 1; i++)
-        {
-            string message = GetMessageValue(messages[i], "Message:");
+    //    for (int i = 0; i < messages.Length - 1; i++)
+    //    {
+    //        string message = GetMessageValue(messages[i], "Message:");
 
-            ListOfMessages.Add(new MessageList(message));
-        }
+    //        ListOfMessages.Add(new MessageList(message));
+    //    }
 
 
-    } 
+    //} 
 
-    string GetMessageValue(string data, string index)
-    {
-        string value = data.Substring(data.IndexOf(index) + index.Length);
-        if (value.Contains("|"))
-            value = value.Remove(value.IndexOf("|"));
-        return value;
-    }
+    //string GetMessageValue(string data, string index)
+    //{
+    //    string value = data.Substring(data.IndexOf(index) + index.Length);
+    //    if (value.Contains("|"))
+    //        value = value.Remove(value.IndexOf("|"));
+    //    return value;
+    //}
 
     public void SetButtonText()
     {
@@ -137,33 +167,13 @@ public class InformativeMessage : MonoBehaviour {
 
     IEnumerator GetCompletedMinigame()
     {
-        string name = "milan";
+        //string name = "milan";
         print("Beginning");
-
-        //for (int i = 0; i < PlayerSpawner.fetchedList.Count; i++)
-        //{
-        //    print("FOR");
-        //    if(PlayerSpawner.fetchedList[i].name == Manager.username)
-        //    {
-        //        print()
-        //        if(PlayerSpawner.fetchedList[i].message != "")
-        //        {
-        //            window.SetActive(true);
-        //            notificationText.text = Manager.username + " completed a Memory!";
-
-        //            yield return new WaitForSeconds(10);
-        //            window.SetActive(false);
-        //        }
-        //    }
-        //}
-        //window.SetActive(true);
-        //window.SetActive(false);
 
         string loginUserURL = "http://gocommander.sytes.net/scripts/get_minimessage.php";
 
         WWWForm form = new WWWForm();
-        form.AddField("usernamePost", name);
-
+        form.AddField("usernamePost", Manager.username);
 
         WWW www = new WWW(loginUserURL, form);
 
@@ -171,42 +181,32 @@ public class InformativeMessage : MonoBehaviour {
 
         string result = www.text;
 
-        if (result != null)
+        if (result.Equals(""))
         {
-            //nav = result.Split(';');
-            print(result);
-            notificationWindow.SetActive(true);
-            notificationText.text = result;
-
-            yield return new WaitForSeconds(15);
-            notificationWindow.SetActive(false);
+            messagetimer = 10f;            
         }
-
-        //for (int i = 0; i < nav.Length - 1; i++)
-        //{
-        //    int id = int.Parse(GetDataValue(nav[i], "ID:"));
-        //    string username = GetDataValue(nav[i], "Username:");
-        //    double lat = double.Parse(GetDataValue(nav[i], "Latitude:"));
-        //    double lng = double.Parse(GetDataValue(nav[i], "Longitude:"));
-        //    string message = GetDataValue(nav[i], "Minimessage:");
-
-        //    if (message.Equals(""))
-        //    {
-        //        fetchedList.Add(new Player(id, username, lat, lng));
-        //    }
-        //    else
-        //    {
-        //        fetchedList.Add(new Player(id, username, lat, lng, message));
-        //    }
-        //}
+        else
+        {
+            minimessage = www.text;
+            isQuizCompleted = true;
+        }
     }
 
-    string GetDataValue(string data, string index)
+    IEnumerator DeleteMinimessage()
     {
-        string value = data.Substring(data.IndexOf(index) + index.Length);
-        if (value.Contains("|"))
-            value = value.Remove(value.IndexOf("|"));
-        return value;
+        //string name = "milan";
+        print("Beginning");
+
+        string loginUserURL = "http://gocommander.sytes.net/scripts/delete_minigamemessage.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", GoogleMap.username);
+
+        WWW www = new WWW(loginUserURL, form);
+
+        yield return www;
+        timer = 5f;
+        isQuizCompleted = false;
     }
 
     IEnumerator RemoveNotification()
@@ -215,7 +215,7 @@ public class InformativeMessage : MonoBehaviour {
         {
             yield return new WaitForSeconds(10);
             notificationWindow.SetActive(false);
-            isQuizCompleted = false;
+            //isQuizCompleted = false;
         }
         else if (isMemoryCompleted)
         {

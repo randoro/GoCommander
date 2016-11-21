@@ -5,7 +5,8 @@ using System.Collections;
 using System;
 using System.Text.RegularExpressions;
 
-public class Login : MonoBehaviour {
+public class Login : MonoBehaviour
+{
 
     public GameObject username;
     public GameObject password;
@@ -32,13 +33,15 @@ public class Login : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         Result = result.GetComponent<Text>();
         Timer = timer.GetComponent<Text>();
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
 
         Username = username.GetComponent<InputField>().text;
         Password = password.GetComponent<InputField>().text;
@@ -67,8 +70,8 @@ public class Login : MonoBehaviour {
             password.GetComponent<InputField>().text = "";
             username.GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Username";
             password.GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Password";
-            //SceneManager.LoadScene("mainScene");
-            SceneManager.LoadScene("LobbyScene");
+            SceneManager.LoadScene("mainScene");
+            //SceneManager.LoadScene("LobbyScene");
         }
         if (result == "User not found")
         {
@@ -78,7 +81,7 @@ public class Login : MonoBehaviour {
         {
             Result.text = "Wrong Password!";
         }
-        
+
     }
 
     private void StartTimer()

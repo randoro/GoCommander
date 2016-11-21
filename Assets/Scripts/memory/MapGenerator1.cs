@@ -16,11 +16,13 @@ public class MapGenerator1 : MonoBehaviour
     private String level;
     public Text Thetext;
     public int shuffleSeeed;
-    int circleCount;
+    int circleCount; 
     //tiden man har på sig att klara spelet
    private int starttime;
     //tid som är kvar
     public float timeleft;
+	public float timestartcolers;
+	public float timeoblsticale;
     public int showtime;
 	public int score;
 	public int lvl;//hämttar lvl från server (svårihihetsgrad)
@@ -56,6 +58,8 @@ public class MapGenerator1 : MonoBehaviour
         GenerateMap();
         SetUpCamera();
         starttime = 45;
+		timeoblsticale = 6;
+		timestartcolers = 4;
         timeleft = starttime;
 		lvl = 1;
 		score = 0;
@@ -93,11 +97,7 @@ public class MapGenerator1 : MonoBehaviour
             value = value.Remove(value.IndexOf("|"));
         return value;
     }
-	public void Circel(){
-	
-	//	changecolor.ChangeColor(Color.blue);
-	
-	}
+
     void Update()
     {
         if (win == true)
@@ -112,22 +112,33 @@ public class MapGenerator1 : MonoBehaviour
 
             SceneManager.LoadScene("mainScene");
         }
+		showtime = (int)timeoblsticale;
+		if (timeoblsticale < 0) {
+
+			timestartcolers=timestartcolers-Time.deltaTime;
+			showtime = (int)timestartcolers;
+		}
+		timeoblsticale=timeoblsticale-Time.deltaTime;
+
+		if (timestartcolers < 0) {
+			showtime = (int)timeleft;
+		}
         if (timeleft < -1)
 
         {
-            Debug.Log("lose");
+        
             StartCoroutine(delayTime());
 
             SceneManager.LoadScene("mainScene");
         }		
-		if (win==false)
+		if (win==false&&timestartcolers < 0)
 		{
 			timeleft = timeleft - Time.deltaTime;
 		}
 	
 
         // Debug.Log(timeleft);
-        showtime = (int)timeleft;
+    
         Thetext.text = showtime.ToString("");
     }
 

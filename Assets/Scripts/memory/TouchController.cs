@@ -33,8 +33,9 @@ public class TouchController : MonoBehaviour {
 
     private void SetStartPointColor()
     {
-        startPoint1.ColorTile.ChangeColor(Color.gray);
-        startPoint2.ColorTile.ChangeColor(Color.gray);
+        startPoint1.ColorTile.ChangeColor(Color.blue);
+		startPoint2.ColorTile.ChangeColor(Color.blue);
+
     }
 
 	// Update is called once per frame
@@ -117,6 +118,10 @@ public class TouchController : MonoBehaviour {
             }
             oldRealPos = realPos;
         }
+		if (mapGenerator1.timestartcolers < 0) {
+			startPoint1.ColorTile.ChangeColor(Color.white);
+			startPoint2.ColorTile.ChangeColor(Color.white);
+		}
 	}
     private void Failure()
     {
