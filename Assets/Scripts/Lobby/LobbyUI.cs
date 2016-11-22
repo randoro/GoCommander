@@ -177,10 +177,12 @@ public class LobbyUI : MonoBehaviour
     IEnumerator CreateNewTeam(string newTeamName)
     {
         string getMembersURL = "http://gocommander.sytes.net/scripts/create_group.php";
-   
+
+        userInfo.text = GoogleMap.username;
+
         WWWForm form = new WWWForm();
         form.AddField("userGroupPost", newTeamName);
-        form.AddField("usernamePost", GoogleMap.username);
+        form.AddField("usernamePost", userInfo.text);
         WWW www = new WWW(getMembersURL, form);
 
         yield return www;
@@ -201,6 +203,7 @@ public class LobbyUI : MonoBehaviour
 
     private void PopulateTeamList()
     {
+        teamListContent.GetComponent<RectTransform>().sizeDelta += new Vector2(0, teamScrollTransform.rect.height);
 
         teamJoinButtons = new Button[teamList.Count];
         teamNameTexts = new Text[teamList.Count];
@@ -233,7 +236,6 @@ public class LobbyUI : MonoBehaviour
             y = rectTransform.offsetMin.y;
             rectTransform.offsetMax = new Vector2(x, y);
 
-            //teamListContent.GetComponent<RectTransform>().sizeDelta += new Vector2(0, teamScrollTransform.rect.height / 2 - 50);
             AddTeamButtonListeners(teamJoinButtons[i], teamNameTexts[i].text);
 
         }
@@ -241,7 +243,7 @@ public class LobbyUI : MonoBehaviour
 
     public void PopulateMemberList(string selectedTeam)
     {
-        
+                
         addFriendButtons = new Button[memberList.Count];
         memberNameTexts = new Text[memberList.Count];
 
@@ -304,7 +306,7 @@ public class LobbyUI : MonoBehaviour
     public void TeamButtonClick(string selectedTeam)
     {
         current_UI = UI_Phase.UI_Lobby;
-        teamInfo.text = "Team: " + selectedTeam + "";
+        teamInfo.text = selectedTeam;
         StartCoroutine(JoinSelectedTeam(selectedTeam));
     }
 
@@ -321,13 +323,17 @@ public class LobbyUI : MonoBehaviour
 
     public void LeaveLobbyButtonClick()
     {
+        ///DELETE PLAYER///
+
         SceneManager.LoadScene("LobbyScene");
     }
 
     public void StartButtonClick()
     {
-        if (memberList.Count > 0)
+        if (memberList.Count > 2)
         {
+            GoogleMap.username = userInfo.text;
+            GoogleMap.groupName = teamInfo.text;
             SceneManager.LoadScene("mainScene");
         }
     }
