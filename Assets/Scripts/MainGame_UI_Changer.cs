@@ -92,12 +92,4 @@ public class MainGame_UI_Changer : MonoBehaviour
     {
         SceneManager.LoadScene("CommanderScene");
     }
-
-    private void SetMessages()
-    {
-        messageList[0] = "Good work!";
-        messageList[1] = "I need a power up";
-        messageList[2] = "Message 3";
-        messageList[3] = "Message 4";
-    }
 }

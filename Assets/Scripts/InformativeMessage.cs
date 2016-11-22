@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class InformativeMessage : MonoBehaviour {
 
     public GameObject notificationWindow;
-    public Text notificationText, ButtonTextOne, ButtonTextTwo, ButtonTextThree, ButtonTextFour;
+    public Text notificationText;
 
     public static bool isQuizCompleted, isPuzzleCompleted, isMemoryCompleted, isSprintCompleted;
     string[] nav;
@@ -45,7 +45,7 @@ public class InformativeMessage : MonoBehaviour {
         messages[2] = "MessageToChoose3";
         messages[3] = "MessageToChoose4";
 
-        SetButtonText();
+        //SetButtonText();
 
         //ShowCompletedMinigame();
         //StartCoroutine(RemoveNotification());
@@ -168,13 +168,13 @@ public class InformativeMessage : MonoBehaviour {
     //    return value;
     //}
 
-    public void SetButtonText()
-    {
-        ButtonTextOne.text = messages[0];
-        ButtonTextTwo.text = messages[1];
-        ButtonTextThree.text = messages[2];
-        ButtonTextFour.text = messages[3];
-    }
+    //public void SetButtonText()
+    //{
+    //    ButtonTextOne.text = messages[0];
+    //    ButtonTextTwo.text = messages[1];
+    //    ButtonTextThree.text = messages[2];
+    //    ButtonTextFour.text = messages[3];
+    //}
 
     //public static void ShowCompletedMinigame()
     //{
