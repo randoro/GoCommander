@@ -11,8 +11,7 @@ public class Manager : MonoBehaviour
 {
     public static List<QuizList> allQuestionsList = new List<QuizList>();
     private string[] allQuestions, allAnswersID, Quiz;
-
-    public Transform resultObj;
+    
     GameObject scoremanager;
     public int score = 0;
     int answeredQuestions = 0;
@@ -25,6 +24,12 @@ public class Manager : MonoBehaviour
 
     private string line, answerline;
     public static string username = GoogleMap.username;
+    
+    public Camera camera;
+
+    private Color defaultBackgroundColor;
+
+    public Text questionText;
 
     // Use this for initialization
     private void Start()
@@ -36,7 +41,9 @@ public class Manager : MonoBehaviour
 
         StartCoroutine(GetQuizes());
 
+        defaultBackgroundColor = camera.backgroundColor;
 
+        //camera.backgroundColor = Color.green;
         
     }
 
@@ -102,7 +109,7 @@ public class Manager : MonoBehaviour
         }
         if (randomQuestion > -1)
         {
-            GetComponent<TextMesh>().text = allQuestions[randomQuestion];
+            questionText.text = allQuestions[randomQuestion];
         }
     }
 
@@ -114,17 +121,14 @@ public class Manager : MonoBehaviour
 
             if (allAnswersID[randomQuestion].Contains(selectedAnswer))
             {
-
-                resultObj.GetComponent<TextMesh>().text = "Correct";
-                resultObj.GetComponent<TextMesh>().color = Color.green;
+                camera.backgroundColor = Color.green;
 
                 StartCoroutine(delayTime());
                 score += 10;
             }
             else
             {
-                resultObj.GetComponent<TextMesh>().text = "Wrong Answer";
-                resultObj.GetComponent<TextMesh>().color = Color.red;
+                camera.backgroundColor = Color.red;
 
                 StartCoroutine(delayTime());
             }
@@ -171,9 +175,11 @@ public class Manager : MonoBehaviour
     void GenerateNewQuestion()
     {
         randomQuestion = -1;
+        camera.backgroundColor = defaultBackgroundColor;
+
         answeredQuestions++;
 
-        resultObj.GetComponent<TextMesh>().text = "";
+        //resultObj.GetComponent<TextMesh>().text = "";
     }
 
     void RandomizeQuestion()

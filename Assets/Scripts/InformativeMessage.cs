@@ -69,39 +69,39 @@ public class InformativeMessage : MonoBehaviour {
         //    finished = true;
         //}
 
-            //    timer -= Time.deltaTime;
-            //    StartCoroutine(GetCompletedMinigame());
-            //if (!minimessage.Equals(""))
-            //{
-            //    print(minimessage);                
-            //    notificationWindow.SetActive(true);
-            //    notificationText.text = minimessage;
-            //}
+        //timer -= Time.deltaTime;
+        //StartCoroutine(GetCompletedMinigame());
+        //if (!minimessage.Equals(""))
+        //{
+        //    print(minimessage);
+        //    notificationWindow.SetActive(true);
+        //    notificationText.text = minimessage;
+        //}
 
 
-            //    //StartCoroutine(RemoveNotification());
-            //    if (timer < 0)
-            //    {
-            //        StartCoroutine(DeleteMinimessage());               
-            //    }
-            //}
-        
-        //    else if (isMemoryCompleted)
-        //    {
-        //        window.SetActive(true);
-        //        notificationText.text = Manager.username + " completed a Memory!";
-        //    }
-        //    else if (isPuzzleCompleted)
-        //    {
-        //        window.SetActive(true);
-        //        notificationText.text = Manager.username + " completed a Puzzle!";
-        //    }
-        //    else if (isSprintCompleted)
-        //    {
-        //        window.SetActive(true);
-        //        notificationText.text = Manager.username + " completed a Sprint!";
-        //    }
-    }
+        ////StartCoroutine(RemoveNotification());
+        //if (timer < 0)
+        //{
+        //    StartCoroutine(DeleteMinimessage());
+        //}
+    //}
+
+    //    else if (isMemoryCompleted)
+    //    {
+    //        window.SetActive(true);
+    //        notificationText.text = Manager.username + " completed a Memory!";
+    //    }
+    //    else if (isPuzzleCompleted)
+    //    {
+    //        window.SetActive(true);
+    //        notificationText.text = Manager.username + " completed a Puzzle!";
+    //    }
+    //    else if (isSprintCompleted)
+    //    {
+    //        window.SetActive(true);
+    //        notificationText.text = Manager.username + " completed a Sprint!";
+    //    }
+}
 
     IEnumerator TimerPause()
     {      

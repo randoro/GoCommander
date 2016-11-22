@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine.UI;
 
 public class Text1 : MonoBehaviour {
     
@@ -13,6 +14,8 @@ public class Text1 : MonoBehaviour {
     private string file = "firstOptions";
 
     public static TextMesh firstOption;
+
+    public Button firstOptionBtn;
     
     
 
@@ -29,13 +32,14 @@ public class Text1 : MonoBehaviour {
 
         if (Manager.randomQuestion > -1)
         {
-            GetComponent<TextMesh>().text = firstChoices[Manager.randomQuestion];
+            firstOptionBtn.GetComponentInChildren<Text>().text = firstChoices[Manager.randomQuestion];
         }
     }
 
-    void OnMouseDown()
+    public void OnMouseDown()
     {
-        Manager.selectedAnswer = gameObject.name;
+        Manager.selectedAnswer = firstOptionBtn.name;
+
         Manager.choiceSelected = "y";
     }
 
@@ -45,19 +49,5 @@ public class Text1 : MonoBehaviour {
         {
             firstChoices[i] = Manager.allQuestionsList[i].alt1;
         }
-        //if (Manager.isInSkane)
-        //{
-        //    for (int i = 0; i < Manager.skaneListQuiz.Count; i++)
-        //    {
-        //        firstChoices[i] = Manager.skaneListQuiz[i].alt1;
-        //    }
-        //}
-        //else
-        //{
-        //    for (int i = 0; i < Manager.nationalListQuiz.Count; i++)
-        //    {
-        //        firstChoices[i] = Manager.nationalListQuiz[i].alt1;
-        //    }
-        //}
     }
 }
