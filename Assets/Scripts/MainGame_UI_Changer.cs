@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class MainGame_UI_Changer : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class MainGame_UI_Changer : MonoBehaviour
 
     public GameObject menu_btn;
     public GameObject back_btn;
+    public GameObject commander_badge_btn;
 
 	// Use this for initialization
 	void Start ()
@@ -54,6 +56,11 @@ public class MainGame_UI_Changer : MonoBehaviour
     public void BackBtnClick()
     {
         activeUI = ActiveUI.inGameUI;
+    }
+
+    public void CommanderBadgeBtnClick()
+    {
+        SceneManager.LoadScene("CommanderScene");
     }
 
     private void SetMessages()
