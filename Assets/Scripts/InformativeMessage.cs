@@ -20,7 +20,7 @@ public class InformativeMessage : MonoBehaviour {
     //public static string s;
 
     public static bool finished;
-    float timer = 6f;
+    //float timer = 6f;
 
     private void Start()
     {
@@ -52,11 +52,16 @@ public class InformativeMessage : MonoBehaviour {
 
         //StartCoroutine(TimerPause());
 
-        InvokeRepeating("StartMethod", 8.0f, 10f);
+
+        InvokeRepeating("StartMethod", 1.0f, 10f);
     }
 
     void StartMethod()
     {
+        
+        print("START REVOKE");
+        print(GoogleMap.username);
+        print(GoogleMap.groupName);
         StartCoroutine(TimerPause());
     }
 
@@ -109,21 +114,13 @@ public class InformativeMessage : MonoBehaviour {
 
         if (!minimessage.Equals(""))
         {
-            timer -= Time.deltaTime;
             notificationText.text = minimessage;
             notificationWindow.SetActive(true);
-            
-            if (timer < 0)
-            {
-                StartCoroutine(DeleteMinimessage());
-            }
+
+            StartCoroutine(DeleteMinimessage());
         }
 
-
-        //StartCoroutine(RemoveNotification());
-        yield return new WaitForSeconds(8);
-        //notificationText.text = "";
-        //notificationWindow.SetActive(false);
+        yield return new WaitForSeconds(5);
     }
 
     private void InitializeComponents()
@@ -212,7 +209,7 @@ public class InformativeMessage : MonoBehaviour {
         string loginUserURL = "http://gocommander.sytes.net/scripts/get_minimessage.php";
 
         WWWForm form = new WWWForm();
-        form.AddField("usernamePost", Manager.username);
+        form.AddField("usernamePost", GoogleMap.username);
 
         WWW www = new WWW(loginUserURL, form);
 
@@ -237,18 +234,19 @@ public class InformativeMessage : MonoBehaviour {
 
     IEnumerator DeleteMinimessage()
     {
+        print("DELETE MESSAGE");
         minimessage = "";
         //notificationText.text = "";
         //notificationWindow.SetActive(false);
         
         
-        timer = 7f;
+        //timer = 7f;
         //string name = "milan";
 
         string loginUserURL = "http://gocommander.sytes.net/scripts/delete_minigamemessage.php";
 
         WWWForm form = new WWWForm();
-        form.AddField("usernamePost", Manager.username);
+        form.AddField("usernamePost", GoogleMap.username);
 
         WWW www = new WWW(loginUserURL, form);
 

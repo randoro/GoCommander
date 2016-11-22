@@ -40,11 +40,23 @@ public class Messaging : MonoBehaviour {
     }
 
 
-    public void SendMessage(Text _stringToSend)
+    IEnumerator SendMessage(Text _stringToSend)
     {
         string messageToSend;
         messageToSend = _stringToSend.text;
 
         print(messageToSend);
+
+        string mottagare = "milan";
+
+        string loginUserURL = "http://gocommander.sytes.net/scripts/send_game_message.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("userRecPost", mottagare);
+        form.AddField("usermessagePost", messageToSend);
+
+        WWW www = new WWW(loginUserURL, form);
+
+        //yield return www;
     }
 }

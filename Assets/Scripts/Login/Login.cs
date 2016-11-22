@@ -26,9 +26,7 @@ public class Login : MonoBehaviour
     {
         if (Username != "" && Password != "")
         {
-            StartTimer();
             StartCoroutine(LoginUser(Username, Password));
-            StopTimer();
         }
     }
 
