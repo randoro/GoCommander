@@ -10,19 +10,25 @@ public class MainGame_UI_Changer : MonoBehaviour
     public enum ActiveUI
     {
         inGameUI,
-        menuUI
+        menuUI,
+        helpUI
     }
     public ActiveUI activeUI;
 
     public Canvas inGameUI;
     public Canvas menuUI;
+    public Canvas helpUI;
 
     public GameObject menu_btn;
-    public GameObject back_btn;
+    public GameObject back_to_game_btn;
+    public GameObject back_to_menu_btn;
+    public GameObject help_btn;
+    public GameObject exit_btn;
     public GameObject commander_badge_btn;
+    public GameObject message_btn;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
         activeUI = ActiveUI.inGameUI;
 	}
@@ -36,13 +42,22 @@ public class MainGame_UI_Changer : MonoBehaviour
                 {
                     inGameUI.enabled = true;
                     menuUI.enabled = false;
+                    helpUI.enabled = false;
                 }
                 break;
             case ActiveUI.menuUI:
                 {
                     inGameUI.enabled = false;
                     menuUI.enabled = true;
+                    helpUI.enabled = false;
 
+                }
+                break;
+            case ActiveUI.helpUI:
+                {
+                    inGameUI.enabled = false;
+                    menuUI.enabled = false;
+                    helpUI.enabled = true;
                 }
                 break;
         }
@@ -53,9 +68,24 @@ public class MainGame_UI_Changer : MonoBehaviour
         activeUI = ActiveUI.menuUI;
     }
 
-    public void BackBtnClick()
+    public void HelpBtnClick()
+    {
+        activeUI = ActiveUI.helpUI;
+    }
+
+    public void BackToGameBtnClick()
     {
         activeUI = ActiveUI.inGameUI;
+    }
+
+    public void BackToMenuBtnClick()
+    {
+        activeUI = ActiveUI.menuUI;
+    }
+
+    public void ExitbtnClick()
+    {
+        SceneManager.LoadScene("login");
     }
 
     public void CommanderBadgeBtnClick()

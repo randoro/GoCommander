@@ -3,10 +3,10 @@ using System.Collections;
 
 public class ScoreHolder : MonoBehaviour {
 
-    public int qwizscore;
-	public int puzzelscore;
+    public int quizscore;
+	public int puzzlescore;
 	public int memoryscore;
- 	public int score;
+ 	public int total_score;
 
 	//HighScoreHolder
 	// Use this for initialization
@@ -26,11 +26,11 @@ public class ScoreHolder : MonoBehaviour {
 
 	public int Getqwizscore()
 	{
-		return qwizscore;
+		return quizscore;
 	}
 	public int Getpuzzelscore()
 	{
-		return puzzelscore;
+		return puzzlescore;
 	}
 	public int Getmemoryscore()
 	{

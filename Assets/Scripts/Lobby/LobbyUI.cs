@@ -203,7 +203,7 @@ public class LobbyUI : MonoBehaviour
 
     private void PopulateTeamList()
     {
-        teamListContent.GetComponent<RectTransform>().sizeDelta += new Vector2(0, teamScrollTransform.rect.height);
+        //teamListContent.GetComponent<RectTransform>().sizeDelta += new Vector2(0, teamScrollTransform.rect.height);
 
         teamJoinButtons = new Button[teamList.Count];
         teamNameTexts = new Text[teamList.Count];

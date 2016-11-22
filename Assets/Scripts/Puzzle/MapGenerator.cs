@@ -86,7 +86,7 @@ public class MapGenerator : MonoBehaviour
 		{
 			score = (int)timeleft * lvl * 100;
 			//scoremanager.GetComponent<ScoreHolder>().setpuzzelscore(score);
-			scoremanager.GetComponent<ScoreHolder>().puzzelscore=score;
+			scoremanager.GetComponent<ScoreHolder>().puzzlescore=score;
 		}
 		if(win=false)
 		{
