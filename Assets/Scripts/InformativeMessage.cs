@@ -20,7 +20,6 @@ public class InformativeMessage : MonoBehaviour {
     //public static string s;
 
     public static bool finished;
-    float timer = 6f;
 
     private void Start()
     {
@@ -45,18 +44,19 @@ public class InformativeMessage : MonoBehaviour {
         messages[2] = "MessageToChoose3";
         messages[3] = "MessageToChoose4";
 
-        SetButtonText();
+        //SetButtonText();
 
         //ShowCompletedMinigame();
         //StartCoroutine(RemoveNotification());
 
         //StartCoroutine(TimerPause());
 
-        InvokeRepeating("StartMethod", 8.0f, 10f);
+        InvokeRepeating("StartMethod", 1.0f, 10f);
     }
 
     void StartMethod()
     {
+        print("START INVOKE");
         StartCoroutine(TimerPause());
     }
 
@@ -109,21 +109,13 @@ public class InformativeMessage : MonoBehaviour {
 
         if (!minimessage.Equals(""))
         {
-            timer -= Time.deltaTime;
             notificationText.text = minimessage;
             notificationWindow.SetActive(true);
-            
-            if (timer < 0)
-            {
-                StartCoroutine(DeleteMinimessage());
-            }
+
+            StartCoroutine(DeleteMinimessage());
         }
 
-
-        //StartCoroutine(RemoveNotification());
         yield return new WaitForSeconds(8);
-        //notificationText.text = "";
-        //notificationWindow.SetActive(false);
     }
 
     private void InitializeComponents()
@@ -230,20 +222,12 @@ public class InformativeMessage : MonoBehaviour {
         {
             minimessage = result;
             print(minimessage);
-            //isQuizCompleted = true;
         }
-        //yield return result;
     }
 
     IEnumerator DeleteMinimessage()
     {
         minimessage = "";
-        //notificationText.text = "";
-        //notificationWindow.SetActive(false);
-        
-        
-        timer = 7f;
-        //string name = "milan";
 
         string loginUserURL = "http://gocommander.sytes.net/scripts/delete_minigamemessage.php";
 
@@ -253,9 +237,6 @@ public class InformativeMessage : MonoBehaviour {
         WWW www = new WWW(loginUserURL, form);
 
         yield return www;
-        
-        
-        //isQuizCompleted = false;
     }
 
     IEnumerator RemoveNotification()
