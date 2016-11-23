@@ -27,7 +27,7 @@ public class LoadImage : MonoBehaviour {
         int question = Manager.randomQuestion;
         string images = Manager.allQuestionsList[question].image;       
         images = images.Substring(1);
-        print(question);
+        //print(question);
         StartCoroutine(DownloadImage(images));
     }
 
