@@ -321,6 +321,7 @@ public class MapGenerator : MonoBehaviour
     public class Tile
     {
 		
+		
         public enum CircleColor
         {
             Empty,
@@ -401,15 +402,18 @@ public class MapGenerator : MonoBehaviour
 
                 if (DidWeWin())
                 {
-                    //StartCoroutine(delayTime());
-                    InformativeMessage.isPuzzleCompleted = true;
-                    //InformativeMessage.ShowCompletedMinigame();
-
-                    SceneManager.LoadScene("mainScene");
+                    
+                  
+					InformativeMessage.isPuzzleCompleted = true;
 					MapGenerator.win = true;
+
+					SceneManager.LoadScene("mainScene");
+
+
                 }
             }
         }
+
 
         public void ChangeNeighbourChain(CircleColor newColor, Tile parent)
         {
