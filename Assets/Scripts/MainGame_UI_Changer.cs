@@ -11,13 +11,18 @@ public class MainGame_UI_Changer : MonoBehaviour
     {
         inGameUI,
         menuUI,
-        helpUI
+        helpUI,
+        messagePlayerListUI,
+        messageOptionsUI,
+        ActiveUI
     }
-    public ActiveUI activeUI;
+    public static ActiveUI activeUI;
 
     public Canvas inGameUI;
     public Canvas menuUI;
     public Canvas helpUI;
+    public Canvas messagePlayerListUI;
+    public Canvas messageOptionsUI;
 
     public GameObject menu_btn;
     public GameObject back_to_game_btn;
@@ -25,7 +30,6 @@ public class MainGame_UI_Changer : MonoBehaviour
     public GameObject help_btn;
     public GameObject exit_btn;
     public GameObject commander_badge_btn;
-    public GameObject message_btn;
 
     // Use this for initialization
     void Start ()
@@ -43,6 +47,9 @@ public class MainGame_UI_Changer : MonoBehaviour
                     inGameUI.enabled = true;
                     menuUI.enabled = false;
                     helpUI.enabled = false;
+
+                    messageOptionsUI.enabled = false;
+                    messagePlayerListUI.enabled = false;
                 }
                 break;
             case ActiveUI.menuUI:
@@ -51,6 +58,9 @@ public class MainGame_UI_Changer : MonoBehaviour
                     menuUI.enabled = true;
                     helpUI.enabled = false;
 
+                    messageOptionsUI.enabled = false;
+                    messagePlayerListUI.enabled = false;
+
                 }
                 break;
             case ActiveUI.helpUI:
@@ -58,6 +68,29 @@ public class MainGame_UI_Changer : MonoBehaviour
                     inGameUI.enabled = false;
                     menuUI.enabled = false;
                     helpUI.enabled = true;
+
+                    messageOptionsUI.enabled = false;
+                    messagePlayerListUI.enabled = false;
+                }
+                break;
+            case ActiveUI.messagePlayerListUI:
+                {
+                    inGameUI.enabled = false;
+                    menuUI.enabled = false;
+                    helpUI.enabled = false;
+
+                    messageOptionsUI.enabled = false;
+                    messagePlayerListUI.enabled = true;
+                }
+                break;
+            case ActiveUI.messageOptionsUI:
+                {
+                    inGameUI.enabled = false;
+                    menuUI.enabled = false;
+                    helpUI.enabled = false;
+
+                    messageOptionsUI.enabled = true;
+                    messagePlayerListUI.enabled = false;
                 }
                 break;
         }
