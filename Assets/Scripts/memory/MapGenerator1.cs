@@ -63,7 +63,7 @@ public class MapGenerator1 : MonoBehaviour
         timeleft = starttime;
 		lvl = 1;
 		score = 0;
-//		scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
+
 		//changecolor = FindObjectOfType<Cerclecolerchencher> ();
 
 }
@@ -140,7 +140,7 @@ public class MapGenerator1 : MonoBehaviour
 
         // Debug.Log(timeleft);
     
-        Thetext.text = showtime.ToString("");
+        Thetext.text ="timeleft "+ showtime.ToString("");
     }
 
     IEnumerator delayTime()

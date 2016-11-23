@@ -12,7 +12,7 @@ public class Manager : MonoBehaviour
     public static List<QuizList> allQuestionsList = new List<QuizList>();
     private string[] allQuestions, allAnswersID, Quiz;
     
-    GameObject scoremanager;
+
     public int score = 0;
     int answeredQuestions = 0;
 

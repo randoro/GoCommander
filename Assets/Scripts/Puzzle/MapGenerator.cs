@@ -43,7 +43,7 @@ public class MapGenerator : MonoBehaviour
 	public int score;
 	public int lvl;//hämttar lvl från server (svårihihetsgrad)
 	public static bool win =false;
-	GameObject scoremanager;
+
 
 	//HighScoreHolder 
     IEnumerator Start()
@@ -71,13 +71,16 @@ public class MapGenerator : MonoBehaviour
         starttime = 100;
         timeleft = starttime;
 		score = 0;
-		scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
+
     }
     void Update()
-    {
+	{timeleft = timeleft - Time.deltaTime;
+		showtime = (int)timeleft;
+		Thetext.text = "timeleft "+ showtime.ToString();
+		
         if (timeleft < -1)
         {
-            Debug.Log("lose");
+          
             StartCoroutine(delayTime());
 
             SceneManager.LoadScene("mainScene");
@@ -85,16 +88,12 @@ public class MapGenerator : MonoBehaviour
 		if (win=true) 
 		{
 			score = (int)timeleft * lvl * 100;
-			//scoremanager.GetComponent<ScoreHolder>().setpuzzelscore(score);
-			scoremanager.GetComponent<ScoreHolder>().puzzlescore=score;
+		
+
 		}
-		if(win=false)
-		{
-			timeleft = timeleft - Time.deltaTime;
-		}
-        // Debug.Log(timeleft);
-        showtime = (int)timeleft;
-        Thetext.text = showtime.ToString("");
+
+       
+      
     }
     IEnumerator GetPuzzles()
     {
