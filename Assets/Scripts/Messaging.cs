@@ -57,6 +57,6 @@ public class Messaging : MonoBehaviour {
 
         WWW www = new WWW(loginUserURL, form);
 
-        //yield return www;
+        yield return www;
     }
 }
