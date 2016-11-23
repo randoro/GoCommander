@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class BadgeTest : MonoBehaviour {
 
-    public Button commanderBadgeButton;
+    public GameObject commanderBadgeButton;
 	// Use this for initialization
 	void Start () {
 	}
@@ -14,7 +14,14 @@ public class BadgeTest : MonoBehaviour {
 	}
     public void OnClick()
     {
-        commanderBadgeButton.enabled = false;
+        if (!commanderBadgeButton.activeInHierarchy)
+        {
+            commanderBadgeButton.SetActive(true);
+        }
+        else
+        {
+            commanderBadgeButton.SetActive(false);
+        }
     }
 
 }

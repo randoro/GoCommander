@@ -35,7 +35,7 @@ public class ListController : MonoBehaviour {
         for (int i = 0; i < playerList.Count; i++)
         {
             currPH = playerList[i].GetComponent<PlayerHolder>();
-            listObjects.Add(new ListItem(contentRT, currPH, gMap, new Vector2(0, contentRT.position.y - 100 * i), listGameObjects, this));
+            listObjects.Add(new ListItem(contentRT, currPH, gMap, new Vector2(0, contentRT.position.y + 100 * i), listGameObjects, this));
             Debug.Log(currPH.Name);
         }
     }

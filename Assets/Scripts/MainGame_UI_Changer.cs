@@ -140,6 +140,6 @@ public class MainGame_UI_Changer : MonoBehaviour
 
     public void CommanderBadgeBtnClick()
     {
-        SceneManager.LoadScene("CommanderScene");
+        BadgeController.interested = true;
     }
 }
