@@ -38,11 +38,11 @@ public class MapGenerator : MonoBehaviour
     /// <returns></returns>
     public Text Thetext;
     private int starttime;
-    private float timeleft;
+    public float timeleft;
     public int showtime;
 	public int score;
 	public int lvl;//hämttar lvl från server (svårihihetsgrad)
-	public static bool win =false;
+	public static bool win = false;
 	GameObject scoremanager;
 
 	//HighScoreHolder 
@@ -71,13 +71,17 @@ public class MapGenerator : MonoBehaviour
         starttime = 100;
         timeleft = starttime;
 		score = 0;
-		scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
+
+
+		//scoremanager = GameObject.Find ("HighScoreHolder").gameObject;
     }
     void Update()
-    {
+	{  showtime = (int)timeleft;
+		Thetext.text = showtime.ToString();	
+		timeleft = timeleft - Time.deltaTime;
         if (timeleft < -1)
         {
-            Debug.Log("lose");
+         
             StartCoroutine(delayTime());
 
             SceneManager.LoadScene("mainScene");
@@ -86,15 +90,15 @@ public class MapGenerator : MonoBehaviour
 		{
 			score = (int)timeleft * lvl * 100;
 			//scoremanager.GetComponent<ScoreHolder>().setpuzzelscore(score);
-			scoremanager.GetComponent<ScoreHolder>().puzzlescore=score;
+			//scoremanager.GetComponent<ScoreHolder>().puzzlescore=score;
 		}
 		if(win=false)
 		{
-			timeleft = timeleft - Time.deltaTime;
+			Debug.Log(timeleft);
 		}
-        // Debug.Log(timeleft);
-        showtime = (int)timeleft;
-        Thetext.text = showtime.ToString("");
+     
+      
+     
     }
     IEnumerator GetPuzzles()
     {
@@ -316,6 +320,7 @@ public class MapGenerator : MonoBehaviour
 
     public class Tile
     {
+		
         public enum CircleColor
         {
             Empty,
