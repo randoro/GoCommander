@@ -28,6 +28,11 @@ public class Message_UI : MonoBehaviour
         MainGame_UI_Changer.activeUI = MainGame_UI_Changer.ActiveUI.messagePlayerListUI;
     }
 
+    public void ToMessagesOptionsClick()
+    {
+        MainGame_UI_Changer.activeUI = MainGame_UI_Changer.ActiveUI.messageOptionsUI;
+    }
+
     public void BackToGameClick()
     {
         MainGame_UI_Changer.activeUI = MainGame_UI_Changer.ActiveUI.inGameUI;
