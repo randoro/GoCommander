@@ -14,7 +14,7 @@ public class MainGame_UI_Changer : MonoBehaviour
         helpUI,
         messagePlayerListUI,
         messageOptionsUI,
-        ActiveUI
+        treasureOrbsUI
     }
     public static ActiveUI activeUI;
 
@@ -23,6 +23,7 @@ public class MainGame_UI_Changer : MonoBehaviour
     public Canvas helpUI;
     public Canvas messagePlayerListUI;
     public Canvas messageOptionsUI;
+    public Canvas treasureOrbsUI;
 
     public GameObject menu_btn;
     public GameObject back_to_game_btn;
@@ -50,6 +51,7 @@ public class MainGame_UI_Changer : MonoBehaviour
 
                     messageOptionsUI.enabled = false;
                     messagePlayerListUI.enabled = false;
+                    treasureOrbsUI.enabled = false;
                 }
                 break;
             case ActiveUI.menuUI:
@@ -60,6 +62,7 @@ public class MainGame_UI_Changer : MonoBehaviour
 
                     messageOptionsUI.enabled = false;
                     messagePlayerListUI.enabled = false;
+                    treasureOrbsUI.enabled = false;
 
                 }
                 break;
@@ -71,6 +74,7 @@ public class MainGame_UI_Changer : MonoBehaviour
 
                     messageOptionsUI.enabled = false;
                     messagePlayerListUI.enabled = false;
+                    treasureOrbsUI.enabled = false;
                 }
                 break;
             case ActiveUI.messagePlayerListUI:
@@ -81,6 +85,7 @@ public class MainGame_UI_Changer : MonoBehaviour
 
                     messageOptionsUI.enabled = false;
                     messagePlayerListUI.enabled = true;
+                    treasureOrbsUI.enabled = false;
                 }
                 break;
             case ActiveUI.messageOptionsUI:
@@ -91,6 +96,18 @@ public class MainGame_UI_Changer : MonoBehaviour
 
                     messageOptionsUI.enabled = true;
                     messagePlayerListUI.enabled = false;
+                    treasureOrbsUI.enabled = false;
+                }
+                break;
+            case ActiveUI.treasureOrbsUI:
+                {
+                    inGameUI.enabled = false;
+                    menuUI.enabled = false;
+                    helpUI.enabled = false;
+
+                    messageOptionsUI.enabled = false;
+                    messagePlayerListUI.enabled = false;
+                    treasureOrbsUI.enabled = true;
                 }
                 break;
         }
