@@ -10,6 +10,7 @@ using SimpleJSON;
 public class Manager : MonoBehaviour
 {
     public static List<QuizList> allQuestionsList = new List<QuizList>();
+    private List<int> alreadyAnsweredQuestions = new List<int>();
     private string[] allQuestions, allAnswersID, Quiz;
     
 
@@ -185,6 +186,20 @@ public class Manager : MonoBehaviour
     void RandomizeQuestion()
     {
         randomQuestion = Random.Range(0, 3);
+        alreadyAnsweredQuestions.Add(randomQuestion);
+        print(alreadyAnsweredQuestions);
+        print(randomQuestion);
+
+        for (int i = 0; i < alreadyAnsweredQuestions.Count; i++)
+        {
+            if(randomQuestion == alreadyAnsweredQuestions[i])
+            {
+                print("Question already answered");
+
+                randomQuestion = Random.Range(0, 3);
+            }
+        }
+        print("new question generated");
         LoadImage.loadImage = true;
     }
     
