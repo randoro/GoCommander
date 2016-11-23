@@ -89,6 +89,8 @@ public class MinigameStarter : MonoBehaviour {
                         GameObject treasure = hit.transform.root.gameObject;
                         TreasureHolder th = treasure.GetComponent<TreasureHolder>();
 
+                        treasure.GetComponent<ParticleSystem>().Play();
+
                         Treasure t = th.treasure;
                         int type = t.type;
                         int id = t.id;
