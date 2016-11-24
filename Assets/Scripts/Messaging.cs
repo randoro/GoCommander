@@ -39,6 +39,11 @@ public class Messaging : MonoBehaviour {
         messageList[1] = "Thank you";
         messageList[2] = "Hello";
         messageList[3] = "Hurry up";
+
+        playerToMessage.text = "milan";
+        messageToSend.text = "TEST";
+
+        StartCoroutine(SendMessage());
     }
 
     private void SetMessages()
