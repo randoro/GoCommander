@@ -14,13 +14,11 @@ public class InformativeMessage : MonoBehaviour {
     private string[] messages;
 
     string minimessage;
+    string gamemessage;
 
     private List<MessageList> ListOfMessages = new List<MessageList>();
 
-    //public static string s;
-
     public static bool finished;
-    //float timer = 6f;
 
     private void Start()
     {
@@ -29,14 +27,8 @@ public class InformativeMessage : MonoBehaviour {
         isPuzzleCompleted = false;
         isMemoryCompleted = false;
         isSprintCompleted = false;
-        //notificationText.text = "A minigame was completed by " + Manager.username;
-
-        //window.GetComponent<Image>().enabled = false;
 
         InitializeComponents();
-
-        Debug.Log("START START!!");
-        //StartCoroutine(GetCompletedMinigame());
 
         messages = new string[4];
 
@@ -45,15 +37,15 @@ public class InformativeMessage : MonoBehaviour {
         messages[2] = "MessageToChoose3";
         messages[3] = "MessageToChoose4";
 
-        //SetButtonText();
-
-        //ShowCompletedMinigame();
-        //StartCoroutine(RemoveNotification());
-
-        //StartCoroutine(TimerPause());
-
-
         InvokeRepeating("StartMethod", 1.0f, 10f);
+        InvokeRepeating("StartGetGameMessage", 2.0f, 10f);
+    }
+
+    void StartGetGameMessage()
+    {
+        print(GoogleMap.username);
+        print(GoogleMap.groupName);
+        StartCoroutine(TimerPauseGameMessage());
     }
 
     void StartMethod()
@@ -67,46 +59,8 @@ public class InformativeMessage : MonoBehaviour {
 
     private void Update()
     {
-        //if (finished)
-        //{
-        //    finished = false;
-        //    StartCoroutine(TimerPause());
-        //    finished = true;
-        //}
 
-        //timer -= Time.deltaTime;
-        //StartCoroutine(GetCompletedMinigame());
-        //if (!minimessage.Equals(""))
-        //{
-        //    print(minimessage);
-        //    notificationWindow.SetActive(true);
-        //    notificationText.text = minimessage;
-        //}
-
-
-        ////StartCoroutine(RemoveNotification());
-        //if (timer < 0)
-        //{
-        //    StartCoroutine(DeleteMinimessage());
-        //}
-    //}
-
-    //    else if (isMemoryCompleted)
-    //    {
-    //        window.SetActive(true);
-    //        notificationText.text = Manager.username + " completed a Memory!";
-    //    }
-    //    else if (isPuzzleCompleted)
-    //    {
-    //        window.SetActive(true);
-    //        notificationText.text = Manager.username + " completed a Puzzle!";
-    //    }
-    //    else if (isSprintCompleted)
-    //    {
-    //        window.SetActive(true);
-    //        notificationText.text = Manager.username + " completed a Sprint!";
-    //    }
-}
+    }
 
     IEnumerator TimerPause()
     {      
@@ -123,89 +77,28 @@ public class InformativeMessage : MonoBehaviour {
         yield return new WaitForSeconds(5);
     }
 
+    IEnumerator TimerPauseGameMessage()
+    {
+        StartCoroutine(GetGameMessage());
+
+        if (!gamemessage.Equals(""))
+        {
+            notificationText.text = minimessage;
+            notificationWindow.SetActive(true);
+
+            StartCoroutine(DeleteGameMessage());
+        }
+
+        yield return new WaitForSeconds(5);
+    }
+
     private void InitializeComponents()
     {
         notificationWindow.SetActive(false);
     }
 
-    //IEnumerator GetMessages()
-    //{
-    //    string messagesURL = "";
-
-    //    WWWForm form = new WWWForm();
-    //    //form.AddField("", );
-
-    //    WWW www = new WWW(messagesURL, form);
-
-    //    yield return www;
-
-    //    string result = www.text;
-
-    //    if(result != null)
-    //    {
-    //        messages = result.Split(';');
-
-    //    }
-
-    //    for (int i = 0; i < messages.Length - 1; i++)
-    //    {
-    //        string message = GetMessageValue(messages[i], "Message:");
-
-    //        ListOfMessages.Add(new MessageList(message));
-    //    }
-
-
-    //} 
-
-    //string GetMessageValue(string data, string index)
-    //{
-    //    string value = data.Substring(data.IndexOf(index) + index.Length);
-    //    if (value.Contains("|"))
-    //        value = value.Remove(value.IndexOf("|"));
-    //    return value;
-    //}
-
-    //public void SetButtonText()
-    //{
-    //    ButtonTextOne.text = messages[0];
-    //    ButtonTextTwo.text = messages[1];
-    //    ButtonTextThree.text = messages[2];
-    //    ButtonTextFour.text = messages[3];
-    //}
-
-    //public static void ShowCompletedMinigame()
-    //{
-    //    if (isQuizCompleted)
-    //    {
-    //        window.SetActive(true);
-    //        notificationText.text = Manager.username + " completed a Quiz!";
-
-    //        s = Manager.username + " completed a Quiz!";
-
-    //        StartCoroutine(SendCompletedMinigame(s));
-    //    }
-    //    else if (isMemoryCompleted)
-    //    {
-    //        window.SetActive(true);
-    //        notificationText.text = Manager.username + " completed a Memory!";
-    //    }
-    //    else if (isPuzzleCompleted)
-    //    {
-    //        window.SetActive(true);
-    //        notificationText.text = Manager.username + " completed a Puzzle!";
-    //    }
-    //    else if (isSprintCompleted)
-    //    {
-    //        window.SetActive(true);
-    //        notificationText.text = Manager.username + " completed a Sprint!";
-    //    }
-    //}
-
     IEnumerator GetCompletedMinigame()
     {
-        //string name = "milan";
-        //minimessage = "TEST!!!";
-
         string loginUserURL = "http://gocommander.sytes.net/scripts/get_minimessage.php";
 
         WWWForm form = new WWWForm();
@@ -227,21 +120,39 @@ public class InformativeMessage : MonoBehaviour {
         {
             minimessage = result;
             print(minimessage);
-            //isQuizCompleted = true;
         }
-        //yield return result;
+    }
+
+    IEnumerator GetGameMessage()
+    {
+        string gameMessageURL = "http://gocommander.sytes.net/scripts/get_game_message.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", GoogleMap.username);
+
+        WWW www = new WWW(gameMessageURL, form);
+
+        yield return www;
+
+        string result = www.text;
+
+        if (result.Equals(""))
+        {
+            print("NULL");
+            notificationText.text = "";
+            notificationWindow.SetActive(false);
+        }
+        else
+        {
+            gamemessage = result;
+            print(gamemessage);
+        }
     }
 
     IEnumerator DeleteMinimessage()
     {
         print("DELETE MESSAGE");
         minimessage = "";
-        //notificationText.text = "";
-        //notificationWindow.SetActive(false);
-        
-        
-        //timer = 7f;
-        //string name = "milan";
 
         string loginUserURL = "http://gocommander.sytes.net/scripts/delete_minigamemessage.php";
 
@@ -251,36 +162,20 @@ public class InformativeMessage : MonoBehaviour {
         WWW www = new WWW(loginUserURL, form);
 
         yield return www;
-        
-        
-        //isQuizCompleted = false;
     }
 
-    IEnumerator RemoveNotification()
+    IEnumerator DeleteGameMessage()
     {
-        if (isQuizCompleted)
-        {
-            yield return new WaitForSeconds(5);
-            notificationWindow.SetActive(false);
-            isQuizCompleted = false;
-        }
-        //else if (isMemoryCompleted)
-        //{
-        //    yield return new WaitForSeconds(10);
-        //    notificationWindow.SetActive(false);
-        //    isMemoryCompleted = false;
-        //}
-        //else if (isPuzzleCompleted)
-        //{
-        //    yield return new WaitForSeconds(10);
-        //    notificationWindow.SetActive(false);
-        //    isPuzzleCompleted = false;
-        //}
-        //else if (isSprintCompleted)
-        //{
-        //    yield return new WaitForSeconds(10);
-        //    notificationWindow.SetActive(false);
-        //    isSprintCompleted = false;
-        //}
+        print("DELETE MESSAGE");
+        gamemessage = "";
+
+        string deleteMessageURL = "http://gocommander.sytes.net/scripts/delete_game_message.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", GoogleMap.username);
+
+        WWW www = new WWW(deleteMessageURL, form);
+
+        yield return www;
     }
 }
