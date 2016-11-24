@@ -23,7 +23,6 @@ public class Messaging : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        InitializeMessages();
         SetMessages();
         SetPlayers();
 	}
@@ -33,21 +32,13 @@ public class Messaging : MonoBehaviour {
 	
 	}
 
-    private void InitializeMessages()
+    private void SetMessages()
     {
         messageList[0] = "Great work";
         messageList[1] = "Thank you";
         messageList[2] = "Hello";
         messageList[3] = "Hurry up";
 
-        playerToMessage.text = "milan";
-        messageToSend.text = "TEST";
-
-        StartCoroutine(SendMessage());
-    }
-
-    private void SetMessages()
-    {
         message1Text.text = messageList[0];
         message2Text.text = messageList[1];
         message3Text.text = messageList[2];
@@ -79,7 +70,11 @@ public class Messaging : MonoBehaviour {
         messageToSend = _messageToSend;
 
         print(messageToSend.text);
+        
+    }
 
+    public void SendToServer()
+    {
         StartCoroutine(SendMessage());
     }
 
@@ -89,14 +84,12 @@ public class Messaging : MonoBehaviour {
         string player = playerToMessage.text;
 
         print("Sent: " + message + "To player: " + player);
-        
-        //string mottagare = "milan";
 
         string loginUserURL = "http://gocommander.sytes.net/scripts/send_game_message.php";
 
         WWWForm form = new WWWForm();
         form.AddField("userRecPost", player);
-        form.AddField("usermessagePost", message);
+        form.AddField("userMessagePost", message);
 
         WWW www = new WWW(loginUserURL, form);
 
