@@ -36,6 +36,7 @@ public class LobbyUI : MonoBehaviour
 
     public Text userInfo;
     public Text teamInfo;
+    public Text memberCountInfo;
 
     Text[] teamNameTexts;
     Text[] memberNameTexts;
@@ -57,13 +58,20 @@ public class LobbyUI : MonoBehaviour
 
     private string[] teamArray;
     string newTeamName;
+    string selectedTeam;
 
     // Use this for initialization
     void Start()
     {
-        StartCoroutine(GetTeamFromServer());
         current_UI = UI_Phase.UI_Join_Create;
         startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
+        InvokeRepeating("StartRepeat", 3.0f, 5f);
+    }
+
+    public void StartRepeat()
+    {
+        StartCoroutine(GetTeamFromServer());
+        StartCoroutine(GetMembersInTeam(selectedTeam));
     }
 
     void Update()
@@ -133,6 +141,8 @@ public class LobbyUI : MonoBehaviour
 
     IEnumerator JoinSelectedTeam(string selectedTeam)
     {
+        this.selectedTeam = selectedTeam;
+
         memberList.Clear();
 
         string getTeamURL = "http://gocommander.sytes.net/scripts/join_group.php";
@@ -149,6 +159,8 @@ public class LobbyUI : MonoBehaviour
 
     IEnumerator GetMembersInTeam(string selectedTeam)
     {
+            this.selectedTeam = selectedTeam;
+
             string getMembersURL = "http://gocommander.sytes.net/scripts/show_group_members.php";
 
             WWWForm form = new WWWForm();
@@ -192,6 +204,21 @@ public class LobbyUI : MonoBehaviour
         TeamButtonClick(newTeamName);
     }
 
+    IEnumerator LeaveTeam()
+    {
+        string getMembersURL = "http://gocommander.sytes.net/scripts/leave_group.php";
+
+        userInfo.text = GoogleMap.username;
+
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", userInfo.text);
+        WWW www = new WWW(getMembersURL, form);
+
+        yield return www;
+
+        string result = www.text;
+    }
+
 
     string GetLobbyData(string data, string index)
     {
@@ -202,9 +229,7 @@ public class LobbyUI : MonoBehaviour
     }
 
     private void PopulateTeamList()
-    {
-        //teamListContent.GetComponent<RectTransform>().sizeDelta += new Vector2(0, teamScrollTransform.rect.height);
-
+    { 
         teamJoinButtons = new Button[teamList.Count];
         teamNameTexts = new Text[teamList.Count];
 
@@ -237,7 +262,6 @@ public class LobbyUI : MonoBehaviour
             rectTransform.offsetMax = new Vector2(x, y);
 
             AddTeamButtonListeners(teamJoinButtons[i], teamNameTexts[i].text);
-
         }
     }
 
@@ -273,13 +297,9 @@ public class LobbyUI : MonoBehaviour
                 y = rectTransform.offsetMin.y + 30;
                 rectTransform.offsetMax = new Vector2(x, y);
 
-                AddFriendButtonListeners(addFriendButtons[i], memberNameTexts[i].text);
-            
-            //if(memberList.Count < 10)
-            //{
-
-            //}          
+                AddFriendButtonListeners(addFriendButtons[i], memberNameTexts[i].text);         
         }
+        memberCountInfo.text = memberList.Count.ToString();
     }
 
     public void AddTeamButtonListeners(Button button, string ID)
@@ -323,8 +343,7 @@ public class LobbyUI : MonoBehaviour
 
     public void LeaveLobbyButtonClick()
     {
-        ///DELETE PLAYER///
-
+        LeaveTeam();
         SceneManager.LoadScene("LobbyScene");
     }
 
