@@ -30,13 +30,6 @@ public class InformativeMessage : MonoBehaviour {
 
         InitializeComponents();
 
-        messages = new string[4];
-
-        messages[0] = "Great work!";
-        messages[1] = "Thanks";
-        messages[2] = "MessageToChoose3";
-        messages[3] = "MessageToChoose4";
-
         InvokeRepeating("StartMethod", 1.0f, 10f);
         InvokeRepeating("StartGetGameMessage", 2.0f, 10f);
     }
@@ -83,7 +76,7 @@ public class InformativeMessage : MonoBehaviour {
 
         if (!gamemessage.Equals(""))
         {
-            notificationText.text = minimessage;
+            notificationText.text = gamemessage;
             notificationWindow.SetActive(true);
 
             StartCoroutine(DeleteGameMessage());
@@ -146,6 +139,7 @@ public class InformativeMessage : MonoBehaviour {
         {
             gamemessage = result;
             print(gamemessage);
+            print(result);
         }
     }
 
