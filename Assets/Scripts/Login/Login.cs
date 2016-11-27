@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 
 public class Login : MonoBehaviour
 {
-
     public GameObject username;
     public GameObject password;
     public GameObject result;
@@ -18,9 +17,7 @@ public class Login : MonoBehaviour
     private Text Result;
     private Text Timer;
     private float timerUp;
-
-    //TEMPORARY FOR TESTING ENTERING THE LOBBY SCENE
-    public Button lobbyTestBtn;
+  
 
     public void LoginButton()
     {
@@ -41,9 +38,8 @@ public class Login : MonoBehaviour
     void Update()
     {
 
-        Username = username.GetComponent<InputField>().text;
-        Password = password.GetComponent<InputField>().text;
-
+      Username = username.GetComponent<InputField>().text;
+      Password = password.GetComponent<InputField>().text;
     }
 
     IEnumerator LoginUser(string name, string pass)
@@ -95,12 +91,5 @@ public class Login : MonoBehaviour
         print("Timer Stop!");
         float finalTime = timerUp;
         Timer.text = "Timer: " + finalTime.ToString("F3");
-    }
-
-
-    //TEMPORARY METHOD FOR TESTING ENTERING THE LOBBY SCENE
-    public void LobbyTestClick()
-    {
-        SceneManager.LoadScene("LobbyScene");
     }
 }
