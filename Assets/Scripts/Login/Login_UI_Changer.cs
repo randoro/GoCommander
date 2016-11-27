@@ -15,6 +15,7 @@ public class Login_UI_Changer : MonoBehaviour {
     public Canvas UI_help;
 
     public Button helpBtn;
+    public Button exitBtn;
     public Button backBtn;
 
     // Use this for initialization
@@ -46,6 +47,11 @@ public class Login_UI_Changer : MonoBehaviour {
     public void HelpBtnClick()
     {
         current_UI = UI_Phase.UI_help;
+    }
+
+    public void ExitBtnClick()
+    {
+        Application.Quit();
     }
 
     public void BackBtnClick()
