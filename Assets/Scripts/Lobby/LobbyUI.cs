@@ -60,23 +60,24 @@ public class LobbyUI : MonoBehaviour
     string newTeamName;
     string selectedTeam;
 
+    int timer;
+
     // Use this for initialization
     void Start()
     {
-        current_UI = UI_Phase.UI_Join_Create;
+        timer = 50;
+        current_UI = UI_Phase.UI_Lobby;
         startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
-        InvokeRepeating("StartRepeat", 3.0f, 5f);
-    }
-
-    public void StartRepeat()
-    {
-        StartCoroutine(GetTeamFromServer());
+        StartCoroutine(GetTeamsFromServer());
         StartCoroutine(GetMembersInTeam(selectedTeam));
+        current_UI = UI_Phase.UI_Join_Create;
     }
 
     void Update()
     {
-        switch(current_UI)
+        timer--;
+
+        switch (current_UI)
         {
             case UI_Phase.UI_Join_Create:
                 {
@@ -113,8 +114,9 @@ public class LobbyUI : MonoBehaviour
         }
     }
 
-    IEnumerator GetTeamFromServer()
+    IEnumerator GetTeamsFromServer()
     {
+
         string getTeamsURL = "http://gocommander.sytes.net/scripts/show_group.php";
 
         WWW www = new WWW(getTeamsURL);
@@ -141,6 +143,7 @@ public class LobbyUI : MonoBehaviour
 
     IEnumerator JoinSelectedTeam(string selectedTeam)
     {
+
         this.selectedTeam = selectedTeam;
 
         memberList.Clear();
@@ -206,6 +209,7 @@ public class LobbyUI : MonoBehaviour
 
     IEnumerator LeaveTeam()
     {
+
         string getMembersURL = "http://gocommander.sytes.net/scripts/leave_group.php";
 
         userInfo.text = GoogleMap.username;
@@ -262,6 +266,12 @@ public class LobbyUI : MonoBehaviour
             rectTransform.offsetMax = new Vector2(x, y);
 
             AddTeamButtonListeners(teamJoinButtons[i], teamNameTexts[i].text);
+
+        }
+        if (timer < 1)
+        {
+            timer = 50;
+            SceneManager.LoadScene("LobbyScene");
         }
     }
 
@@ -299,7 +309,7 @@ public class LobbyUI : MonoBehaviour
 
                 AddFriendButtonListeners(addFriendButtons[i], memberNameTexts[i].text);         
         }
-        memberCountInfo.text = memberList.Count.ToString();
+        memberCountInfo.text = "" + memberList.Count.ToString() + "/10";
     }
 
     public void AddTeamButtonListeners(Button button, string ID)
