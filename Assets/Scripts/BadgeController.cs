@@ -23,6 +23,10 @@ public class BadgeController : MonoBehaviour {
             {
                 StartCoroutine(SendCommanderRequest());
             }
+            else
+            {
+                StartCoroutine(SendNonInterest());
+            }
             Start();
             gameObject.SetActive(false);
         }
@@ -30,6 +34,10 @@ public class BadgeController : MonoBehaviour {
     IEnumerator SendCommanderRequest()
     {
         StartCoroutine(WaitForCommanderDecision());
+        yield return null;
+    }
+    IEnumerator SendNonInterest()
+    {
         yield return null;
     }
     IEnumerator WaitForCommanderDecision()
