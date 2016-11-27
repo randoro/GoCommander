@@ -70,8 +70,7 @@ public class GoalSpawner : MonoBehaviour
                         if (id == 0)
                         {
                             print("game won");
-                            InformativeMessage.isSprintCompleted = true;
-                            //InformativeMessage.ShowCompletedMinigame();
+                            StartCoroutine(SendCompletedMinigame());
 
                             Application.LoadLevel("mainScene");
                         }
@@ -80,6 +79,20 @@ public class GoalSpawner : MonoBehaviour
             }
         }
 
+    }
+
+    IEnumerator SendCompletedMinigame()
+    {
+        string message = GoogleMap.username + " completed a Sprint!";
+        string loginUserURL = "http://gocommander.sytes.net/scripts/send_minimessage.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("userGroupPost", "Killerbunnies");
+        form.AddField("userMiniMessagePost", message);
+
+        WWW www = new WWW(loginUserURL, form);
+
+        yield return www;
     }
 
     private double randomizeAround(double middle, double radius)

@@ -8,6 +8,7 @@ using System.Text;
 using UnityEngine.SceneManagement;
 using System.Threading;
 using UnityEngine.UI;
+using System.Net;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -313,7 +314,7 @@ public class MapGenerator : MonoBehaviour
     }
 
 
-    public class Tile
+    public class Tile : MonoBehaviour
     {
 
         public enum CircleColor
@@ -396,16 +397,28 @@ public class MapGenerator : MonoBehaviour
 
                 if (DidWeWin())
                 {
-                    
-                  
-					InformativeMessage.isPuzzleCompleted = true;
 					MapGenerator.win = true;
+                    StartCoroutine(SendCompletedMinigame());
 
-					SceneManager.LoadScene("mainScene");
+                    SceneManager.LoadScene("mainScene");
 
 
                 }
             }
+        }
+
+        IEnumerator SendCompletedMinigame()
+        {
+            string message = GoogleMap.username + " completed a Puzzle!";
+            string loginUserURL = "http://gocommander.sytes.net/scripts/send_minimessage.php";
+
+            WWWForm form = new WWWForm();
+            form.AddField("userGroupPost", "Killerbunnies");
+            form.AddField("userMiniMessagePost", message);
+
+            WWW www = new WWW(loginUserURL, form);
+
+            yield return www;
         }
 
 

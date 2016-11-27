@@ -140,9 +140,6 @@ public class Manager : MonoBehaviour
     {
         if (answeredQuestions == 4)
         {
-            //InformativeMessage.isQuizCompleted = true;
-
-            //InformativeMessage.ShowCompletedMinigame();
             StartCoroutine(SendCompletedMinigame());
             InformativeMessage.finished = true;
 
@@ -152,7 +149,7 @@ public class Manager : MonoBehaviour
 
     IEnumerator SendCompletedMinigame()
     {
-        string message = "completed minigame";
+        string message = GoogleMap.username + " completed a Quiz!";
         string loginUserURL = "http://gocommander.sytes.net/scripts/send_minimessage.php";
 
         WWWForm form = new WWWForm();

@@ -103,11 +103,9 @@ public class MapGenerator1 : MonoBehaviour
         if (win == true)
         {
 			score = (int)timeleft * lvl * 100;
-		
-            StartCoroutine(delayTime());
 
-            InformativeMessage.isMemoryCompleted = true;
-            //InformativeMessage.ShowCompletedMinigame();
+            StartCoroutine(SendCompletedMinigame());
+            StartCoroutine(delayTime());
 		
            SceneManager.LoadScene("mainScene");
 
@@ -146,6 +144,20 @@ public class MapGenerator1 : MonoBehaviour
     IEnumerator delayTime()
     {
         yield return new WaitForSeconds(5);
+    }
+
+    IEnumerator SendCompletedMinigame()
+    {
+        string message = GoogleMap.username + " completed a Memory!";
+        string loginUserURL = "http://gocommander.sytes.net/scripts/send_minimessage.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("userGroupPost", "Killerbunnies");
+        form.AddField("userMiniMessagePost", message);
+
+        WWW www = new WWW(loginUserURL, form);
+
+        yield return www;
     }
 
     private void SetUpCamera()

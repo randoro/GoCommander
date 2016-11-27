@@ -7,8 +7,7 @@ public class InformativeMessage : MonoBehaviour {
 
     public GameObject notificationWindow;
     public Text notificationText;
-
-    public static bool isQuizCompleted, isPuzzleCompleted, isMemoryCompleted, isSprintCompleted;
+    
     string[] nav;
 
     private string[] messages;
@@ -23,10 +22,6 @@ public class InformativeMessage : MonoBehaviour {
     private void Start()
     {
         finished = false;
-        isQuizCompleted = false;
-        isPuzzleCompleted = false;
-        isMemoryCompleted = false;
-        isSprintCompleted = false;
 
         InitializeComponents();
 

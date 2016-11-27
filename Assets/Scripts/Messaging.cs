@@ -34,10 +34,10 @@ public class Messaging : MonoBehaviour {
 
     private void SetMessages()
     {
-        messageList[0] = "Great work";
-        messageList[1] = "Thank you";
-        messageList[2] = "Hello";
-        messageList[3] = "Hurry up";
+        messageList[0] = "Great work!";
+        messageList[1] = "Thank you!";
+        messageList[2] = "Hello!";
+        messageList[3] = "Hurry up!";
 
         message1Text.text = messageList[0];
         message2Text.text = messageList[1];
@@ -47,8 +47,8 @@ public class Messaging : MonoBehaviour {
 
     private void SetPlayers()
     {
-        playerList[0] = "milan";
-        playerList[1] = "rasmus";
+        playerList[0] = "Milan";
+        playerList[1] = "Rasmus";
         playerList[2] = "player";
         playerList[3] = "player";
 
@@ -89,7 +89,7 @@ public class Messaging : MonoBehaviour {
 
         WWWForm form = new WWWForm();
         form.AddField("userRecPost", player);
-        form.AddField("userMessagePost", message);
+        form.AddField("userMessagePost", player + ": " + message);
 
         WWW www = new WWW(loginUserURL, form);
 
