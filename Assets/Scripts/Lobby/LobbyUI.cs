@@ -66,12 +66,13 @@ public class LobbyUI : MonoBehaviour
     void Start()
     {
         timer = 50;
-        current_UI = UI_Phase.UI_Lobby;
-        startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
-        StartCoroutine(GetTeamsFromServer());
-        StartCoroutine(GetMembersInTeam(selectedTeam));
         current_UI = UI_Phase.UI_Join_Create;
+        startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
+        addFriendButtons = new Button[10];
+        memberNameTexts = new Text[10];
+        StartCoroutine(GetTeamsFromServer());
     }
+
 
     void Update()
     {
@@ -143,7 +144,6 @@ public class LobbyUI : MonoBehaviour
 
     IEnumerator JoinSelectedTeam(string selectedTeam)
     {
-
         this.selectedTeam = selectedTeam;
 
         memberList.Clear();
@@ -162,7 +162,9 @@ public class LobbyUI : MonoBehaviour
 
     IEnumerator GetMembersInTeam(string selectedTeam)
     {
-            this.selectedTeam = selectedTeam;
+        memberList.Clear();
+
+        this.selectedTeam = selectedTeam;
 
             string getMembersURL = "http://gocommander.sytes.net/scripts/show_group_members.php";
 
@@ -181,10 +183,13 @@ public class LobbyUI : MonoBehaviour
 
             for (int i = 0; i < teamArray.Length - 1; i++)
             {
-                int id = int.Parse(GetLobbyData(teamArray[i], "ID:"));
-                string member = GetLobbyData(teamArray[i], "Groupusers:");
-                memberData = new LobbyData(id, member);
-                memberList.Add(memberData);
+              if (memberList.Count < 10)
+                {
+                  int id = int.Parse(GetLobbyData(teamArray[i], "ID:"));
+                  string member = GetLobbyData(teamArray[i], "Groupusers:");
+                  memberData = new LobbyData(id, member);
+                  memberList.Add(memberData);
+                }
             }
             PopulateMemberList(selectedTeam);
     }
@@ -277,9 +282,8 @@ public class LobbyUI : MonoBehaviour
 
     public void PopulateMemberList(string selectedTeam)
     {
-                
-        addFriendButtons = new Button[memberList.Count];
-        memberNameTexts = new Text[memberList.Count];
+        //addFriendButtons = new Button[memberList.Count];
+        //memberNameTexts = new Text[memberList.Count];
 
         memberElementTransform = memberElementPrefab.GetComponent<RectTransform>();
         memberScrollTransform = memberListContent.GetComponent<RectTransform>();
@@ -289,27 +293,49 @@ public class LobbyUI : MonoBehaviour
         {
             j++;
 
+                newMemberElement = null;
                 newMemberElement = Instantiate(memberElementPrefab, memberScrollTransform) as GameObject;
                 newMemberElement.transform.SetParent(memberScrollTransform, false);
                 addFriendButtons[i] = newMemberElement.GetComponentInChildren<Button>();
                 addFriendButtons[i].enabled = true;
-                memberNameTexts[i] = newMemberElement.GetComponentInChildren<Text>();
+                memberNameTexts[i] = addFriendButtons[i].GetComponentInChildren<Text>();
                 memberNameTexts[i].text = memberList[i].name;
                 memberNameTexts[i].fontSize = 12;
 
-                RectTransform rectTransform = newMemberElement.GetComponent<RectTransform>();
+            //newMemberElement.transform.SetParent(memberScrollTransform, false);
+            //addFriendButtons[i] = newMemberElement.GetComponentInChildren<Button>();
+            //addFriendButtons[i].enabled = true;
+            //memberNameTexts[i] = newMemberElement.GetComponentInChildren<Text>();
+            //memberNameTexts[i].text = memberList[i].name;
+            //memberNameTexts[i].fontSize = 12;
 
-                float x = -memberScrollTransform.rect.width / 2 * (i % 1);
-                float y = memberScrollTransform.rect.height / 2 - 30 * j;
-                rectTransform.offsetMin = new Vector2(x, y);
+            RectTransform rectTransform = newMemberElement.GetComponent<RectTransform>();
 
-                x = rectTransform.offsetMin.x;
-                y = rectTransform.offsetMin.y + 30;
-                rectTransform.offsetMax = new Vector2(x, y);
+            //float x = -memberScrollTransform.rect.width / 2 * (i % 1);
+            //float y = memberScrollTransform.rect.height / 2 - 30 * j;
+            //rectTransform.offsetMin = new Vector2(x, y);
 
-                AddFriendButtonListeners(addFriendButtons[i], memberNameTexts[i].text);         
+            //x = rectTransform.offsetMin.x;
+            //y = rectTransform.offsetMin.y + 30;
+            //rectTransform.offsetMax = new Vector2(x, y);
+
+            float x = 0;
+            float y = teamScrollTransform.rect.height / 2 - 50 * j;
+            rectTransform.offsetMin = new Vector2(x, y);
+
+            x = rectTransform.offsetMin.x;
+            y = rectTransform.offsetMin.y;
+            rectTransform.offsetMax = new Vector2(x, y);
+
+            AddFriendButtonListeners(addFriendButtons[i], memberNameTexts[i].text);         
         }
         memberCountInfo.text = "" + memberList.Count.ToString() + "/10";
+        if (timer < 1)
+        {
+            
+            StartCoroutine(GetMembersInTeam(selectedTeam));
+            timer = 50;
+        }
     }
 
     public void AddTeamButtonListeners(Button button, string ID)
