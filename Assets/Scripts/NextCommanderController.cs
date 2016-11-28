@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class NextCommanderController : MonoBehaviour {
 
     List<string> candidateList = new List<string>();
-    List<Player> voters = new List<Player>();
+    public List<Player> voters = new List<Player>();
     int lowestCount = 10;
 
     string[] polls;
@@ -21,7 +21,6 @@ public class NextCommanderController : MonoBehaviour {
         for (int i = 0; i < voters.Count; i++)
         {
             if (voters[i].vote.Contains("CANDIDATE") || voters[i].vote.Contains("NOT"))
-
             {
                 if (voters[i].vote.Contains("CANDIDATE") && voters[i].counter <= lowestCount)
                 {
@@ -39,7 +38,7 @@ public class NextCommanderController : MonoBehaviour {
         }
     }
 
-    public void EndVotingAndCompare(List<string> candidateList)
+    void EndVotingAndCompare(List<string> candidateList)
     {
         if (candidateList.Count < 1)
         {
@@ -71,7 +70,7 @@ public class NextCommanderController : MonoBehaviour {
         WWW www = new WWW(votersURL, form);
         yield return www;
     }
-    IEnumerator CheckPolls()
+    public IEnumerator CheckPolls()
     {
         string votersURL = "http://gocommander.sytes.net/scripts/commander_poll.php";
 
@@ -97,7 +96,6 @@ public class NextCommanderController : MonoBehaviour {
             voters.Add(new Player(vote, counter, id, name, groupName));
         }
     }
-
     string GetDataValue(string data, string index)
     {
         string value = data.Substring(data.IndexOf(index) + index.Length);

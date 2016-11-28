@@ -3,6 +3,7 @@ using System.Collections;
 
 public class BadgeInfoListener : MonoBehaviour {
     public int refreshDelay = 5;
+    public NextCommanderController nextCommanderController;
 
 	// Use this for initialization
 	public void Start () {
@@ -18,4 +19,12 @@ public class BadgeInfoListener : MonoBehaviour {
             yield return new WaitForSeconds(refreshDelay);
         }
 	}
+
+    IEnumerator CheckPending()
+    {
+        string votersURL = "http://gocommander.sytes.net/scripts/commander_vote.php";
+
+        WWW www = new WWW(votersURL);
+        yield return www;
+    }
 }
