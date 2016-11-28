@@ -42,7 +42,7 @@ public class MapGenerator : MonoBehaviour
     private float timeleft;
     public int showtime;
 	public int score;
-	public int lvl;//hämttar lvl från server (svårihihetsgrad)
+	public float poeng;
 	public static bool win =false;
 
 
@@ -69,27 +69,23 @@ public class MapGenerator : MonoBehaviour
         SetUpCamera();
 
         //tid
-        starttime = 100;
+        starttime = 0;
         timeleft = starttime;
-		score = 0;
+		score = 1000;
+		poeng = score;
 
     }
     void Update()
-	{timeleft = timeleft - Time.deltaTime;
+	{
+		timeleft = timeleft + Time.deltaTime;
 		showtime = (int)timeleft;
-		Thetext.text = "timeleft "+ showtime.ToString();
-		
-        if (timeleft < -1)
-        {
-          
-            StartCoroutine(delayTime());
-
-            SceneManager.LoadScene("mainScene");
-        }
+		Thetext.text = "time "+ showtime.ToString();
+		poeng = poeng - Time.deltaTime;
+		score = (int)poeng;
 		if (win=true) 
 		{
-			score = (int)timeleft * lvl * 100;
-		
+			
+			print ("test");
 
 		}
 
@@ -398,9 +394,9 @@ public class MapGenerator : MonoBehaviour
                 if (DidWeWin())
                 {
 					MapGenerator.win = true;
-                    StartCoroutine(SendCompletedMinigame());
-
-                    SceneManager.LoadScene("mainScene");
+                  //  StartCoroutine(SendCompletedMinigame());
+					print("win2");
+                    //SceneManager.LoadScene("mainScene");
 
 
                 }
