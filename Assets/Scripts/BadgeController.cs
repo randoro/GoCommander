@@ -71,6 +71,10 @@ public class BadgeController : MonoBehaviour {
                 GoogleMap.lastCommander = true;
                 StopCoroutine(WaitForCommanderDecision());
             }
+            else if(result.Contains("STOP"))
+            {
+                StopCoroutine(WaitForCommanderDecision());
+            }
             yield return new WaitForSeconds(refreshDelayCommander);
         }
     }

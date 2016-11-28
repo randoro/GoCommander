@@ -22,21 +22,15 @@ public class BadgeInfoListener : MonoBehaviour {
 	}
     IEnumerator CheckPending()
     {
-        string votersURL = "http://gocommander.sytes.net/scripts/commander_poll.php";
+        string votersURL = "http://gocommander.sytes.net/scripts/commander_check.php";
 
-        WWW www = new WWW(votersURL);
+        WWWForm form = new WWWForm();
+        form.AddField("userNamePost", GoogleMap.username);
+        WWW www = new WWW(votersURL, form);
         yield return www;
-
         string result = www.text;
 
-        if (result != null)
-        {
-            polls = result.Split(';');
-        }
-
-        string vote = GetDataValue(polls[0], "Vote:");
-
-        if (vote.Contains("Pending"))
+        if (result.Contains("PENDING"))
         {
             if (GoogleMap.lastCommander)
             {

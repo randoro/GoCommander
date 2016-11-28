@@ -41,7 +41,7 @@ public class NextCommanderController : MonoBehaviour {
                 }
                 else
                 {
-                    yield return null;
+                    break;
                 }
             }
             yield return new WaitForSeconds(refreshDelay);
@@ -51,31 +51,37 @@ public class NextCommanderController : MonoBehaviour {
     {
         if (candidateList.Count < 1)
         {
-            string winner = "STOP";
-            StartCoroutine(ReturnWinner(winner));
+            string votePost = "STOP";
+            StartCoroutine(ReturnWinner(null, votePost));
         }
         if (candidateList.Count > 1)
         {
+            string votePost = "COMMANDER";
             Random rnd = new Random();
             int index = Random.Range(0, candidateList.Count);
             string winner = candidateList[index];
-            StartCoroutine(ReturnWinner(winner));
+            StartCoroutine(ReturnWinner(winner, votePost));
         }
         else if (candidateList.Count == 1)
         {
+            string votePost = "COMMANDER";
             int index = 0;
             string winner = candidateList[index];
-            StartCoroutine(ReturnWinner(winner));
+            StartCoroutine(ReturnWinner(winner, votePost));
         }
     }
 
-    IEnumerator ReturnWinner(string winner)
+    IEnumerator ReturnWinner(string winner, string votePost)
     {
         string votersURL = "http://gocommander.sytes.net/scripts/commander_vote.php";
 
         WWWForm form = new WWWForm();
-        form.AddField("userNamePost", GoogleMap.username);
-        form.AddField("userVotePost", winner);
+        if (winner != null)
+        {
+            form.AddField("userNamePost", winner);
+        }
+        form.AddField("userVotePost", votePost);
+        form.AddField("userGroupPost", GoogleMap.groupName);
         WWW www = new WWW(votersURL, form);
         yield return www;
     }
