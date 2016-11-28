@@ -17,14 +17,18 @@ public class Messaging : MonoBehaviour {
     private Text playerToMessage;
     private Text messageToSend;
 
-    private string[] messageList = new string[4];
-    private string[] playerList = new string[4];
+    private string[] messageArray = new string[4];
+    private string[] playerArray = new string[4];
+    private string[] playerArrayTest = new string[4];
+    private string[] teamArray = new string[10];
 
     // Use this for initialization
     void Start () {
 
         SetMessages();
         SetPlayers();
+
+        GetTeamsFromServer();
 	}
 	
 	// Update is called once per frame
@@ -34,28 +38,28 @@ public class Messaging : MonoBehaviour {
 
     private void SetMessages()
     {
-        messageList[0] = "Great work!";
-        messageList[1] = "Thank you!";
-        messageList[2] = "Hello!";
-        messageList[3] = "Hurry up!";
+        messageArray[0] = "Great work!";
+        messageArray[1] = "Thank you!";
+        messageArray[2] = "Hello!";
+        messageArray[3] = "Hurry up!";
 
-        message1Text.text = messageList[0];
-        message2Text.text = messageList[1];
-        message3Text.text = messageList[2];
-        message4Text.text = messageList[3];
+        message1Text.text = messageArray[0];
+        message2Text.text = messageArray[1];
+        message3Text.text = messageArray[2];
+        message4Text.text = messageArray[3];
     }
 
     private void SetPlayers()
     {
-        playerList[0] = "Milan";
-        playerList[1] = "Rasmus";
-        playerList[2] = "player";
-        playerList[3] = "player";
+        playerArray[0] = "Milan";
+        playerArray[1] = "Rasmus";
+        playerArray[2] = "player";
+        playerArray[3] = "player";
 
-        player1Name.text = playerList[0];
-        player2Name.text = playerList[1];
-        player3Name.text = playerList[2];
-        player4Name.text = playerList[3];
+        player1Name.text = playerArray[0];
+        player2Name.text = playerArray[1];
+        player3Name.text = playerArray[2];
+        player4Name.text = playerArray[3];
     }
 
     public void SetPlayerToMessage(Text _playerToMessage)
@@ -89,12 +93,74 @@ public class Messaging : MonoBehaviour {
 
         WWWForm form = new WWWForm();
         form.AddField("userRecPost", player);
-        form.AddField("userMessagePost", player + ": " + message);
+        form.AddField("userMessagePost", GoogleMap.username + ": " + message);
 
         WWW www = new WWW(loginUserURL, form);
 
         yield return www;
 
         print("Message is sent");
+    }
+
+    IEnumerator GetTeamsFromServer()
+    {
+        print("GETTING TEAMS FROM SERVER");
+
+        string getTeamsURL = "http://gocommander.sytes.net/scripts/show_group.php";
+
+        WWW www = new WWW(getTeamsURL);
+
+        yield return www;
+
+        string result = www.text;
+
+        print("TEAM RESULT: " + result);
+
+        if (result != null)
+        {
+            teamArray = result.Split(';');
+
+            print("TEAMARRAY: " + teamArray);
+        }
+
+        int id = 0;
+        for (int i = 0; i < teamArray.Length - 1; i++)
+        {
+            //string teamName = GetLobbyData(teamArray[i], "Groupname:");
+            //id++;
+            //teamData = new LobbyData(id, teamName);
+            //teamList.Add(teamData);
+        }
+    }
+
+    IEnumerator GetMembersInTeam(string selectedTeam)
+    {
+        string getMembersURL = "http://gocommander.sytes.net/scripts/show_group_members.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("userGroupPost", "Killerbunnies");
+        WWW www = new WWW(getMembersURL, form);
+
+        yield return www;
+
+        string result = www.text;
+
+        print(result);
+
+        if (result != null)
+        {
+            teamArray = result.Split(';');
+        }
+
+        //for (int i = 0; i < teamArray.Length - 1; i++)
+        //{
+        //    if (memberList.Count < 10)
+        //    {
+        //        int id = int.Parse(GetLobbyData(teamArray[i], "ID:"));
+        //        string member = GetLobbyData(teamArray[i], "Groupusers:");
+        //        memberData = new LobbyData(id, member);
+        //        memberList.Add(memberData);
+        //    }
+        //}
     }
 }
