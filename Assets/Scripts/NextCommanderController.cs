@@ -7,37 +7,46 @@ public class NextCommanderController : MonoBehaviour {
     List<string> candidateList = new List<string>();
     public List<Player> voters = new List<Player>();
     int lowestCount = 10;
+    public int refreshDelay = 2;
 
     string[] polls;
 
-    public void StartVoting()
+    public IEnumerator StartVoting()
     {
-        int poll = 0;
-        voters.Clear();
-
-        StartCoroutine(CheckPolls());
-        candidateList.Clear();
-
-        for (int i = 0; i < voters.Count; i++)
+        while (true)
         {
-            if (voters[i].vote.Contains("CANDIDATE") || voters[i].vote.Contains("NOT"))
+            int poll = 0;
+            voters.Clear();
+
+            StartCoroutine(CheckPolls());
+            candidateList.Clear();
+
+            for (int i = 0; i < voters.Count; i++)
             {
-                if (voters[i].vote.Contains("CANDIDATE") && voters[i].counter <= lowestCount)
+                if (voters[i].vote.Contains("CANDIDATE") || voters[i].vote.Contains("NOT"))
                 {
-                    lowestCount = voters[i].counter;
-                    candidateList.Add(voters[i].name);
+                    if (voters[i].vote.Contains("CANDIDATE") && voters[i].counter <= lowestCount)
+                    {
+                        lowestCount = voters[i].counter;
+                        candidateList.Add(voters[i].name);
+                    }
+
+                    poll++;
+
+                    if (poll >= voters.Count)
+                    {
+                        EndVotingAndCompare(candidateList);
+                        StopCoroutine(StartVoting());
+                    }
                 }
-
-                poll++;
-
-                if (poll >= voters.Count)
+                else
                 {
-                    EndVotingAndCompare(candidateList);
+                    yield return null;
                 }
             }
+            yield return new WaitForSeconds(refreshDelay);
         }
     }
-
     void EndVotingAndCompare(List<string> candidateList)
     {
         if (candidateList.Count < 1)
@@ -88,7 +97,7 @@ public class NextCommanderController : MonoBehaviour {
         for (int i = 0; i < polls.Length - 1; i++)
         {
             int id = int.Parse(GetDataValue(polls[i], "ID:"));
-            string name = GetDataValue(polls[i], "Username.");
+            string name = GetDataValue(polls[i], "Username:");
             string groupName = GetDataValue(polls[i], "Groupname:");
             int counter = int.Parse(GetDataValue(polls[i], "Counter:"));
             string vote = GetDataValue(polls[i], "Vote:");

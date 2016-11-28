@@ -22,8 +22,8 @@ public class GoogleMap : MonoBehaviour {
     public Color roadColor = Color.white;
     public Color waterColor = Color.blue;
     public static string username;
-
     public static string groupName;
+    public static bool lastCommander;
     bool settled;
     bool isPaused;
 
