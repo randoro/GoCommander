@@ -68,7 +68,7 @@ public class LobbyUI : MonoBehaviour
         timer = 50;
         current_UI = UI_Phase.UI_Join_Create;
         startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
-        addFriendButtons = new Button[10];
+        addFriendButtons = new Button[5];
         memberNameTexts = new Text[10];
         StartCoroutine(GetTeamsFromServer());
     }
@@ -183,7 +183,7 @@ public class LobbyUI : MonoBehaviour
 
             for (int i = 0; i < teamArray.Length - 1; i++)
             {
-              if (memberList.Count < 10)
+              if (memberList.Count < 6)
                 {
                   int id = int.Parse(GetLobbyData(teamArray[i], "ID:"));
                   string member = GetLobbyData(teamArray[i], "Groupusers:");
@@ -198,11 +198,11 @@ public class LobbyUI : MonoBehaviour
     {
         string getMembersURL = "http://gocommander.sytes.net/scripts/create_group.php";
 
-        userInfo.text = GoogleMap.username;
+        //userInfo.text = GoogleMap.username;
 
         WWWForm form = new WWWForm();
         form.AddField("userGroupPost", newTeamName);
-        form.AddField("usernamePost", userInfo.text);
+        form.AddField("usernamePost", GoogleMap.username);
         WWW www = new WWW(getMembersURL, form);
 
         yield return www;
@@ -217,10 +217,8 @@ public class LobbyUI : MonoBehaviour
 
         string getMembersURL = "http://gocommander.sytes.net/scripts/leave_group.php";
 
-        userInfo.text = GoogleMap.username;
-
         WWWForm form = new WWWForm();
-        form.AddField("usernamePost", userInfo.text);
+        form.AddField("usernamePost", GoogleMap.username);
         WWW www = new WWW(getMembersURL, form);
 
         yield return www;
@@ -385,12 +383,11 @@ public class LobbyUI : MonoBehaviour
 
     public void StartButtonClick()
     {
-        if (memberList.Count > 2)
-        {
-            GoogleMap.username = userInfo.text;
+        //if (memberList.Count > 2)
+        //{
             GoogleMap.groupName = teamInfo.text;
             SceneManager.LoadScene("mainScene");
-        }
+        //}
     }
 
     public void LogOutButtonClick()
