@@ -25,6 +25,8 @@ public class TreasureSpawner : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        print("treasure spawner starts");
+
         map = GameObject.FindGameObjectWithTag("Map");
         gMap = map.GetComponent<GoogleMap>();
 
