@@ -214,7 +214,6 @@ public class LobbyUI : MonoBehaviour
 
     IEnumerator LeaveTeam()
     {
-
         string getMembersURL = "http://gocommander.sytes.net/scripts/leave_group.php";
 
         WWWForm form = new WWWForm();
@@ -361,6 +360,7 @@ public class LobbyUI : MonoBehaviour
     {
         current_UI = UI_Phase.UI_Lobby;
         teamInfo.text = selectedTeam;
+        GoogleMap.groupName = selectedTeam;
         StartCoroutine(JoinSelectedTeam(selectedTeam));
     }
 
@@ -385,7 +385,7 @@ public class LobbyUI : MonoBehaviour
     {
         //if (memberList.Count > 2)
         //{
-            GoogleMap.groupName = teamInfo.text;
+            GoogleMap.groupName = selectedTeam;
             SceneManager.LoadScene("mainScene");
         //}
     }

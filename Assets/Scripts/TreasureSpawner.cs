@@ -25,8 +25,6 @@ public class TreasureSpawner : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        print("treasure spawner starts");
-
         map = GameObject.FindGameObjectWithTag("Map");
         gMap = map.GetComponent<GoogleMap>();
 
@@ -35,13 +33,13 @@ public class TreasureSpawner : MonoBehaviour {
 
         treasureList = new List<GameObject>();
         fetchedList = new List<Treasure>();
-        
+
         StartCoroutine(UpdateTreasures());
     }
 
     void Update()
     {
-        
+        //print(GoogleMap.groupName);
     }
 
     IEnumerator UpdateTreasures()
