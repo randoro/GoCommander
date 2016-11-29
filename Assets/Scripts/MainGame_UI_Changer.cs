@@ -115,6 +115,19 @@ public class MainGame_UI_Changer : MonoBehaviour
         }
 	}
 
+    IEnumerator LeaveTeam()
+    {
+        string getMembersURL = "http://gocommander.sytes.net/scripts/leave_group.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", GoogleMap.username);
+        WWW www = new WWW(getMembersURL, form);
+
+        yield return www;
+
+        string result = www.text;
+    }
+
     public void MenuBtnClick()
     {
         activeUI = ActiveUI.menuUI;
@@ -137,6 +150,7 @@ public class MainGame_UI_Changer : MonoBehaviour
 
     public void ExitbtnClick()
     {
+        StartCoroutine(LeaveTeam());
         SceneManager.LoadScene("login");
     }
 

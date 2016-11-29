@@ -225,7 +225,6 @@ public class LobbyUI : MonoBehaviour
         string result = www.text;
     }
 
-
     string GetLobbyData(string data, string index)
     {
         string value = data.Substring(data.IndexOf(index) + index.Length);
