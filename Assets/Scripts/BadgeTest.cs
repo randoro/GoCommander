@@ -23,5 +23,4 @@ public class BadgeTest : MonoBehaviour {
             commanderBadgeButton.SetActive(false);
         }
     }
-
 }
