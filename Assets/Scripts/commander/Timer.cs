@@ -27,7 +27,7 @@ public class Timer : MonoBehaviour {
 	}
     IEnumerator BackToMainScene()
     {
-        string votersURL = "http://gocommander.sytes.net/scripts/commander_vote.php";
+        string votersURL = "http://gocommander.sytes.net/scripts/commander_start_vote.php";
         WWWForm form = new WWWForm();
         form.AddField("userVotePost", "PENDING");
         form.AddField("userGroupPost", GoogleMap.groupName);

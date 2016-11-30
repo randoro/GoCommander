@@ -8,6 +8,7 @@ public class NextCommanderController : MonoBehaviour {
     public List<Player> voters = new List<Player>();
     int lowestCount = 10;
     public int refreshDelay = 2;
+    int setAllPendingToNot = 0;
     public IEnumerator startVoting;
 
     string[] polls;
@@ -21,12 +22,18 @@ public class NextCommanderController : MonoBehaviour {
     {
         while (true)
         {
+            setAllPendingToNot++;
+
+            if (setAllPendingToNot == 7)
+            {
+                yield return StartCoroutine(SetAllPENDINGtoNOT());
+            }
+
             int poll = 0;
             voters.Clear();
 
             yield return StartCoroutine(CheckPolls());
             candidateList.Clear();
-
 
             for (int i = 0; i < voters.Count; i++)
             {
@@ -76,7 +83,23 @@ public class NextCommanderController : MonoBehaviour {
             yield return StartCoroutine(ReturnWinner(winner, votePost));
         }
     }
+    IEnumerator SetAllPENDINGtoNOT()
+    {
+        string votersURL = "http://gocommander.sytes.net/scripts/commander_vote.php";
 
+        for (int i = 0; i < voters.Count; i++)
+        {
+            if (voters[i].vote.Contains("PENDING"))
+            {
+                WWWForm form = new WWWForm();
+                form.AddField("usernamePost", voters[i].name);
+                form.AddField("userVotePost", "NOT");
+                WWW www = new WWW(votersURL, form);
+                yield return www;
+            }
+        }
+        //form.AddField("userGroupPost", GoogleMap.groupName);
+    }
     IEnumerator ReturnWinner(string winner, string votePost)
     {
         string votersURL = "http://gocommander.sytes.net/scripts/commander_vote.php";
@@ -89,6 +112,7 @@ public class NextCommanderController : MonoBehaviour {
         form.AddField("userVotePost", votePost);
         form.AddField("userGroupPost", GoogleMap.groupName);
         WWW www = new WWW(votersURL, form);
+        setAllPendingToNot = 0;
         yield return www;
         StopCoroutine(startVoting);
     }

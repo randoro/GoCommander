@@ -6,12 +6,14 @@ public class BadgeInfoListener : MonoBehaviour {
     public int refreshDelay = 5;
     public NextCommanderController nextCommanderController;
     public GameObject commanderBadgeButton;
+    Vector3 originalScale;
     string[] polls;
     public IEnumerator listener;
 	// Use this for initialization
 	public void Start () {
         listener = Listen();
         StartCoroutine(listener);
+        originalScale = commanderBadgeButton.transform.localScale;
 	}
 	
 	// Update is called once per frame
@@ -32,7 +34,6 @@ public class BadgeInfoListener : MonoBehaviour {
         yield return www;
         string result = www.text;
         print(result);
-
         result = "PENDING";
 
         if (result.Contains("PENDING"))
@@ -41,9 +42,8 @@ public class BadgeInfoListener : MonoBehaviour {
             {
                 GoogleMap.lastCommander = false;
                 StartCoroutine(nextCommanderController.startVoting);
-                //commanderBadgeButton.SetActive(true);
+                commanderBadgeButton.transform.localScale = originalScale;
                 commanderBadgeButton.GetComponent<BadgeController>().enabled = true;
-                commanderBadgeButton.GetComponent<Button>().interactable = false;
                 StopCoroutine(listener);
                 StopCoroutine(CheckPending());
             }
@@ -51,7 +51,7 @@ public class BadgeInfoListener : MonoBehaviour {
             {
                 //commanderBadgeButton.SetActive(true);
                 commanderBadgeButton.GetComponent<BadgeController>().enabled = true;
-                commanderBadgeButton.GetComponent<Button>().interactable = false;
+                commanderBadgeButton.transform.localScale = originalScale;
                 StopCoroutine(listener);
                 StopCoroutine(CheckPending());
             }
