@@ -35,17 +35,12 @@ public class Manager : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
-        //StartCoroutine(SendCompletedMinigame());
-
         allQuestions = new string[4];
         allAnswersID = new string[4];
 
         StartCoroutine(GetQuizes());
 
         defaultBackgroundColor = camera.backgroundColor;
-
-        //camera.backgroundColor = Color.green;
-        
     }
 
     // Update is called once per frame
@@ -176,8 +171,6 @@ public class Manager : MonoBehaviour
         camera.backgroundColor = defaultBackgroundColor;
 
         answeredQuestions++;
-
-        //resultObj.GetComponent<TextMesh>().text = "";
     }
 
     void RandomizeQuestion()
@@ -186,6 +179,8 @@ public class Manager : MonoBehaviour
         alreadyAnsweredQuestions.Add(randomQuestion);
         print(alreadyAnsweredQuestions);
         print(randomQuestion);
+
+        randomQuestion = Random.Range(0, 3);
 
         for (int i = 0; i < alreadyAnsweredQuestions.Count; i++)
         {
