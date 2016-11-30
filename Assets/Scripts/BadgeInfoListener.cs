@@ -14,6 +14,7 @@ public class BadgeInfoListener : MonoBehaviour {
         listener = Listen();
         StartCoroutine(listener);
         originalScale = commanderBadgeButton.transform.localScale;
+        commanderBadgeButton.transform.localScale = new Vector3(0, 0, 0);
 	}
 	
 	// Update is called once per frame
@@ -34,7 +35,6 @@ public class BadgeInfoListener : MonoBehaviour {
         yield return www;
         string result = www.text;
         print(result);
-        result = "PENDING";
 
         if (result.Contains("PENDING"))
         {

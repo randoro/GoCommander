@@ -36,7 +36,14 @@ public class BadgeController : MonoBehaviour {
             }
             SetStartValues();
             enabled = false;
-            gameObject.GetComponent<Button>().interactable = true;
+            gameObject.transform.localScale = new Vector3(0, 0, 0);
+        }
+        else if (interested)
+        {
+            StartCoroutine(SendCommanderRequest());
+            SetStartValues();
+            enabled = false;
+            gameObject.transform.localScale = new Vector3(0, 0, 0);
         }
 	}
     IEnumerator SendCommanderRequest()
