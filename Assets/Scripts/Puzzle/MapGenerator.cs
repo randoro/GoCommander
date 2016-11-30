@@ -77,21 +77,17 @@ public class MapGenerator : MonoBehaviour
     }
     void Update()
 	{
-        if (timeleft < -1)
-        {
-            Debug.Log("lose");
-            StartCoroutine(delayTime());
-
-            SceneManager.LoadScene("mainScene");
-        }
-        if (tile.DidWeWin())
-        {
-            score = (int)timeleft * 1 * 100;
-        }
-        if (!tile.DidWeWin())
-        {
-            timeleft = timeleft - Time.deltaTime; ;
-        }
+       
+       
+		//  if (tile.DidWeWin())
+		//   {
+		    score = (int)poeng;
+		//   }
+		//   if (!tile.DidWeWin())
+		//   {
+		  timeleft = timeleft + Time.deltaTime;
+		poeng = poeng - Time.deltaTime;
+		//   }
         // Debug.Log(timeleft);
         showtime = (int)timeleft;
         Thetext.text = showtime.ToString("");
@@ -525,8 +521,9 @@ public class MapGenerator : MonoBehaviour
                         break;
                     }
                     else if (tileFamily[i, j] == tileFamily[tileFamily.GetLength(0) - 1, tileFamily.GetLength(1) - 1])
-                    {
+					{print ("hejoj");
                         return true;
+
 
                     }
                 }

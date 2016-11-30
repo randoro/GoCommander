@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class BadgeController : MonoBehaviour {
 
@@ -14,10 +15,13 @@ public class BadgeController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        SetStartValues();
+	}
+    void SetStartValues()
+    {
         timerValue = 10;
         interested = false;
-	}
-	
+    }
 	// Update is called once per frame
 	void Update () {
         timerValue -= Time.deltaTime;
@@ -25,22 +29,21 @@ public class BadgeController : MonoBehaviour {
             if (interested)
             {
                 StartCoroutine(SendCommanderRequest());
-                SceneManager.LoadScene("CommanderScene");
             }
             else
             {
                 StartCoroutine(SendNonInterest());
             }
-            Start();
-            gameObject.SetActive(false);
-            StartCoroutine(badgeInfoListener.Listen());
+            SetStartValues();
+            enabled = false;
+            gameObject.GetComponent<Button>().interactable = true;
         }
 	}
     IEnumerator SendCommanderRequest()
     {
         string votersURL = "http://gocommander.sytes.net/scripts/commander_vote.php";
         WWWForm form = new WWWForm();
-        form.AddField("userNamePost", GoogleMap.username);
+        form.AddField("usernamePost", GoogleMap.username);
         form.AddField("userVotePost", "CANDIDATE");
         WWW www = new WWW(votersURL, form);
         yield return www;
@@ -50,10 +53,11 @@ public class BadgeController : MonoBehaviour {
     {
         string votersURL = "http://gocommander.sytes.net/scripts/commander_vote.php";
         WWWForm form = new WWWForm();
-        form.AddField("userNamePost", GoogleMap.username);
+        form.AddField("usernamePost", GoogleMap.username);
         form.AddField("userVotePost", "NOT");
         WWW www = new WWW(votersURL, form);
         yield return www;
+        badgeInfoListener.StartCoroutine(badgeInfoListener.listener);
     }
     IEnumerator WaitForCommanderDecision()
     {
@@ -61,19 +65,23 @@ public class BadgeController : MonoBehaviour {
         {
             string votersURL = "http://gocommander.sytes.net/scripts/commander_check.php";
             WWWForm form = new WWWForm();
-            form.AddField("userNamePost", GoogleMap.username);
+            form.AddField("usernamePost", GoogleMap.username);
             WWW www = new WWW(votersURL, form);
             yield return www;
             string result = www.text;
+            print(result);
 
             if (result.Contains("COMMANDER"))
             {
                 GoogleMap.lastCommander = true;
                 StopCoroutine(WaitForCommanderDecision());
+                badgeInfoListener.StartCoroutine(badgeInfoListener.listener);
+                SceneManager.LoadScene("CommanderScene");
             }
             else if(result.Contains("STOP"))
             {
                 StopCoroutine(WaitForCommanderDecision());
+                StartCoroutine(badgeInfoListener.listener);
             }
             yield return new WaitForSeconds(refreshDelayCommander);
         }

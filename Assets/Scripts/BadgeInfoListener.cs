@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class BadgeInfoListener : MonoBehaviour {
     public int refreshDelay = 5;
     public NextCommanderController nextCommanderController;
     public GameObject commanderBadgeButton;
     string[] polls;
-
+    public IEnumerator listener;
 	// Use this for initialization
 	public void Start () {
-        StartCoroutine(Listen());
+        listener = Listen();
+        StartCoroutine(listener);
 	}
 	
 	// Update is called once per frame
@@ -25,24 +27,33 @@ public class BadgeInfoListener : MonoBehaviour {
         string votersURL = "http://gocommander.sytes.net/scripts/commander_check.php";
 
         WWWForm form = new WWWForm();
-        form.AddField("userNamePost", GoogleMap.username);
+        form.AddField("usernamePost", GoogleMap.username);
         WWW www = new WWW(votersURL, form);
         yield return www;
         string result = www.text;
+        print(result);
+
+        result = "PENDING";
 
         if (result.Contains("PENDING"))
         {
             if (GoogleMap.lastCommander)
             {
                 GoogleMap.lastCommander = false;
-                StartCoroutine(nextCommanderController.StartVoting());
-                commanderBadgeButton.SetActive(true);
-                StopCoroutine(Listen());
+                StartCoroutine(nextCommanderController.startVoting);
+                //commanderBadgeButton.SetActive(true);
+                commanderBadgeButton.GetComponent<BadgeController>().enabled = true;
+                commanderBadgeButton.GetComponent<Button>().interactable = false;
+                StopCoroutine(listener);
+                StopCoroutine(CheckPending());
             }
             else
             {
-                commanderBadgeButton.SetActive(true);
-                StopCoroutine(Listen());
+                //commanderBadgeButton.SetActive(true);
+                commanderBadgeButton.GetComponent<BadgeController>().enabled = true;
+                commanderBadgeButton.GetComponent<Button>().interactable = false;
+                StopCoroutine(listener);
+                StopCoroutine(CheckPending());
             }
         }
     }
