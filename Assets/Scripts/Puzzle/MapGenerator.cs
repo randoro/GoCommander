@@ -77,20 +77,24 @@ public class MapGenerator : MonoBehaviour
     }
     void Update()
 	{
-		timeleft = timeleft + Time.deltaTime;
-		showtime = (int)timeleft;
-		Thetext.text = "time "+ showtime.ToString();
-		poeng = poeng - Time.deltaTime;
-		score = (int)poeng;
-		if (win=true) 
-		{
-			
-			print ("test");
+        if (timeleft < -1)
+        {
+            Debug.Log("lose");
+            StartCoroutine(delayTime());
 
-		}
-
-       
-      
+            SceneManager.LoadScene("mainScene");
+        }
+        if (tile.DidWeWin())
+        {
+            score = (int)timeleft * 1 * 100;
+        }
+        if (!tile.DidWeWin())
+        {
+            timeleft = timeleft - Time.deltaTime;
+        }
+        // Debug.Log(timeleft);
+        showtime = (int)timeleft;
+        Thetext.text = showtime.ToString("");
     }
     IEnumerator GetPuzzles()
     {
