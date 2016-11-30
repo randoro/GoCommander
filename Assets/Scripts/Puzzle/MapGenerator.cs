@@ -521,8 +521,9 @@ public class MapGenerator : MonoBehaviour
                         break;
                     }
                     else if (tileFamily[i, j] == tileFamily[tileFamily.GetLength(0) - 1, tileFamily.GetLength(1) - 1])
-                    {
+					{print ("hejoj");
                         return true;
+
 
                     }
                 }
