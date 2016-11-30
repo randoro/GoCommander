@@ -118,10 +118,10 @@ public class TouchController : MonoBehaviour {
             }
             oldRealPos = realPos;
         }
-		if (mapGenerator1.timestartcolers < 0) {
-			startPoint1.ColorTile.ChangeColor(Color.white);
-			startPoint2.ColorTile.ChangeColor(Color.white);
-		}
+        //if (mapGenerator1.timestartcolers < 0) {
+        //    startPoint1.ColorTile.ChangeColor(Color.white);
+        //    startPoint2.ColorTile.ChangeColor(Color.white);
+        //}
 	}
     private void Failure()
     {

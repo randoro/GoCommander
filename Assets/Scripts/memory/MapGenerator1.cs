@@ -21,8 +21,8 @@ public class MapGenerator1 : MonoBehaviour
    private int starttime;
     //tid som är kvar
     public float timeleft;
-	public float timestartcolers;
-	public float timeoblsticale;
+    //public float timestartcolers;
+	public float timeObstacle;
     public int showtime;
 	public int score;
 	public int lvl;//hämttar lvl från server (svårihihetsgrad)
@@ -58,8 +58,8 @@ public class MapGenerator1 : MonoBehaviour
         GenerateMap();
         SetUpCamera();
         starttime = 45;
-		timeoblsticale = 6;
-		timestartcolers = 4;
+		timeObstacle = 6;
+        //timestartcolers = 4;
         timeleft = starttime;
 		lvl = 1;
 		score = 0;
@@ -107,34 +107,33 @@ public class MapGenerator1 : MonoBehaviour
             StartCoroutine(SendCompletedMinigame());
             StartCoroutine(delayTime());
 		
-           SceneManager.LoadScene("mainScene");
-
-
-        }
-		showtime = (int)timeoblsticale;
-		if (timeoblsticale < 0) {
-
-			timestartcolers=timestartcolers-Time.deltaTime;
-			showtime = (int)timestartcolers;
-		}
-		timeoblsticale=timeoblsticale-Time.deltaTime;
-
-		if (timestartcolers < 0) {
-			showtime = (int)timeleft;
-		}
-        if (timeleft < -1)
-
-        {
-        
-            StartCoroutine(delayTime());
-		
             SceneManager.LoadScene("mainScene");
-        }		
-		if (win==false&&timestartcolers < 0)
+        }
+        else if (win == false)
 		{
 			timeleft = timeleft - Time.deltaTime;
 		}
-	
+		showtime = (int)timeObstacle;
+        timeObstacle -= Time.deltaTime;
+        //if (timeObstacle < 0)
+        //{
+
+        //    timestartcolers = timestartcolers - Time.deltaTime;
+        //    showtime = (int)timestartcolers;
+        //}
+        //if (timestartcolers < 0) {
+        //    showtime = (int)timeleft;
+        //}
+        if (timeObstacle < 0)
+        {
+            showtime = (int)timeleft;
+        }
+        if (timeleft < -1)
+        {
+            StartCoroutine(delayTime());
+		
+            SceneManager.LoadScene("mainScene");
+        }
 
         // Debug.Log(timeleft);
     
@@ -209,7 +208,7 @@ public class MapGenerator1 : MonoBehaviour
                 //Vector3 tilePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
                 Transform newTileInstance = Instantiate(tilePrefab, tilePos, Quaternion.Euler(Vector3.right)) as Transform;
 
-                newTileInstance.localScale = Vector3.one * (1 - gridLinePercent);
+                newTileInstance.localScale = new Vector3(Vector3.one.x * (1 - gridLinePercent), Vector3.one.y * (1 - gridLinePercent), 0.01f);
                 newTileInstance.parent = mapHolder;
 
                 DetermineTileStatus(x, y, mapHolder);
@@ -222,6 +221,7 @@ public class MapGenerator1 : MonoBehaviour
             case 'O':
                 Vector3 circlePos = CoordToVector(x, y);
                 Transform newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
+                newCircle.localScale = Vector3.one * (1 - gridLinePercent);
                 newCircle.parent = mapHolder;
 
 		//	changecolor.Add
@@ -259,7 +259,6 @@ public class MapGenerator1 : MonoBehaviour
 
         Coordinate coordinate;
         ColorTile colorTile;
-	
 
         public Tile(Coordinate coordinate)
         {
@@ -274,8 +273,6 @@ public class MapGenerator1 : MonoBehaviour
             set
             {
                 obstacle = value;
-
-
             }
         }
         public ColorTile ColorTile
@@ -298,7 +295,6 @@ public class MapGenerator1 : MonoBehaviour
             colorTile.ChangeColor(Color.green);
 
             MapGenerator1.win = true;
-
         }
         public void ObstacleCollision()
         {
