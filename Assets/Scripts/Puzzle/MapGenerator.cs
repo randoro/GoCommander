@@ -90,7 +90,7 @@ public class MapGenerator : MonoBehaviour
         }
         if (!tile.DidWeWin())
         {
-            timeleft = timeleft - Time.deltaTime;
+            timeleft = timeleft - Time.deltaTime; ;
         }
         // Debug.Log(timeleft);
         showtime = (int)timeleft;
