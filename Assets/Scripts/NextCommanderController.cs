@@ -8,18 +8,25 @@ public class NextCommanderController : MonoBehaviour {
     public List<Player> voters = new List<Player>();
     int lowestCount = 10;
     public int refreshDelay = 2;
+    public IEnumerator startVoting;
 
     string[] polls;
 
-    public IEnumerator StartVoting()
+    void Start()
+    {
+        startVoting = StartVoting();
+    }
+
+    IEnumerator StartVoting()
     {
         while (true)
         {
             int poll = 0;
             voters.Clear();
 
-            StartCoroutine(CheckPolls());
+            yield return StartCoroutine(CheckPolls());
             candidateList.Clear();
+
 
             for (int i = 0; i < voters.Count; i++)
             {
@@ -32,11 +39,10 @@ public class NextCommanderController : MonoBehaviour {
                     }
 
                     poll++;
-
-                    if (poll >= voters.Count)
+                    
+                    if (poll == voters.Count)
                     {
-                        EndVotingAndCompare(candidateList);
-                        StopCoroutine(StartVoting());
+                        yield return StartCoroutine(EndVotingAndCompare(candidateList));
                     }
                 }
                 else
@@ -47,12 +53,12 @@ public class NextCommanderController : MonoBehaviour {
             yield return new WaitForSeconds(refreshDelay);
         }
     }
-    void EndVotingAndCompare(List<string> candidateList)
+    IEnumerator EndVotingAndCompare(List<string> candidateList)
     {
         if (candidateList.Count < 1)
         {
             string votePost = "STOP";
-            StartCoroutine(ReturnWinner(null, votePost));
+            yield return StartCoroutine(ReturnWinner(null, votePost));
         }
         if (candidateList.Count > 1)
         {
@@ -60,14 +66,14 @@ public class NextCommanderController : MonoBehaviour {
             Random rnd = new Random();
             int index = Random.Range(0, candidateList.Count);
             string winner = candidateList[index];
-            StartCoroutine(ReturnWinner(winner, votePost));
+            yield return StartCoroutine(ReturnWinner(winner, votePost));
         }
         else if (candidateList.Count == 1)
         {
             string votePost = "COMMANDER";
             int index = 0;
             string winner = candidateList[index];
-            StartCoroutine(ReturnWinner(winner, votePost));
+            yield return StartCoroutine(ReturnWinner(winner, votePost));
         }
     }
 
@@ -78,14 +84,15 @@ public class NextCommanderController : MonoBehaviour {
         WWWForm form = new WWWForm();
         if (winner != null)
         {
-            form.AddField("userNamePost", winner);
+            form.AddField("usernamePost", winner);
         }
         form.AddField("userVotePost", votePost);
         form.AddField("userGroupPost", GoogleMap.groupName);
         WWW www = new WWW(votersURL, form);
         yield return www;
+        StopCoroutine(startVoting);
     }
-    public IEnumerator CheckPolls()
+    IEnumerator CheckPolls()
     {
         string votersURL = "http://gocommander.sytes.net/scripts/commander_poll.php";
 
@@ -94,6 +101,8 @@ public class NextCommanderController : MonoBehaviour {
         WWW www = new WWW(votersURL, form);
         yield return www;
         string result = www.text;
+
+        print(result);
 
         if (result != null)
         {
