@@ -75,23 +75,29 @@ public class LobbyUI : MonoBehaviour
 
         current_UI = UI_Phase.UI_Join_Create;
         startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
-        InvokeRepeating("StartLoop", 0.2f, 5);       
+
+        //InvokeRepeating("StartLoop", 0.2f, 5);
+        StartCoroutine(StartLoop());
     }
 
-    private void StartLoop()
+    private IEnumerator StartLoop()
     {
-        if (current_UI == UI_Phase.UI_Join_Create)
+        while (true)
         {
-            StartCoroutine(GetTeamsFromServer());
-        }
-        else if(selectedTeam != null && current_UI == UI_Phase.UI_Lobby)
-        {
-            updatingText.text = "searching for players...";
-            StartCoroutine(GetMembersInTeam());
-            if (MemberListChanged())
+            if (current_UI == UI_Phase.UI_Join_Create)
             {
-                PopulateMemberList();
+                StartCoroutine(GetTeamsFromServer());
             }
+            else if (selectedTeam != null && current_UI == UI_Phase.UI_Lobby)
+            {
+                updatingText.text = "searching for players...";
+                yield return StartCoroutine(GetMembersInTeam());
+                if (MemberListChanged())
+                {
+                    PopulateMemberList();
+                }
+            }
+            yield return new WaitForSeconds(5);
         }
     }
 
@@ -378,7 +384,8 @@ public class LobbyUI : MonoBehaviour
             y = rectTransform.offsetMin.y;
             rectTransform.offsetMax = new Vector2(x, y);
 
-            AddFriendButtonListeners(addFriendButtons[i], memberNameTexts[i].text);
+            //AddFriendButtonListeners(addFriendButtons[i], memberNameTexts[i].text);
+            AddFriendButtonListeners(addFriendButton, memberNameText.text);
 
             updatingText.text = " ";
         }
@@ -389,22 +396,28 @@ public class LobbyUI : MonoBehaviour
 
     private bool MemberListChanged()
     {
-        for (int i = 0; i < fetchedMemberList.Count; i++)
+        if(!memberList.Equals(fetchedMemberList))
         {
-            if (memberList[i] != null)
-            {
-                if (memberList[i].name != fetchedMemberList[i].name)
-                {
-                    CloneToMemberList();
-                    return true;
-                }
-            }
-            else
-            {
-                CloneToMemberList();
-                return true;
-            }
+            print("We made it!");
+            CloneToMemberList();
+            return true;
         }
+        //for (int i = 0; i < fetchedMemberList.Count; i++)
+        //{
+        //    print("We made it!");
+        //    if (memberList[i].name != fetchedMemberList[i].name)
+        //    {
+        //        print("But we did not get to here!");
+        //        CloneToMemberList();
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        CloneToMemberList();
+        //        return true;
+        //    }
+        //}
+        
         return false;
     }
     private void CloneToMemberList()
@@ -451,11 +464,11 @@ public class LobbyUI : MonoBehaviour
         //yield return StartCoroutine(GetMembersInTeam(selectedTeam));
         if (fetchedMemberList.Count < maxTeamMembers)
         {
+            current_UI = UI_Phase.UI_Lobby;
             teamInfo.text = selectedTeam;
             GoogleMap.groupName = selectedTeam;
             this.selectedTeam = selectedTeam;
             yield return StartCoroutine(JoinSelectedTeam());
-            current_UI = UI_Phase.UI_Lobby;
             //if (MemberListChanged())
             //{
             //    PopulateMemberList(selectedTeam);
