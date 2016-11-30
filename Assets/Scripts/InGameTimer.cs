@@ -4,10 +4,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class InGameTimer : MonoBehaviour {
-
-    private static InGameTimer inGameTimer;
-
-    public static float timeLeft;
+    
+    public static float timeLeft = 1200;
     public Text timeLeftText;
     private Text testText;
 
@@ -19,17 +17,7 @@ public class InGameTimer : MonoBehaviour {
 
     void Awake()
     {
-        if(inGameTimer == null)
-        {
-            DontDestroyOnLoad(gameObject);
-            inGameTimer = this;
-        }
-        else if(inGameTimer != this)
-        {
-            Destroy(gameObject);
-        }
-
-        timeLeft = 1200.0f;
+        timeLeft = PlayerPrefs.GetFloat("Player Time");
     }
 
 	// Update is called once per frame
@@ -38,30 +26,29 @@ public class InGameTimer : MonoBehaviour {
         timeLeft -= Time.fixedDeltaTime;
         print(timeLeft);
 
-        //timeLeftText.text = ((int)timeLeft/60).ToString() + " minutes";
+        timeLeftText.text = ((int)timeLeft/60).ToString() + " minutes";
 
-        if(timeLeft <= 0)
+        if (timeLeft <= 0)
         {
             print("GAME IS OVER!!!!");
 
-            timeLeft = 1200.0f;
-
             LeaveTeam();
+
+            timeLeft = 1200.0f;
 
             SceneManager.LoadScene("LobbyScene");
         }
 
 	}
 
-    void OnLevelWasLoaded()
+    void OnDestroy()
     {
-        timeLeftText = GameObject.Find("Time_text").GetComponent<Text>();
-        if(testText != null)
-        {
-            timeLeftText = testText;
-            timeLeftText.text = timeLeft.ToString();
-        }
-        
+        PlayerPrefs.SetFloat("Player Time", timeLeft);
+    }
+
+    void OnApplicationQuit()
+    {
+        timeLeft = 1200.0f;
     }
 
     IEnumerator LeaveTeam()
