@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Timer : MonoBehaviour {
+public class InGameTimer : MonoBehaviour {
 
     public float timeLeft = 1200.0f;
 
@@ -18,7 +18,6 @@ public class Timer : MonoBehaviour {
 	void Update () {
 
         timeLeft -= Time.fixedDeltaTime;
-        print(timeLeft);
 
         timeLeftText.text = ((int)timeLeft/60).ToString();
 
