@@ -76,7 +76,7 @@ public class LobbyUI : MonoBehaviour
         StartCoroutine(GetTeamsFromServer());
         if(selectedTeam != null)
         {
-            updatingText.text = " ";
+            updatingText.text = "searching for players...";
             StartCoroutine(GetMembersInTeam(selectedTeam));
         }
     }
@@ -280,15 +280,24 @@ public class LobbyUI : MonoBehaviour
         }
         else
         {
-            for(int i = 0; i < memberList.Count; i++)
+            Destroy(newMemberElement);
+            newMemberElement = null;
+
+            for (int i = 0; i < maxTeamMembers; i++)
             {
                 Destroy(addFriendButtons[i]);
                 Destroy(memberNameTexts[i]);
+                Destroy(addFriendButtons[i].GetComponent<Button>());
+                Destroy(memberNameTexts[i].GetComponent<Text>());
                 Array.Clear(memberNameTexts, i, memberList.Count);
                 Array.Clear(addFriendButtons, i, memberList.Count);
+                addFriendButtons = null;
+                memberNameTexts = null;
             }
-            Destroy(newMemberElement.gameObject);
         }
+
+        //addFriendButtons = new Button[maxTeamMembers];
+        //memberNameTexts = new Text[maxTeamMembers];
 
         memberElementTransform = memberElementPrefab.GetComponent<RectTransform>();
         memberScrollTransform = memberListContent.GetComponent<RectTransform>();
@@ -318,7 +327,7 @@ public class LobbyUI : MonoBehaviour
 
             AddFriendButtonListeners(addFriendButtons[i], memberNameTexts[i].text);
 
-            updatingText.text = "searching for players...";
+            updatingText.text = " ";
         }
         Debug.Log("Updating list");
         memberCountInfo.text = "" + memberList.Count.ToString() + "/" + maxTeamMembers.ToString();
