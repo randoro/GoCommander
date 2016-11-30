@@ -74,13 +74,16 @@ public class LobbyUI : MonoBehaviour
 
         current_UI = UI_Phase.UI_Join_Create;
         startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
-        InvokeRepeating("StartLoop", 0.2f, 2);       
+        InvokeRepeating("StartLoop", 0.2f, 10);       
     }
 
     private void StartLoop()
     {
-        StartCoroutine(GetTeamsFromServer());
-        if(selectedTeam != null)
+        if (current_UI == UI_Phase.UI_Join_Create)
+        {
+            StartCoroutine(GetTeamsFromServer());
+        }
+        if(selectedTeam != null && current_UI == UI_Phase.UI_Lobby)
         {
             updatingText.text = "searching for players...";
             StartCoroutine(GetMembersInTeam(selectedTeam));
@@ -223,10 +226,7 @@ public class LobbyUI : MonoBehaviour
                   fetchedMemberList.Add(memberData);
                 }
             }
-        if (hasMemberListChanged())
-        {
-            PopulateMemberList(selectedTeam);
-        }
+        hasMemberListChanged();
     }
 
     IEnumerator CreateNewTeam(string newTeamName)
@@ -361,13 +361,12 @@ public class LobbyUI : MonoBehaviour
         memberCountInfo.text = "" + fetchedMemberList.Count.ToString() + "/" + maxTeamMembers.ToString();
     }
 
-    private bool hasMemberListChanged()
+    private void hasMemberListChanged()
     {
         if(memberList.Count != fetchedMemberList.Count)
         {
-            return true;
+            PopulateMemberList(selectedTeam);
         }
-        return false;
     }
 
     public void AddTeamButtonListeners(Button button, string ID)
