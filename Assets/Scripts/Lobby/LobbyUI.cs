@@ -24,7 +24,8 @@ public class LobbyUI : MonoBehaviour
     LobbyData teamData;
     LobbyData memberData;
     List<LobbyData> teamList = new List<LobbyData>();
-    List<LobbyData> memberList = new List<LobbyData>();
+    List<LobbyData> fetchedMemberList = new List<LobbyData>();
+    List<GameObject> memberList = new List<GameObject>();
 
     public GameObject memberListContent;
     public GameObject teamListContent;
@@ -62,6 +63,8 @@ public class LobbyUI : MonoBehaviour
     string selectedTeam;
 
     int maxTeamMembers = 5;
+
+    bool canPopulate = true; 
 
     // Use this for initialization
     void Start()
@@ -151,7 +154,7 @@ public class LobbyUI : MonoBehaviour
     {
         this.selectedTeam = selectedTeam;
 
-        memberList.Clear();
+        fetchedMemberList.Clear();
 
         string getTeamURL = "http://gocommander.sytes.net/scripts/join_group.php";
 
@@ -167,29 +170,29 @@ public class LobbyUI : MonoBehaviour
 
     IEnumerator GetMembersInTeam(string selectedTeam)
     {
-        memberList.Clear();
+        fetchedMemberList.Clear();
 
-        if (addFriendButtons != null && memberNameTexts != null)
-        {
-            for (int i = 0; i < maxTeamMembers; i++)
-            {
-                Destroy(newMemberElement);
-                Destroy(newMemberElement.GetComponent<Button>());
-                Destroy(newMemberElement.GetComponentInChildren<Button>());
-                Destroy(addFriendButtons[i]);
-                Destroy(memberNameTexts[i]);
-                Destroy(addFriendButtons[i].GetComponent<Button>());
-                Destroy(memberNameTexts[i].GetComponent<Text>());
-                Array.Clear(memberNameTexts, i, maxTeamMembers);
-                Array.Clear(addFriendButtons, i, maxTeamMembers);
-                addFriendButtons = null;
-                memberNameTexts = null;
-            }
-        }
+        //if (addFriendButtons != null && memberNameTexts != null)
+        //{
+        //    for (int i = 0; i < maxTeamMembers; i++)
+        //    {
+        //        Destroy(newMemberElement);
+        //        Destroy(newMemberElement.GetComponent<Button>());
+        //        Destroy(newMemberElement.GetComponentInChildren<Button>());
+        //        Destroy(addFriendButtons[i]);
+        //        Destroy(memberNameTexts[i]);
+        //        Destroy(addFriendButtons[i].GetComponent<Button>());
+        //        Destroy(memberNameTexts[i].GetComponent<Text>());
+        //        Array.Clear(memberNameTexts, i, maxTeamMembers);
+        //        Array.Clear(addFriendButtons, i, maxTeamMembers);
+        //        addFriendButtons = null;
+        //        memberNameTexts = null;
+        //    }
+        //}
 
-        addFriendButtons = new Button[maxTeamMembers];
-        memberNameTexts = new Text[maxTeamMembers];
-    
+        //addFriendButtons = new Button[maxTeamMembers];
+        //memberNameTexts = new Text[maxTeamMembers];
+
         this.selectedTeam = selectedTeam;
 
             string getMembersURL = "http://gocommander.sytes.net/scripts/show_group_members.php";
@@ -209,15 +212,18 @@ public class LobbyUI : MonoBehaviour
 
             for (int i = 0; i < teamArray.Length - 1; i++)
             {
-              if (memberList.Count < 6)
+                if (fetchedMemberList.Count < maxTeamMembers + 1)
                 {
                   int id = int.Parse(GetLobbyData(teamArray[i], "ID:"));
                   string member = GetLobbyData(teamArray[i], "Groupusers:");
                   memberData = new LobbyData(id, member);
-                  memberList.Add(memberData);
+                  fetchedMemberList.Add(memberData);
                 }
             }
+        if (hasMemberListChanged())
+        {
             PopulateMemberList(selectedTeam);
+        }
     }
 
     IEnumerator CreateNewTeam(string newTeamName)
@@ -294,47 +300,44 @@ public class LobbyUI : MonoBehaviour
 
     public void PopulateMemberList(string selectedTeam)
     {
-        //if (addFriendButtons == null && memberNameTexts == null)
-        //{
-        //    addFriendButtons = new Button[maxTeamMembers];
-        //    memberNameTexts = new Text[maxTeamMembers];
-        //}
-        //else
-        //{
-        //    for (int i = 0; i < maxTeamMembers; i++)
-        //    {
-        //        //Destroy(newMemberElement);
-        //        //Destroy(newMemberElement.GetComponent<Button>());
-        //        //Destroy(newMemberElement.GetComponentInChildren<Button>());
-        //        //Destroy(addFriendButtons[i].gameObject);
-        //        //Destroy(memberNameTexts[i].gameObject);
-        //        //Destroy(addFriendButtons[i].GetComponent<Button>().gameObject);
-        //        //Destroy(memberNameTexts[i].GetComponent<Text>().gameObject);
-        //        //Array.Clear(memberNameTexts, i, maxTeamMembers);
-        //        //Array.Clear(addFriendButtons, i, maxTeamMembers);
-        //        //addFriendButtons = null;
-        //        //memberNameTexts = null;
-        //    }
-        //}
+        if (addFriendButtons != null && memberNameTexts != null)
+        {
+            for (int i = 0; i < maxTeamMembers; i++)
+            {
+                Destroy(newMemberElement);
+                Destroy(newMemberElement.GetComponent<Button>());
+                Destroy(newMemberElement.GetComponentInChildren<Button>());
+                Destroy(addFriendButtons[i]);
+                Destroy(memberNameTexts[i]);
+                Destroy(addFriendButtons[i].GetComponent<Button>());
+                Destroy(memberNameTexts[i].GetComponent<Text>());
+                Array.Clear(memberNameTexts, i, maxTeamMembers);
+                Array.Clear(addFriendButtons, i, maxTeamMembers);
+                addFriendButtons = null;
+                memberNameTexts = null;
+            }
+        }
 
-        //addFriendButtons = new Button[maxTeamMembers];
-        //memberNameTexts = new Text[maxTeamMembers];
+        addFriendButtons = new Button[maxTeamMembers];
+        memberNameTexts = new Text[maxTeamMembers];
 
         memberElementTransform = memberElementPrefab.GetComponent<RectTransform>();
         memberScrollTransform = memberListContent.GetComponent<RectTransform>();
 
         int j = 0;
-        for (int i = 0; i < memberList.Count; i++)
+        for (int i = 0; i < fetchedMemberList.Count; i++)
         {
             j++;
 
-                newMemberElement = Instantiate(memberElementPrefab, memberScrollTransform) as GameObject;
-                newMemberElement.transform.SetParent(memberScrollTransform, false);
-                addFriendButtons[i] = newMemberElement.GetComponentInChildren<Button>();
-                addFriendButtons[i].enabled = true;
-                memberNameTexts[i] = addFriendButtons[i].GetComponentInChildren<Text>();
-                memberNameTexts[i].text = memberList[i].name;
-                memberNameTexts[i].fontSize = 12;
+            newMemberElement = Instantiate(memberElementPrefab, memberScrollTransform) as GameObject;
+            newMemberElement.transform.SetParent(memberScrollTransform, false);
+            addFriendButtons[i] = newMemberElement.GetComponentInChildren<Button>();
+            addFriendButtons[i].enabled = true;
+            memberNameTexts[i] = addFriendButtons[i].GetComponentInChildren<Text>();
+            memberNameTexts[i].text = fetchedMemberList[i].name;
+            memberNameTexts[i].fontSize = 12;
+
+            memberList.Add(newMemberElement);
 
             RectTransform rectTransform = newMemberElement.GetComponent<RectTransform>();
 
@@ -350,8 +353,18 @@ public class LobbyUI : MonoBehaviour
 
             updatingText.text = " ";
         }
+        
         Debug.Log("Updating list");
-        memberCountInfo.text = "" + memberList.Count.ToString() + "/" + maxTeamMembers.ToString();
+        memberCountInfo.text = "" + fetchedMemberList.Count.ToString() + "/" + maxTeamMembers.ToString();
+    }
+
+    private bool hasMemberListChanged()
+    {
+        if(memberList.Count != fetchedMemberList.Count)
+        {
+            return true;
+        }
+        return false;
     }
 
     public void AddTeamButtonListeners(Button button, string ID)
