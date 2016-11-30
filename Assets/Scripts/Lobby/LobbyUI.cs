@@ -211,6 +211,8 @@ public class LobbyUI : MonoBehaviour
 
             string result = www.text;
 
+            print(result);
+
             if (result != null)
             {
                 teamArray = result.Split(';');
@@ -247,8 +249,6 @@ public class LobbyUI : MonoBehaviour
 
     IEnumerator LeaveTeam()
     {
-        memberList.Clear();
-
         string getMembersURL = "http://gocommander.sytes.net/scripts/leave_group.php";
 
         WWWForm form = new WWWForm();
@@ -257,9 +257,16 @@ public class LobbyUI : MonoBehaviour
 
         yield return www;
 
+
+
         string result = www.text;
 
         StartCoroutine(GetMembersInTeam(selectedTeam));
+    }
+
+    private void DestroyMemberListElements()
+    {
+        
     }
 
     string GetLobbyData(string data, string index)
@@ -307,22 +314,29 @@ public class LobbyUI : MonoBehaviour
 
     public void PopulateMemberList(string selectedTeam)
     {
-        if (addFriendButtons != null && memberNameTexts != null)
+        //if (addFriendButtons != null && memberNameTexts != null)
+        //{
+        //    for (int i = 0; i < maxTeamMembers; i++)
+        //    {
+        //        Destroy(memberList[i]);
+
+        //        //Destroy(newMemberElement);
+        //        //Destroy(newMemberElement.GetComponent<Button>());
+        //        //Destroy(newMemberElement.GetComponentInChildren<Button>());
+        //        //Destroy(addFriendButtons[i]);
+        //        //Destroy(memberNameTexts[i]);
+        //        //Destroy(addFriendButtons[i].GetComponent<Button>());
+        //        //Destroy(memberNameTexts[i].GetComponent<Text>());
+        //        //Array.Clear(memberNameTexts, i, maxTeamMembers);
+        //        //Array.Clear(addFriendButtons, i, maxTeamMembers);
+        //        //addFriendButtons = null;
+        //        //memberNameTexts = null;
+        //    }
+        //}
+
+        for (int i = 0; i < maxTeamMembers; i++)
         {
-            for (int i = 0; i < maxTeamMembers; i++)
-            {
-                Destroy(newMemberElement);
-                Destroy(newMemberElement.GetComponent<Button>());
-                Destroy(newMemberElement.GetComponentInChildren<Button>());
-                Destroy(addFriendButtons[i]);
-                Destroy(memberNameTexts[i]);
-                Destroy(addFriendButtons[i].GetComponent<Button>());
-                Destroy(memberNameTexts[i].GetComponent<Text>());
-                Array.Clear(memberNameTexts, i, maxTeamMembers);
-                Array.Clear(addFriendButtons, i, maxTeamMembers);
-                addFriendButtons = null;
-                memberNameTexts = null;
-            }
+            Destroy(memberList[i]);
         }
 
         addFriendButtons = new Button[maxTeamMembers];
@@ -367,10 +381,10 @@ public class LobbyUI : MonoBehaviour
 
     private void CheckMemberListChanged()
     {
-        if(memberList.Count != fetchedMemberList.Count)
-        {
+        //if(memberList.Count != fetchedMemberList.Count)
+        //{
             PopulateMemberList(selectedTeam);
-        }
+        //}
     }
 
     public void AddTeamButtonListeners(Button button, string ID)
