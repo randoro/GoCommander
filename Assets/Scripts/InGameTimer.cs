@@ -5,21 +5,40 @@ using UnityEngine.UI;
 
 public class InGameTimer : MonoBehaviour {
 
-    public float timeLeft = 1200.0f;
+    private static InGameTimer inGameTimer;
 
+    public static float timeLeft;
     public Text timeLeftText;
+    private Text testText;
 
 	// Use this for initialization
-	void Start () {
-	
-	}
-	
+    void Start()
+    {
+
+    }
+
+    void Awake()
+    {
+        if(inGameTimer == null)
+        {
+            DontDestroyOnLoad(gameObject);
+            inGameTimer = this;
+        }
+        else if(inGameTimer != this)
+        {
+            Destroy(gameObject);
+        }
+
+        timeLeft = 1200.0f;
+    }
+
 	// Update is called once per frame
 	void Update () {
 
         timeLeft -= Time.fixedDeltaTime;
+        print(timeLeft);
 
-        timeLeftText.text = ((int)timeLeft/60).ToString();
+        //timeLeftText.text = ((int)timeLeft/60).ToString() + " minutes";
 
         if(timeLeft <= 0)
         {
@@ -33,6 +52,17 @@ public class InGameTimer : MonoBehaviour {
         }
 
 	}
+
+    void OnLevelWasLoaded()
+    {
+        timeLeftText = GameObject.Find("Time_text").GetComponent<Text>();
+        if(testText != null)
+        {
+            timeLeftText = testText;
+            timeLeftText.text = timeLeft.ToString();
+        }
+        
+    }
 
     IEnumerator LeaveTeam()
     {
