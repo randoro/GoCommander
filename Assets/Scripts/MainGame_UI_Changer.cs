@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainGame_UI_Changer : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class MainGame_UI_Changer : MonoBehaviour
         helpUI,
         messagePlayerListUI,
         messageOptionsUI,
-        treasureOrbsUI
+        treasureOrbsUI,
     }
     public static ActiveUI activeUI;
 
@@ -31,6 +32,7 @@ public class MainGame_UI_Changer : MonoBehaviour
     public GameObject help_btn;
     public GameObject exit_btn;
     public GameObject commander_badge_btn;
+    public Button scoreBtn;
 
     // Use this for initialization
     void Start ()
@@ -113,6 +115,19 @@ public class MainGame_UI_Changer : MonoBehaviour
         }
 	}
 
+    IEnumerator LeaveTeam()
+    {
+        string getMembersURL = "http://gocommander.sytes.net/scripts/leave_group.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", GoogleMap.username);
+        WWW www = new WWW(getMembersURL, form);
+
+        yield return www;
+
+        string result = www.text;
+    }
+
     public void MenuBtnClick()
     {
         activeUI = ActiveUI.menuUI;
@@ -135,11 +150,17 @@ public class MainGame_UI_Changer : MonoBehaviour
 
     public void ExitbtnClick()
     {
+        StartCoroutine(LeaveTeam());
         SceneManager.LoadScene("login");
     }
 
     public void CommanderBadgeBtnClick()
     {
         BadgeController.interested = true;
+    }
+
+    public void ScoreBtnClick()
+    {
+        SceneManager.LoadScene("highscoreScene");
     }
 }

@@ -5,73 +5,87 @@ using System.Collections.Generic;
 public class NextCommanderController : MonoBehaviour {
 
     List<string> candidateList = new List<string>();
-    List<Player> voters = new List<Player>();
+    public List<Player> voters = new List<Player>();
     int lowestCount = 10;
+    public int refreshDelay = 2;
 
     string[] polls;
 
-    public void StartVoting()
+    public IEnumerator StartVoting()
     {
-        int poll = 0;
-        voters.Clear();
-
-        StartCoroutine(CheckPolls());
-        candidateList.Clear();
-
-        for (int i = 0; i < voters.Count; i++)
+        while (true)
         {
-            if (voters[i].vote.Contains("CANDIDATE") || voters[i].vote.Contains("NOT"))
+            int poll = 0;
+            voters.Clear();
 
+            StartCoroutine(CheckPolls());
+            candidateList.Clear();
+
+            for (int i = 0; i < voters.Count; i++)
             {
-                if (voters[i].vote.Contains("CANDIDATE") && voters[i].counter <= lowestCount)
+                if (voters[i].vote.Contains("CANDIDATE") || voters[i].vote.Contains("NOT"))
                 {
-                    lowestCount = voters[i].counter;
-                    candidateList.Add(voters[i].name);
+                    if (voters[i].vote.Contains("CANDIDATE") && voters[i].counter <= lowestCount)
+                    {
+                        lowestCount = voters[i].counter;
+                        candidateList.Add(voters[i].name);
+                    }
+
+                    poll++;
+
+                    if (poll >= voters.Count)
+                    {
+                        EndVotingAndCompare(candidateList);
+                        StopCoroutine(StartVoting());
+                    }
                 }
-
-                poll++;
-
-                if (poll >= voters.Count)
+                else
                 {
-                    EndVotingAndCompare(candidateList);
+                    break;
                 }
             }
+            yield return new WaitForSeconds(refreshDelay);
         }
     }
-
-    public void EndVotingAndCompare(List<string> candidateList)
+    void EndVotingAndCompare(List<string> candidateList)
     {
         if (candidateList.Count < 1)
         {
-            string winner = "STOP";
-            StartCoroutine(ReturnWinner(winner));
+            string votePost = "STOP";
+            StartCoroutine(ReturnWinner(null, votePost));
         }
         if (candidateList.Count > 1)
         {
+            string votePost = "COMMANDER";
             Random rnd = new Random();
             int index = Random.Range(0, candidateList.Count);
             string winner = candidateList[index];
-            StartCoroutine(ReturnWinner(winner));
+            StartCoroutine(ReturnWinner(winner, votePost));
         }
         else if (candidateList.Count == 1)
         {
+            string votePost = "COMMANDER";
             int index = 0;
             string winner = candidateList[index];
-            StartCoroutine(ReturnWinner(winner));
+            StartCoroutine(ReturnWinner(winner, votePost));
         }
     }
 
-    IEnumerator ReturnWinner(string winner)
+    IEnumerator ReturnWinner(string winner, string votePost)
     {
         string votersURL = "http://gocommander.sytes.net/scripts/commander_vote.php";
 
         WWWForm form = new WWWForm();
-        form.AddField("userNamePost", GoogleMap.username);
-        form.AddField("userVotePost", winner);
+        if (winner != null)
+        {
+            form.AddField("userNamePost", winner);
+        }
+        form.AddField("userVotePost", votePost);
+        form.AddField("userGroupPost", GoogleMap.groupName);
         WWW www = new WWW(votersURL, form);
         yield return www;
     }
-    IEnumerator CheckPolls()
+    public IEnumerator CheckPolls()
     {
         string votersURL = "http://gocommander.sytes.net/scripts/commander_poll.php";
 
@@ -89,7 +103,7 @@ public class NextCommanderController : MonoBehaviour {
         for (int i = 0; i < polls.Length - 1; i++)
         {
             int id = int.Parse(GetDataValue(polls[i], "ID:"));
-            string name = GetDataValue(polls[i], "Username.");
+            string name = GetDataValue(polls[i], "Username:");
             string groupName = GetDataValue(polls[i], "Groupname:");
             int counter = int.Parse(GetDataValue(polls[i], "Counter:"));
             string vote = GetDataValue(polls[i], "Vote:");
@@ -97,7 +111,6 @@ public class NextCommanderController : MonoBehaviour {
             voters.Add(new Player(vote, counter, id, name, groupName));
         }
     }
-
     string GetDataValue(string data, string index)
     {
         string value = data.Substring(data.IndexOf(index) + index.Length);

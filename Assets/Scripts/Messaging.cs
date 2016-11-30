@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class Messaging : MonoBehaviour {
 
@@ -17,49 +18,77 @@ public class Messaging : MonoBehaviour {
     private Text playerToMessage;
     private Text messageToSend;
 
-    private string[] messageList = new string[4];
-    private string[] playerList = new string[4];
+    public Button player1Button;
+    public Button player2Button;
+    public Button player3Button;
+    public Button player4Button;
+
+    private string[] messageArray = new string[4];
+    private string[] playerArray = new string[4];
+    private string[] playerArrayTest = new string[4];
+    private string[] teamArray = new string[10];
+
+    LobbyData memberData;
+
+    //private LobbyData[] memberList = new LobbyData[10];
+    List<LobbyData> memberList = new List<LobbyData>();
 
     // Use this for initialization
     void Start () {
+        
+        StartCoroutine(GetMembersInTeam());
 
         SetMessages();
         SetPlayers();
-	}
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
+        
+    }
 
     private void SetMessages()
     {
-        messageList[0] = "Great work!";
-        messageList[1] = "Thank you!";
-        messageList[2] = "Hello!";
-        messageList[3] = "Hurry up!";
+        messageArray[0] = "Great work!";
+        messageArray[1] = "Thank you!";
+        messageArray[2] = "Hello!";
+        messageArray[3] = "Hurry up!";
 
-        message1Text.text = messageList[0];
-        message2Text.text = messageList[1];
-        message3Text.text = messageList[2];
-        message4Text.text = messageList[3];
+        message1Text.text = messageArray[0];
+        message2Text.text = messageArray[1];
+        message3Text.text = messageArray[2];
+        message4Text.text = messageArray[3];
     }
 
-    private void SetPlayers()
+    public void SetPlayers()
     {
-        playerList[0] = "Milan";
-        playerList[1] = "Rasmus";
-        playerList[2] = "player";
-        playerList[3] = "player";
+        for (int i = 0; i < 4; i++)
+        {
+            playerArray[i] = memberList[i].name;
+        }
 
-        player1Name.text = playerList[0];
-        player2Name.text = playerList[1];
-        player3Name.text = playerList[2];
-        player4Name.text = playerList[3];
+        player1Name.text = playerArray[0];
+        player2Name.text = playerArray[1];
+        player3Name.text = playerArray[2];
+        player4Name.text = playerArray[3];
+    }
+
+    public void EnablePlayerButtons(Button _b , Text _t)
+    {
+        if(_t.text.Equals(""))
+        {
+            _b.interactable = false;
+        }
     }
 
     public void SetPlayerToMessage(Text _playerToMessage)
     {
+        player1Name.text = playerArray[0];
+        player2Name.text = playerArray[1];
+        player3Name.text = playerArray[2];
+        player4Name.text = playerArray[3];
+
         playerToMessage = _playerToMessage;
 
         print(playerToMessage.text);
@@ -75,13 +104,27 @@ public class Messaging : MonoBehaviour {
 
     public void SendToServer()
     {
+        player1Name.text = playerArray[0];
+        player2Name.text = playerArray[1];
+        player3Name.text = playerArray[2];
+        player4Name.text = playerArray[3];
+
         StartCoroutine(SendMessage());
+    }
+
+    string GetLobbyData(string data, string index)
+    {
+        string value = data.Substring(data.IndexOf(index) + index.Length);
+        if (value.Contains("|"))
+            value = value.Remove(value.IndexOf("|"));
+        return value;
     }
 
     public IEnumerator SendMessage()
     {
         string message = messageToSend.text;
         string player = playerToMessage.text;
+        
 
         print("Sent: " + message + "To player: " + player);
 
@@ -89,12 +132,43 @@ public class Messaging : MonoBehaviour {
 
         WWWForm form = new WWWForm();
         form.AddField("userRecPost", player);
-        form.AddField("userMessagePost", player + ": " + message);
+        form.AddField("userMessagePost", GoogleMap.username + ": " + message);
 
         WWW www = new WWW(loginUserURL, form);
 
         yield return www;
 
         print("Message is sent");
+    }
+
+    IEnumerator GetMembersInTeam()
+    {
+        string getMembersURL = "http://gocommander.sytes.net/scripts/show_group_members.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("userGroupPost", GoogleMap.groupName);
+        WWW www = new WWW(getMembersURL, form);
+
+        yield return www;
+
+        string result = www.text;
+
+        print(result);
+
+        if (result != null)
+        {
+            teamArray = result.Split(';');
+        }
+
+        for (int i = 0; i < teamArray.Length - 1; i++)
+        {
+            if (memberList.Count < 10)
+            {
+                int id = int.Parse(GetLobbyData(teamArray[i], "ID:"));
+                string member = GetLobbyData(teamArray[i], "Groupusers:");
+                memberData = new LobbyData(id, member);
+                memberList.Add(memberData);
+            }
+        }
     }
 }

@@ -33,13 +33,13 @@ public class TreasureSpawner : MonoBehaviour {
 
         treasureList = new List<GameObject>();
         fetchedList = new List<Treasure>();
-        
+
         StartCoroutine(UpdateTreasures());
     }
 
     void Update()
     {
-        
+        //print(GoogleMap.groupName);
     }
 
     IEnumerator UpdateTreasures()
