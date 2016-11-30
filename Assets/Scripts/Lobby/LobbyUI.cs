@@ -68,7 +68,7 @@ public class LobbyUI : MonoBehaviour
     {
         current_UI = UI_Phase.UI_Join_Create;
         startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
-        InvokeRepeating("StartLoop", 0.2f, 5);       
+        InvokeRepeating("StartLoop", 0.2f, 2);       
     }
 
     private void StartLoop()
@@ -169,6 +169,27 @@ public class LobbyUI : MonoBehaviour
     {
         memberList.Clear();
 
+        if (addFriendButtons != null && memberNameTexts != null)
+        {
+            for (int i = 0; i < maxTeamMembers; i++)
+            {
+                Destroy(newMemberElement);
+                Destroy(newMemberElement.GetComponent<Button>());
+                Destroy(newMemberElement.GetComponentInChildren<Button>());
+                Destroy(addFriendButtons[i]);
+                Destroy(memberNameTexts[i]);
+                Destroy(addFriendButtons[i].GetComponent<Button>());
+                Destroy(memberNameTexts[i].GetComponent<Text>());
+                Array.Clear(memberNameTexts, i, maxTeamMembers);
+                Array.Clear(addFriendButtons, i, maxTeamMembers);
+                addFriendButtons = null;
+                memberNameTexts = null;
+            }
+        }
+
+        addFriendButtons = new Button[maxTeamMembers];
+        memberNameTexts = new Text[maxTeamMembers];
+    
         this.selectedTeam = selectedTeam;
 
             string getMembersURL = "http://gocommander.sytes.net/scripts/show_group_members.php";
@@ -273,28 +294,28 @@ public class LobbyUI : MonoBehaviour
 
     public void PopulateMemberList(string selectedTeam)
     {
-        if (addFriendButtons == null && memberNameTexts == null)
-        {
-            addFriendButtons = new Button[maxTeamMembers];
-            memberNameTexts = new Text[maxTeamMembers];
-        }
-        else
-        {
-            Destroy(newMemberElement);
-            newMemberElement = null;
-
-            for (int i = 0; i < maxTeamMembers; i++)
-            {
-                Destroy(addFriendButtons[i]);
-                Destroy(memberNameTexts[i]);
-                Destroy(addFriendButtons[i].GetComponent<Button>());
-                Destroy(memberNameTexts[i].GetComponent<Text>());
-                Array.Clear(memberNameTexts, i, memberList.Count);
-                Array.Clear(addFriendButtons, i, memberList.Count);
-                addFriendButtons = null;
-                memberNameTexts = null;
-            }
-        }
+        //if (addFriendButtons == null && memberNameTexts == null)
+        //{
+        //    addFriendButtons = new Button[maxTeamMembers];
+        //    memberNameTexts = new Text[maxTeamMembers];
+        //}
+        //else
+        //{
+        //    for (int i = 0; i < maxTeamMembers; i++)
+        //    {
+        //        //Destroy(newMemberElement);
+        //        //Destroy(newMemberElement.GetComponent<Button>());
+        //        //Destroy(newMemberElement.GetComponentInChildren<Button>());
+        //        //Destroy(addFriendButtons[i].gameObject);
+        //        //Destroy(memberNameTexts[i].gameObject);
+        //        //Destroy(addFriendButtons[i].GetComponent<Button>().gameObject);
+        //        //Destroy(memberNameTexts[i].GetComponent<Text>().gameObject);
+        //        //Array.Clear(memberNameTexts, i, maxTeamMembers);
+        //        //Array.Clear(addFriendButtons, i, maxTeamMembers);
+        //        //addFriendButtons = null;
+        //        //memberNameTexts = null;
+        //    }
+        //}
 
         //addFriendButtons = new Button[maxTeamMembers];
         //memberNameTexts = new Text[maxTeamMembers];
