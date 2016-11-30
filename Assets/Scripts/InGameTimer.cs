@@ -49,6 +49,7 @@ public class InGameTimer : MonoBehaviour {
     void OnApplicationQuit()
     {
         timeLeft = 1200.0f;
+        PlayerPrefs.SetFloat("Player Time", timeLeft);
     }
 
     IEnumerator LeaveTeam()

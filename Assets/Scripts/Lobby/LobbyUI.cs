@@ -66,6 +66,9 @@ public class LobbyUI : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        InGameTimer.timeLeft = 1200.0f;
+        PlayerPrefs.SetFloat("Player Time", InGameTimer.timeLeft);
+
         current_UI = UI_Phase.UI_Join_Create;
         startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
         InvokeRepeating("StartLoop", 0.2f, 2);       
