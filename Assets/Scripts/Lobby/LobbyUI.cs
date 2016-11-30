@@ -84,10 +84,14 @@ public class LobbyUI : MonoBehaviour
         {
             StartCoroutine(GetTeamsFromServer());
         }
-        if(selectedTeam != null && current_UI == UI_Phase.UI_Lobby)
+        else if(selectedTeam != null && current_UI == UI_Phase.UI_Lobby)
         {
             updatingText.text = "searching for players...";
-            StartCoroutine(GetMembersInTeam(selectedTeam));
+            StartCoroutine(GetMembersInTeam());
+            if (MemberListChanged())
+            {
+                PopulateMemberList();
+            }
         }
     }
 
@@ -157,9 +161,9 @@ public class LobbyUI : MonoBehaviour
         PopulateTeamList();
     }
 
-    IEnumerator JoinSelectedTeam(string selectedTeam)
+    IEnumerator JoinSelectedTeam()
     {
-        this.selectedTeam = selectedTeam;
+        //this.selectedTeam = selectedTeam;
 
         //fetchedMemberList.Clear();
 
@@ -175,7 +179,7 @@ public class LobbyUI : MonoBehaviour
         //StartCoroutine(GetMembersInTeam(selectedTeam));
     }
 
-    IEnumerator GetMembersInTeam(string selectedTeam)
+    IEnumerator GetMembersInTeam()
     {
         fetchedMemberList.Clear();
 
@@ -200,7 +204,7 @@ public class LobbyUI : MonoBehaviour
         //addFriendButtons = new Button[maxTeamMembers];
         //memberNameTexts = new Text[maxTeamMembers];
 
-        this.selectedTeam = selectedTeam;
+        //this.selectedTeam = selectedTeam;
 
         string getMembersURL = "http://gocommander.sytes.net/scripts/show_group_members.php";
 
@@ -258,7 +262,7 @@ public class LobbyUI : MonoBehaviour
 
         string result = www.text;
 
-        StartCoroutine(GetMembersInTeam(selectedTeam));
+        //StartCoroutine(GetMembersInTeam(selectedTeam));
     }
 
     private void DestroyMemberListElements()
@@ -309,7 +313,7 @@ public class LobbyUI : MonoBehaviour
         }
     }
 
-    public void PopulateMemberList(string selectedTeam)
+    public void PopulateMemberList()
     {
         //if (addFriendButtons != null && memberNameTexts != null)
         //{
@@ -438,19 +442,24 @@ public class LobbyUI : MonoBehaviour
         StartCoroutine(CreateNewTeam(newTeamName));
     }
 
-    public IEnumerator TeamButtonClick(string selectedTeam)
+    public void TeamButtonClick(string selectedTeam)
     {
-        yield return StartCoroutine(GetMembersInTeam(selectedTeam));
+        StartCoroutine(TeamButtonOperations(selectedTeam));
+    }
+    IEnumerator TeamButtonOperations(string selectedTeam)
+    {
+        //yield return StartCoroutine(GetMembersInTeam(selectedTeam));
         if (fetchedMemberList.Count < maxTeamMembers)
         {
-            current_UI = UI_Phase.UI_Lobby;
             teamInfo.text = selectedTeam;
             GoogleMap.groupName = selectedTeam;
-            yield return StartCoroutine(JoinSelectedTeam(selectedTeam));
-            if (MemberListChanged())
-            {
-                PopulateMemberList(selectedTeam);
-            }
+            this.selectedTeam = selectedTeam;
+            yield return StartCoroutine(JoinSelectedTeam());
+            current_UI = UI_Phase.UI_Lobby;
+            //if (MemberListChanged())
+            //{
+            //    PopulateMemberList(selectedTeam);
+            //}
         }
     }
 
@@ -467,7 +476,7 @@ public class LobbyUI : MonoBehaviour
 
     public void LeaveLobbyButtonClick()
     {
-        LeaveTeam();
+        StartCoroutine(LeaveTeam());
         SceneManager.LoadScene("LobbyScene");
     }
 
