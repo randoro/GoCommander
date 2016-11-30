@@ -14,11 +14,15 @@ public class CircleControl : MonoBehaviour
 	GameObject circleCopy;
 
 	float speedRadius = 0;
-	bool isDragging = false;
+	bool isDragging = false, destroyCopy = false;
 	//bool canMove = true;
 	int maxAmountOfMoves = 2;
 	int amountOfMoves;
 	int x, y;
+
+    public Color ourRed;
+    public Color ourGreen;
+    public Color ourBlue;
 	void Start()
 	{
 		moveDirection = new Vector3(0, 0, 0);
@@ -45,15 +49,15 @@ public class CircleControl : MonoBehaviour
 	{
 		if(color == MapGenerator.Tile.CircleColor.Red)
 		{
-			GetComponent<MeshRenderer>().material.color = Color.red;
+			GetComponent<MeshRenderer>().material.color = ourRed;
 		}
 		else if (color == MapGenerator.Tile.CircleColor.Green)
 		{
-			GetComponent<MeshRenderer>().material.color = Color.green;
+			GetComponent<MeshRenderer>().material.color = ourGreen;
 		}
 		else if (color == MapGenerator.Tile.CircleColor.Blue)
 		{
-			GetComponent<MeshRenderer>().material.color = Color.blue;
+			GetComponent<MeshRenderer>().material.color = ourBlue;
 		}
 	}
 	private void BindToTile()
@@ -92,6 +96,7 @@ public class CircleControl : MonoBehaviour
 
 				offset = realPosition - transform.position;
 				isDragging = true;
+                destroyCopy = false;
 			}
 		}
 		//Release
@@ -113,13 +118,10 @@ public class CircleControl : MonoBehaviour
 			}
 			else
 			{
-				GameObject.Destroy(circleCopy);
-				//mapGenerator.tileArray[x, y].InitialMoveDecrease += 1;
-
-				//amountOfMoves++;
-				//transform.localScale += new Vector3(0.2f, 0.2f, 0.0f);
-				AddMoves(1);
-				BindToTile();
+                destroyCopy = true;
+                //GameObject.Destroy(circleCopy);
+                //AddMoves(1);
+                //BindToTile();
 			}
 
 			speedRadius = Vector3.Distance(transform.position, tilePosition);
@@ -139,6 +141,14 @@ public class CircleControl : MonoBehaviour
 		if (!isDragging && !WithinCircleRadius(tilePosition, transform.position, 0.01f))
 		{
 			SnapToGrid();
+
+            if (WithinCircleRadius(tilePosition, transform.position, 0.15f) && destroyCopy) // Note (Calle): Here the radius is bigger for the sake of making the circle bigger as soon as it clashes with the copy which is supposed to be removed
+            {
+                GameObject.Destroy(circleCopy);
+                AddMoves(1);
+                BindToTile();
+                destroyCopy = false;
+            }
 		}
 	}
 	private void AddMoves(int addition)
@@ -147,7 +157,6 @@ public class CircleControl : MonoBehaviour
 		amountOfMoves += addition;
 		transform.localScale += new Vector3(0.2f, 0.2f, 0.0f) * addition;
 	}
-
 	private void SnapToGrid()
 	{
 		float distance_right_now = Vector3.Distance(transform.position, tilePosition);

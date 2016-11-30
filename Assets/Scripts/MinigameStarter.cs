@@ -90,6 +90,7 @@ public class MinigameStarter : MonoBehaviour {
                         TreasureHolder th = treasure.GetComponent<TreasureHolder>();
 
                         treasure.GetComponent<ParticleSystem>().Play();
+                        CommandsLeft.commandsLeft--;
 
                         Treasure t = th.treasure;
                         int type = t.type;

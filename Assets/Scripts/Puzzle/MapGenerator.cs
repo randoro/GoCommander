@@ -51,7 +51,7 @@ public class MapGenerator : MonoBehaviour
 	{
 		//circleCount = Random.Range(5,15);
 		//shuffleSeeed = Random.Range(0, 9999);
-		gridLinePercent = 0.3f;
+        //gridLinePercent = 0.3f;
 
 		int random_level = UnityEngine.Random.Range(1, 5);
 
@@ -170,7 +170,7 @@ public class MapGenerator : MonoBehaviour
 				//Vector3 tilePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
 				Transform newTileInstance = Instantiate(tilePrefab, tilePos, Quaternion.Euler(Vector3.right)) as Transform;
 
-				newTileInstance.localScale = Vector3.one * (1 - gridLinePercent);
+				newTileInstance.localScale = new Vector3(Vector3.one.x * (1 - gridLinePercent), Vector3.one.y * (1 - gridLinePercent), 0.01f);
 				newTileInstance.parent = mapHolder;
 
 				CreateCircle(x, y, mapHolder);

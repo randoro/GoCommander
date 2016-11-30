@@ -1,14 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
-public class Timer : MonoBehaviour {
+public class CommandsLeft : MonoBehaviour {
 
-    float timer = 30;
-    int showTime;
-
+    public static int commandsLeft = 7;
 	// Use this for initialization
 	void Start () {
 	
@@ -16,10 +13,8 @@ public class Timer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        timer -= Time.deltaTime;
-        showTime = (int)timer;
-        gameObject.GetComponent<Text>().text = "time left: " + showTime.ToString();
-        if (timer <= 0)
+        gameObject.GetComponent<Text>().text = "commands left: " + commandsLeft.ToString();
+        if (commandsLeft == 0)
         {
             StartCoroutine(BackToMainScene());
             enabled = false;
