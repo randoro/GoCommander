@@ -74,7 +74,7 @@ public class LobbyUI : MonoBehaviour
 
         current_UI = UI_Phase.UI_Join_Create;
         startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
-        InvokeRepeating("StartLoop", 0.2f, 10);       
+        InvokeRepeating("StartLoop", 0.2f, 5);       
     }
 
     private void StartLoop()
@@ -226,7 +226,7 @@ public class LobbyUI : MonoBehaviour
                   fetchedMemberList.Add(memberData);
                 }
             }
-        hasMemberListChanged();
+        CheckMemberListChanged();
     }
 
     IEnumerator CreateNewTeam(string newTeamName)
@@ -256,6 +256,8 @@ public class LobbyUI : MonoBehaviour
         yield return www;
 
         string result = www.text;
+
+        CheckMemberListChanged();
     }
 
     string GetLobbyData(string data, string index)
@@ -361,7 +363,7 @@ public class LobbyUI : MonoBehaviour
         memberCountInfo.text = "" + fetchedMemberList.Count.ToString() + "/" + maxTeamMembers.ToString();
     }
 
-    private void hasMemberListChanged()
+    private void CheckMemberListChanged()
     {
         if(memberList.Count != fetchedMemberList.Count)
         {
