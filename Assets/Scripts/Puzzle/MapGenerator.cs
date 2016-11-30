@@ -82,7 +82,7 @@ public class MapGenerator : MonoBehaviour
 		Thetext.text = "time "+ showtime.ToString();
 		poeng = poeng - Time.deltaTime;
 		score = (int)poeng;
-		if (win=true) 
+		if (win==false) 
 		{
 			
 			print ("test");
