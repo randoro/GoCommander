@@ -247,6 +247,7 @@ public class LobbyUI : MonoBehaviour
 
     IEnumerator LeaveTeam()
     {
+
         string getMembersURL = "http://gocommander.sytes.net/scripts/leave_group.php";
 
         WWWForm form = new WWWForm();
@@ -257,7 +258,7 @@ public class LobbyUI : MonoBehaviour
 
         string result = www.text;
 
-        CheckMemberListChanged();
+        StartCoroutine(GetMembersInTeam(selectedTeam));
     }
 
     string GetLobbyData(string data, string index)
@@ -305,6 +306,8 @@ public class LobbyUI : MonoBehaviour
 
     public void PopulateMemberList(string selectedTeam)
     {
+        memberList.Clear();
+
         if (addFriendButtons != null && memberNameTexts != null)
         {
             for (int i = 0; i < maxTeamMembers; i++)
