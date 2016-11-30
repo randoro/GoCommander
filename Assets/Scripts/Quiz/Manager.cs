@@ -41,6 +41,10 @@ public class Manager : MonoBehaviour
         StartCoroutine(GetQuizes());
 
         defaultBackgroundColor = camera.backgroundColor;
+
+        answeredQuestions = 0;
+
+        alreadyAnsweredQuestions.Clear();
     }
 
     // Update is called once per frame
@@ -177,18 +181,20 @@ public class Manager : MonoBehaviour
     {
         randomQuestion = Random.Range(0, 3);
         alreadyAnsweredQuestions.Add(randomQuestion);
-        print(alreadyAnsweredQuestions);
-        print(randomQuestion);
-
-        randomQuestion = Random.Range(0, 3);
 
         for (int i = 0; i < alreadyAnsweredQuestions.Count; i++)
         {
-            if(randomQuestion == alreadyAnsweredQuestions[i])
+            print(randomQuestion);
+            print("ALREADYANSWEREDQUESTIONS: " + alreadyAnsweredQuestions[i]);
+            print(alreadyAnsweredQuestions.Count);
+
+            if (randomQuestion == alreadyAnsweredQuestions[i])
             {
                 print("Question already answered");
 
                 randomQuestion = Random.Range(0, 3);
+
+                //RandomizeQuestion();
             }
         }
         print("new question generated");
