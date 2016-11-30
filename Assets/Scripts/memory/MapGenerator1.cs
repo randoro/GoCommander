@@ -20,7 +20,7 @@ public class MapGenerator1 : MonoBehaviour
     //tiden man har på sig att klara spelet
    private int starttime;
     //tid som är kvar
-    public float timeleft;
+    public float timeTaken;
     //public float timestartcolers;
 	public float timeObstacle;
     public int showtime;
@@ -57,10 +57,10 @@ public class MapGenerator1 : MonoBehaviour
         SetUpReadFromFile();
         GenerateMap();
         SetUpCamera();
-        starttime = 45;
+        starttime = 0;
 		timeObstacle = 6;
         //timestartcolers = 4;
-        timeleft = starttime;
+        timeTaken = starttime;
 		lvl = 1;
 		score = 0;
 
@@ -102,17 +102,13 @@ public class MapGenerator1 : MonoBehaviour
     {
         if (win == true)
         {
-			score = (int)timeleft * lvl * 100;
+            score = (lvl * 100) / (int)timeTaken;
 
             StartCoroutine(SendCompletedMinigame());
             StartCoroutine(delayTime());
 		
             SceneManager.LoadScene("mainScene");
         }
-        else if (win == false)
-		{
-			timeleft = timeleft - Time.deltaTime;
-		}
 		showtime = (int)timeObstacle;
         timeObstacle -= Time.deltaTime;
         //if (timeObstacle < 0)
@@ -126,9 +122,10 @@ public class MapGenerator1 : MonoBehaviour
         //}
         if (timeObstacle < 0)
         {
-            showtime = (int)timeleft;
+            timeTaken += Time.deltaTime;
+            showtime = (int)timeTaken;
         }
-        if (timeleft < -1)
+        if (timeTaken < -1)
         {
             StartCoroutine(delayTime());
 		
