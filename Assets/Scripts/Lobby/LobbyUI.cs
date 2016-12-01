@@ -93,8 +93,6 @@ public class LobbyUI : MonoBehaviour
             if (current_UI == UI_Phase.UI_Join_Create)
             {
                 updatingTeamsText.text = "searching for teams...";
-
-                Debug.Log("phase 1");
                 
                 yield return StartCoroutine(GetTeamsFromServer());
                 if (TeamListChanged())
@@ -415,8 +413,10 @@ public class LobbyUI : MonoBehaviour
 
             updatingMembersText.text = "searching for players...";
         }
-        
-        memberCountInfo.text = "" + fetchedMemberList.Count.ToString() + "/" + maxTeamMembers.ToString();
+
+        memberCountInfo.text = "" + fetchedMemberList.Count.ToString() + " / " 
+            + maxTeamMembers.ToString()+ " members";
+
     }
 
     private bool MemberListChanged()
