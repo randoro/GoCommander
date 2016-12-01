@@ -29,9 +29,10 @@ public class Messaging : MonoBehaviour {
     private string[] teamArray = new string[10];
 
     LobbyData memberData;
-
-    //private LobbyData[] memberList = new LobbyData[10];
+    
     List<LobbyData> memberList = new List<LobbyData>();
+
+    private int amountOfPlayers = 0;
 
     // Use this for initialization
     void Start () {
@@ -39,13 +40,19 @@ public class Messaging : MonoBehaviour {
         StartCoroutine(GetMembersInTeam());
 
         SetMessages();
-        SetPlayers();
-
     }
 	
 	// Update is called once per frame
 	void Update () {
-        
+
+        CheckAmountOfPlayers();
+
+        SetPlayers();
+
+        EnablePlayerButtons(player1Button, player1Name);
+        EnablePlayerButtons(player2Button, player2Name);
+        EnablePlayerButtons(player3Button, player3Name);
+        EnablePlayerButtons(player4Button, player4Name);
     }
 
     private void SetMessages()
@@ -63,8 +70,13 @@ public class Messaging : MonoBehaviour {
 
     public void SetPlayers()
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < amountOfPlayers; i++)
         {
+            if (memberList[i].name.Equals(GoogleMap.username))
+            {
+                memberList.Remove(memberList[i]);
+            }
+
             playerArray[i] = memberList[i].name;
         }
 
@@ -72,6 +84,16 @@ public class Messaging : MonoBehaviour {
         player2Name.text = playerArray[1];
         player3Name.text = playerArray[2];
         player4Name.text = playerArray[3];
+
+        EnablePlayerButtons(player1Button, player1Name);
+        EnablePlayerButtons(player2Button, player2Name);
+        EnablePlayerButtons(player3Button, player3Name);
+        EnablePlayerButtons(player4Button, player4Name);
+    }
+
+    void CheckAmountOfPlayers()
+    {
+        amountOfPlayers = memberList.Count;
     }
 
     public void EnablePlayerButtons(Button _b , Text _t)
@@ -80,15 +102,11 @@ public class Messaging : MonoBehaviour {
         {
             _b.interactable = false;
         }
+        _b.interactable = true;
     }
 
     public void SetPlayerToMessage(Text _playerToMessage)
     {
-        player1Name.text = playerArray[0];
-        player2Name.text = playerArray[1];
-        player3Name.text = playerArray[2];
-        player4Name.text = playerArray[3];
-
         playerToMessage = _playerToMessage;
 
         print(playerToMessage.text);
