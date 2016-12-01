@@ -80,7 +80,6 @@ public class MapGenerator1 : MonoBehaviour
             //listPuzzle.Add(new PuzzleList(id, level));
         }
     }
-
     string GetDataValue(string data, string index)
     {
         string value = data.Substring(data.IndexOf(index) + index.Length);
@@ -102,7 +101,6 @@ public class MapGenerator1 : MonoBehaviour
         //}
         if (timeObstacle >= 0)
         {
-            print("Horseshit");
             showtime = (int)timeObstacle;
             timeObstacle -= Time.deltaTime;
             theTimeText.text = "Obstacles disappears in " + showtime.ToString();
@@ -147,7 +145,7 @@ public class MapGenerator1 : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("usernamePost", GoogleMap.username);
         form.AddField("userScorePost", score);
-        form.AddField("userGamePost", "Puzzle");
+        form.AddField("userGamePost", "Memory");
 
         WWW www = new WWW(scoreURL, form);
 

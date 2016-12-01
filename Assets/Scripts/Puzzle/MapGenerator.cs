@@ -91,7 +91,6 @@ public class MapGenerator : MonoBehaviour
             SceneManager.LoadScene("mainScene");
 		}
 	}
-
     IEnumerator SendGroupScore(int score)
     {
         string scoreURL = "http://gocommander.sytes.net/scripts/score_send_group.php";
