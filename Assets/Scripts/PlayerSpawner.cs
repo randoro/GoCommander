@@ -105,6 +105,7 @@ public class PlayerSpawner : MonoBehaviour {
 
         WWWForm form = new WWWForm();
         form.AddField("usernamePost", GoogleMap.username);
+        form.AddField("userGroupPost", GoogleMap.groupName);
 
         WWW www = new WWW(playerURL, form);
         yield return www;

@@ -26,7 +26,7 @@ public class InGameTimer : MonoBehaviour {
         timeLeft -= Time.fixedDeltaTime;
         print(timeLeft);
 
-        timeLeftText.text = ((int)timeLeft/60).ToString() + " minutes";
+        timeLeftText.text = ((int)timeLeft/60).ToString() + " min";
 
         if (timeLeft <= 0)
         {

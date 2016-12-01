@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using Random = UnityEngine.Random;
+using UnityEngine.UI;
 
 public class GoalSpawner : MonoBehaviour
 {
@@ -13,7 +14,8 @@ public class GoalSpawner : MonoBehaviour
 
     private GoalHolder goalHolder;
 
-
+    public static float time = 0;
+    public Text timeText;
 
     // Use this for initialization
     void Start () {
@@ -23,9 +25,13 @@ public class GoalSpawner : MonoBehaviour
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
+        time += Time.fixedDeltaTime;
 
-	    if (!goalSpawned)
+        timeText.text = ((int)time).ToString() + " sec";
+
+        if (!goalSpawned)
 	    {
 	        if (GoogleMap.centerLocation.latitude != 0 && GoogleMap.centerLocation.longitude != 0)
 	        {
