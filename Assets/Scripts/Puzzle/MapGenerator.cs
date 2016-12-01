@@ -42,7 +42,7 @@ public class MapGenerator : MonoBehaviour
 	public int showtime;
 	public int score;
 	public int lvl;//hämttar lvl från server (svårihihetsgrad)
-	private float counter;
+	private float countDown;
 	public static bool win =false;
 
 
@@ -72,7 +72,7 @@ public class MapGenerator : MonoBehaviour
 		starttime = 0;
 		timeleft = starttime;
 		score = 1000;
-		counter = score;
+		countDown = 0f;
 
 
 	}
@@ -80,21 +80,46 @@ public class MapGenerator : MonoBehaviour
 	{
 		timeleft = timeleft + Time.deltaTime;
 		showtime = (int)timeleft;
-		counter=counter - Time.deltaTime;
+		countDown += Time.deltaTime;
 		Thetext.text = "time "+ showtime.ToString();
 
 	
-		if (win=true)
+		if (win)
 		{
-			score = (int)counter;
-
-
+			score = score - (int)countDown;
+            StartCoroutine(SendGroupScore(score));
+            StartCoroutine(SendHighscore(score));
 		}
-
-
-
 	}
-	IEnumerator GetPuzzles()
+
+    IEnumerator SendGroupScore(int score)
+    {
+        string scoreURL = "http://gocommander.sytes.net/scripts/score_send_group.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("userScorePost", score);
+        form.AddField("userGroupPost", GoogleMap.groupName);
+
+        WWW www = new WWW(scoreURL, form);
+
+        yield return www;
+    }
+
+    IEnumerator SendHighscore(int score)
+    {
+        string scoreURL = "http://gocommander.sytes.net/scripts/highscore_send.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", GoogleMap.username);
+        form.AddField("userScorePost", score);
+        form.AddField("userGamePost", "Puzzle");
+
+        WWW www = new WWW(scoreURL, form);
+
+        yield return www;
+    }
+
+    IEnumerator GetPuzzles()
 	{
 		string puzzleURL = "http://gocommander.sytes.net/scripts/puzzlelevel.php";
 
