@@ -43,7 +43,7 @@ public class MapGenerator : MonoBehaviour
 	public int score;
 	public int lvl;//hämttar lvl från server (svårihihetsgrad)
 	private float countDown;
-	public static bool win =false;
+	public static bool win = false;
 
 
 	//HighScoreHolder
@@ -81,14 +81,14 @@ public class MapGenerator : MonoBehaviour
 		timeleft = timeleft + Time.deltaTime;
 		showtime = (int)timeleft;
 		countDown += Time.deltaTime;
-		Thetext.text = "time "+ showtime.ToString();
+		Thetext.text = "time: "+ showtime.ToString();
 
-	
 		if (win)
 		{
-			score = score - (int)countDown;
+            score = 1000 / (int)countDown;
             StartCoroutine(SendGroupScore(score));
             StartCoroutine(SendHighscore(score));
+            SceneManager.LoadScene("mainScene");
 		}
 	}
 
@@ -192,7 +192,6 @@ public class MapGenerator : MonoBehaviour
 				tileArray[x, y] = newTile;
 
 				Vector3 tilePos = CoordToVector(x, y);
-				//Vector3 tilePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
 				Transform newTileInstance = Instantiate(tilePrefab, tilePos, Quaternion.Euler(Vector3.right)) as Transform;
 
 				newTileInstance.localScale = new Vector3(Vector3.one.x * (1 - gridLinePercent), Vector3.one.y * (1 - gridLinePercent), 0.01f);
@@ -420,19 +419,11 @@ public class MapGenerator : MonoBehaviour
 
 				if (DidWeWin())
 				{
-
-
 //					InformativeMessage.isPuzzleCompleted = true;
 					MapGenerator.win = true;
-
-					SceneManager.LoadScene("mainScene");
-
-
 				}
 			}
 		}
-
-
 		public void ChangeNeighbourChain(CircleColor newColor, Tile parent)
 		{
 			usedTiles.Add(this); // We need to MOVE ON - we don't wanna come back here and make the whole thing explode

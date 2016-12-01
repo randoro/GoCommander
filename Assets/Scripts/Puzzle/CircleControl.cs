@@ -20,6 +20,8 @@ public class CircleControl : MonoBehaviour
 	int amountOfMoves;
 	int x, y;
 
+    float z_depth;
+
     public Color ourRed;
     public Color ourGreen;
     public Color ourBlue;
@@ -78,7 +80,7 @@ public class CircleControl : MonoBehaviour
 		{
 			touchPosition = Input.GetTouch(0).position;
 			Vector3 realPosition = Input.GetTouch(0).position;
-			realPosition.z = 10f;
+            realPosition.z = -z_depth;
 			realPosition = Camera.main.ScreenToWorldPoint(realPosition);
 
 			if (!isDragging &&

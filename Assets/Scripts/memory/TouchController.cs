@@ -7,7 +7,7 @@ public class TouchController : MonoBehaviour {
     //Vector2 tileCoordinatePosition;
     int x, y, finger_x, finger_y;
 
-    bool isDragging, itHasBegun = false;
+    bool isDragging, itHasBegun = false, letOneOfThemStayRed = false;
     Vector3 touchPosition;
     Vector3 realPos;
     Vector3 oldRealPos;
@@ -15,10 +15,30 @@ public class TouchController : MonoBehaviour {
     List<MapGenerator1.Tile> pressedTiles;
     MapGenerator1.Tile startPoint1, startPoint2;
 
+    float z_depth;
+
+    public Color red;
+    public Color green;
+    public Color blue;
+    public Color white;
+
+    public static Color ourRed;
+    public static Color ourGreen;
+    public static Color ourBlue;
+    public static Color ourWhite;
+
 	// Use this for initialization
 	void Start ()
     {
         mapGenerator1 = FindObjectOfType<MapGenerator1>();
+
+        z_depth = GameObject.FindGameObjectWithTag("MainCamera").transform.position.z;
+
+        ourRed = red;
+        ourGreen = green;
+        ourBlue = blue;
+        ourWhite = white;
+
         //yield return mapGenerator1.done;
         //tileArray = mapGenerator1.tileArray;
         //pressedTiles = new List<MapGenerator1.Tile>();
@@ -33,9 +53,8 @@ public class TouchController : MonoBehaviour {
 
     private void SetStartPointColor()
     {
-        startPoint1.ColorTile.ChangeColor(Color.blue);
-		startPoint2.ColorTile.ChangeColor(Color.blue);
-
+        startPoint1.ColorTile.ChangeColor(ourBlue);
+		startPoint2.ColorTile.ChangeColor(ourBlue);
     }
 
 	// Update is called once per frame
@@ -43,7 +62,6 @@ public class TouchController : MonoBehaviour {
     {
         if(MapGenerator1.finished)
         {
-            print(MapGenerator1.finished.ToString());
             tileArray = mapGenerator1.tileArray;
             pressedTiles = new List<MapGenerator1.Tile>();
 
@@ -54,74 +72,84 @@ public class TouchController : MonoBehaviour {
 
             MapGenerator1.finished = false;
         }
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        else if (MapGenerator1.startUpdating)
         {
-            touchPosition = Input.GetTouch(0).position;
-            realPos = Input.GetTouch(0).position;
-            realPos.z = 10f;
-            realPos = Camera.main.ScreenToWorldPoint(realPos);
-
-            if (WithinMapBounds((int)realPos.x, (int)realPos.y) && tileArray[(int)realPos.x, (int)realPos.y] == startPoint1 || 
-                WithinMapBounds((int)realPos.x, (int)realPos.y) && tileArray[(int)realPos.x, (int)realPos.y] == startPoint2)
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
             {
-                isDragging = true;
-                pressedTiles.Add(tileArray[(int)realPos.x, (int)realPos.y]);
+                touchPosition = Input.GetTouch(0).position;
+                realPos = Input.GetTouch(0).position;
+                realPos.z = -z_depth;
+                realPos = Camera.main.ScreenToWorldPoint(realPos);
+
+                if (WithinMapBounds((int)realPos.x, (int)realPos.y) && tileArray[(int)realPos.x, (int)realPos.y] == startPoint1 ||
+                    WithinMapBounds((int)realPos.x, (int)realPos.y) && tileArray[(int)realPos.x, (int)realPos.y] == startPoint2)
+                {
+                    isDragging = true;
+                    pressedTiles.Add(tileArray[(int)realPos.x, (int)realPos.y]);
+                    oldRealPos = realPos;
+                }
+            }
+            //Release
+            else if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
+            {
+                isDragging = false;
+
+                int count = pressedTiles.Count;
+
+                if (letOneOfThemStayRed)
+                {
+                    count--;
+                    letOneOfThemStayRed = false;
+                }
+
+                for (int i = 0; i < count; i++)
+                {
+                    pressedTiles[i].TileReleased();
+                }
+
+                pressedTiles.Clear();
+                SetStartPointColor();
+            }
+            //Drag
+            else if (isDragging)
+            {
+                touchPosition = Input.GetTouch(0).position;
+                realPos = Input.GetTouch(0).position;
+                realPos.z = z_depth;
+                realPos = Camera.main.ScreenToWorldPoint(realPos);
+
+                if (WithinMapBounds((int)realPos.x, (int)realPos.y) &&
+                    new Vector2((int)realPos.x, (int)realPos.y) != new Vector2((int)oldRealPos.x, (int)oldRealPos.y))
+                {
+                    if (NeighbourTilesCheck() &&
+                        !pressedTiles.Contains(tileArray[(int)realPos.x, (int)realPos.y]) &&
+                        tileArray[(int)oldRealPos.x, (int)oldRealPos.y] == pressedTiles[pressedTiles.Count - 1])
+                    {
+                        pressedTiles.Add(tileArray[(int)realPos.x, (int)realPos.y]);
+
+                        if (tileArray[(int)realPos.x, (int)realPos.y].Obstacle == true)
+                        {
+                            Failure();
+
+                            isDragging = false;
+
+                            letOneOfThemStayRed = true;
+                        }
+                        else if (tileArray[(int)realPos.x, (int)realPos.y] == startPoint1 || tileArray[(int)realPos.x, (int)realPos.y] == startPoint2)
+                        {
+                            Victory();
+
+                            isDragging = false;
+                        }
+                        else
+                        {
+                            tileArray[(int)realPos.x, (int)realPos.y].TilePressed();
+                        }
+                    }
+                }
                 oldRealPos = realPos;
             }
         }
-        //Release
-        else if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
-        {
-            isDragging = false;
-
-            for (int i = 0; i < pressedTiles.Count; i++)
-            {
-                pressedTiles[i].TileReleased();
-            }
-            pressedTiles.Clear();
-            SetStartPointColor();
-        }
-        //Drag
-        else if (isDragging)
-        {
-            touchPosition = Input.GetTouch(0).position;
-            realPos = Input.GetTouch(0).position;
-            realPos.z = 10f;
-            realPos = Camera.main.ScreenToWorldPoint(realPos);
-
-            if (WithinMapBounds((int)realPos.x, (int)realPos.y) && 
-                new Vector2((int)realPos.x, (int)realPos.y) != new Vector2((int)oldRealPos.x, (int)oldRealPos.y))
-            {
-                if (NeighbourTilesCheck() && 
-                    !pressedTiles.Contains(tileArray[(int)realPos.x, (int)realPos.y]) && 
-                    tileArray[(int)oldRealPos.x, (int)oldRealPos.y] == pressedTiles[pressedTiles.Count - 1])
-                {
-                    pressedTiles.Add(tileArray[(int)realPos.x, (int)realPos.y]);
-
-                    if (tileArray[(int)realPos.x, (int)realPos.y].Obstacle == true)
-                    {
-                        Failure();
-
-                        isDragging = false;
-                    }
-                    else if (tileArray[(int)realPos.x, (int)realPos.y] == startPoint1 || tileArray[(int)realPos.x, (int)realPos.y] == startPoint2)
-                    {
-                        Victory();
-
-                        isDragging = false;
-                    }
-                    else
-                    {
-                        tileArray[(int)realPos.x, (int)realPos.y].TilePressed();
-                    }
-                } 
-            }
-            oldRealPos = realPos;
-        }
-        //if (mapGenerator1.timestartcolers < 0) {
-        //    startPoint1.ColorTile.ChangeColor(Color.white);
-        //    startPoint2.ColorTile.ChangeColor(Color.white);
-        //}
 	}
     private void Failure()
     {
@@ -129,6 +157,7 @@ public class TouchController : MonoBehaviour {
         {
             pressedTiles[i].ObstacleCollision();
         }
+        MapGenerator1.tries++;
     }
     private void Victory()
     {
@@ -136,6 +165,8 @@ public class TouchController : MonoBehaviour {
         {
             pressedTiles[i].GoalIsReached();
         }
+        MapGenerator1.win = true;
+        enabled = false;
     }
     private bool NeighbourTilesCheck()
     {

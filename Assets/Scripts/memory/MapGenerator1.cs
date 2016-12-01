@@ -14,11 +14,11 @@ public class MapGenerator1 : MonoBehaviour
 
     private String[] memoryLevels;
     private String level;
-    public Text Thetext;
+    public Text theTimeText, theTriesText;
     public int shuffleSeeed;
-    int circleCount; 
+    int circleCount;
     //tiden man har på sig att klara spelet
-   private int starttime;
+    private int starttime;
     //tid som är kvar
     public float timeTaken;
     //public float timestartcolers;
@@ -34,7 +34,8 @@ public class MapGenerator1 : MonoBehaviour
   [Range(0, 1)]
     public float gridLinePercent;
 
-    public static bool win = false;
+    public static bool win = false, startUpdating = false;
+    public static int tries = 1;
 
     public Tile[,] tileArray;
     public Tile startPoint;
@@ -51,22 +52,12 @@ public class MapGenerator1 : MonoBehaviour
         // !!! Denna metod skall läsas så tidigt som möjligt !!!
         yield return StartCoroutine(GetMemory());
 
-        //circleCount = Random.Range(5,15);
-        //shuffleSeeed = Random.Range(0, 9999);
-        //gridLinePercent = 0.3f;
         SetUpReadFromFile();
         GenerateMap();
         SetUpCamera();
-        starttime = 0;
-		timeObstacle = 6;
-        //timestartcolers = 4;
-        timeTaken = starttime;
-		lvl = 1;
+        timeTaken = 0;
 		score = 0;
-
-		//changecolor = FindObjectOfType<Cerclecolerchencher> ();
-
-}
+    }
 
     IEnumerator GetMemory()
     {
@@ -100,17 +91,6 @@ public class MapGenerator1 : MonoBehaviour
 
     void Update()
     {
-        if (win == true)
-        {
-            score = (lvl * 100) / (int)timeTaken;
-
-            StartCoroutine(SendCompletedMinigame());
-            StartCoroutine(delayTime());
-		
-            SceneManager.LoadScene("mainScene");
-        }
-		showtime = (int)timeObstacle;
-        timeObstacle -= Time.deltaTime;
         //if (timeObstacle < 0)
         //{
 
@@ -120,21 +100,58 @@ public class MapGenerator1 : MonoBehaviour
         //if (timestartcolers < 0) {
         //    showtime = (int)timeleft;
         //}
-        if (timeObstacle < 0)
+        if (timeObstacle >= 0)
         {
+            print("Horseshit");
+            showtime = (int)timeObstacle;
+            timeObstacle -= Time.deltaTime;
+            theTimeText.text = "Obstacles disappears in " + showtime.ToString();
+        }
+        else if (timeObstacle < 0)
+        {
+            theTimeText.alignment = TextAnchor.UpperCenter;
+            startUpdating = true;
             timeTaken += Time.deltaTime;
             showtime = (int)timeTaken;
-        }
-        if (timeTaken < -1)
-        {
-            StartCoroutine(delayTime());
-		
-            SceneManager.LoadScene("mainScene");
-        }
+            theTimeText.text = "time: " + showtime.ToString();
+            theTriesText.text = "tries taken: " + tries.ToString();
 
-        // Debug.Log(timeleft);
-    
-        Thetext.text ="timeleft "+ showtime.ToString("");
+            if (win)
+            {
+                score = (1000 / (int)timeTaken) / tries;
+                StartCoroutine(SendGroupScore(score));
+                StartCoroutine(SendHighscore(score));
+                //StartCoroutine(SendCompletedMinigame());
+                //StartCoroutine(delayTime());
+                SceneManager.LoadScene("mainScene");
+            }
+        }
+    }
+    IEnumerator SendGroupScore(int score)
+    {
+        string scoreURL = "http://gocommander.sytes.net/scripts/score_send_group.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("userScorePost", score);
+        form.AddField("userGroupPost", GoogleMap.groupName);
+
+        WWW www = new WWW(scoreURL, form);
+
+        yield return www;
+    }
+
+    IEnumerator SendHighscore(int score)
+    {
+        string scoreURL = "http://gocommander.sytes.net/scripts/highscore_send.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", GoogleMap.username);
+        form.AddField("userScorePost", score);
+        form.AddField("userGamePost", "Puzzle");
+
+        WWW www = new WWW(scoreURL, form);
+
+        yield return www;
     }
 
     IEnumerator delayTime()
@@ -285,21 +302,21 @@ public class MapGenerator1 : MonoBehaviour
         }
         public void TilePressed()
         {
-            colorTile.ChangeColor(Color.blue);
+            colorTile.ChangeColor(TouchController.ourBlue);
         }
         public void GoalIsReached()
         {
-            colorTile.ChangeColor(Color.green);
+            colorTile.ChangeColor(TouchController.ourGreen);
 
             MapGenerator1.win = true;
         }
         public void ObstacleCollision()
         {
-            colorTile.ChangeColor(Color.red);
+            colorTile.ChangeColor(TouchController.ourRed);
         }
         public void TileReleased()
         {
-            colorTile.ChangeColor(Color.white);
+            colorTile.ChangeColor(TouchController.ourWhite);
         }
 
         //IEnumerator delayTime()
@@ -307,9 +324,6 @@ public class MapGenerator1 : MonoBehaviour
         //    yield return new WaitForSeconds(5);
         //}
     }
-
-
-
     public struct Coordinate
     {
         public int x;

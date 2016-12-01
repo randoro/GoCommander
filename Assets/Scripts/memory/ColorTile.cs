@@ -21,7 +21,6 @@ public class ColorTile : MonoBehaviour
     MapGenerator1 mapGenerator1;
     Vector2 tileCoordinatePosition;
     int x, y, finger_x, finger_y;
-    Color defaultColor;
 
     void Awake()
     {
