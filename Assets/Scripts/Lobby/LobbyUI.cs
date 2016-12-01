@@ -22,11 +22,14 @@ public class LobbyUI : MonoBehaviour
     public Canvas UI_AddFriend;
 
     LobbyData teamData;
-    LobbyData memberData;
+    List<LobbyData> fetchedTeamList = new List<LobbyData>();
     List<LobbyData> teamList = new List<LobbyData>();
+    List<GameObject> teamObjectList = new List<GameObject>();
+
+    LobbyData memberData;
     List<LobbyData> fetchedMemberList = new List<LobbyData>();
     List<LobbyData> memberList = new List<LobbyData>();
-    List<GameObject> memberListGO = new List<GameObject>();
+    List<GameObject> memberObjectList = new List<GameObject>();
 
     public GameObject memberListContent;
     public GameObject teamListContent;
@@ -35,11 +38,15 @@ public class LobbyUI : MonoBehaviour
     public GameObject teamInputField;
 
     GameObject newMemberElement;
+    GameObject newTeamElement;
 
     public Text userInfo;
     public Text teamInfo;
     public Text memberCountInfo;
-    public Text updatingText;
+    public Text teamCountInfo;
+    public Text updatingMembersText;
+    public Text updatingTeamsText;
+
 
     Text[] teamNameTexts;
     Text[] memberNameTexts;
@@ -76,7 +83,6 @@ public class LobbyUI : MonoBehaviour
         current_UI = UI_Phase.UI_Join_Create;
         startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
 
-        //InvokeRepeating("StartLoop", 0.2f, 5);
         StartCoroutine(StartLoop());
     }
 
@@ -86,10 +92,20 @@ public class LobbyUI : MonoBehaviour
         {
             if (current_UI == UI_Phase.UI_Join_Create)
             {
-                StartCoroutine(GetTeamsFromServer());
+                updatingTeamsText.text = "searching for teams...";
+
+                Debug.Log("phase 1");
+                
+                yield return StartCoroutine(GetTeamsFromServer());
+                if (TeamListChanged())
+                {
+                    PopulateTeamList();
+                }
             }
             else if (selectedTeam != null && current_UI == UI_Phase.UI_Lobby)
             {
+                updatingMembersText.text = "searching for players...";
+
                 yield return StartCoroutine(GetMembersInTeam());
                 if (MemberListChanged())
                 {
@@ -142,6 +158,8 @@ public class LobbyUI : MonoBehaviour
 
     IEnumerator GetTeamsFromServer()
     {
+        fetchedTeamList.Clear();
+
         string getTeamsURL = "http://gocommander.sytes.net/scripts/show_group.php";
 
         WWW www = new WWW(getTeamsURL);
@@ -161,9 +179,9 @@ public class LobbyUI : MonoBehaviour
             string teamName = GetLobbyData(teamArray[i], "Groupname:");
             id++;
             teamData = new LobbyData(id, teamName);
-            teamList.Add(teamData);                    
+            fetchedTeamList.Add(teamData);                    
         }
-        PopulateTeamList();
+        //PopulateTeamList();
     }
 
     IEnumerator JoinSelectedTeam()
@@ -270,11 +288,6 @@ public class LobbyUI : MonoBehaviour
         //StartCoroutine(GetMembersInTeam(selectedTeam));
     }
 
-    private void DestroyMemberListElements()
-    {
-        
-    }
-
     string GetLobbyData(string data, string index)
     {
         string value = data.Substring(data.IndexOf(index) + index.Length);
@@ -284,25 +297,36 @@ public class LobbyUI : MonoBehaviour
     }
 
     private void PopulateTeamList()
-    { 
-        teamJoinButtons = new Button[teamList.Count];
-        teamNameTexts = new Text[teamList.Count];
+    {
+        //teamJoinButtons = new Button[fetchedTeamList.Count];
+        //teamNameTexts = new Text[fetchedTeamList.Count];
 
         teamElementTransform = teamElementPrefab.GetComponent<RectTransform>();
         teamScrollTransform = teamListContent.GetComponent<RectTransform>();
 
+        for (int i = 0; i < teamObjectList.Count; i++) // Note (Calle): This will not run the first loop - otherwise the whole thing would explode I guess
+        {
+            Destroy(teamObjectList[i]);
+            //addFriendButtons[i] = null;
+            //memberNameTexts[i] = null;
+        }
+
         int j = 0;
-        for (int i = 0; i < teamList.Count; i++)
+        for (int i = 0; i < fetchedTeamList.Count; i++)
         {
             j++;
 
-            GameObject newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform) as GameObject;
+            newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform) as GameObject;
             newTeamElement.transform.SetParent(teamScrollTransform, false);
-            teamJoinButtons[i] = newTeamElement.GetComponentInChildren<Button>();
-            teamJoinButtons[i].enabled = true;
-            teamNameTexts[i] = teamJoinButtons[i].GetComponentInChildren<Text>();
-            teamNameTexts[i].text = teamList[i].name;
-            teamNameTexts[i].fontSize = 12;
+            //teamJoinButtons[i] = newTeamElement.GetComponentInChildren<Button>();
+            Button teamJoinButton = newTeamElement.GetComponentInChildren<Button>();
+            teamJoinButton.enabled = true;
+            //teamNameTexts[i] = teamJoinButtons[i].GetComponentInChildren<Text>();
+            Text teamNameText = teamJoinButton.GetComponentInChildren<Text>();
+            teamNameText.text = fetchedTeamList[i].name;
+            teamNameText.fontSize = 12;
+
+            teamObjectList.Add(newTeamElement);
 
             RectTransform rectTransform = newTeamElement.GetComponent<RectTransform>();
 
@@ -314,8 +338,11 @@ public class LobbyUI : MonoBehaviour
             y = rectTransform.offsetMin.y;
             rectTransform.offsetMax = new Vector2(x, y);
 
-            AddTeamButtonListeners(teamJoinButtons[i], teamNameTexts[i].text);
+            AddTeamButtonListeners(teamJoinButton, teamNameText.text);
+
+            updatingTeamsText.text = "updating team list...";
         }
+        teamCountInfo.text = "avaliable teams: " + fetchedTeamList.Count.ToString();
     }
 
     public void PopulateMemberList()
@@ -340,9 +367,9 @@ public class LobbyUI : MonoBehaviour
         //    }
         //}
 
-        for (int i = 0; i < memberListGO.Count; i++) // Note (Calle): This will not run the first loop - otherwise the whole thing would explode I guess
+        for (int i = 0; i < memberObjectList.Count; i++) // Note (Calle): This will not run the first loop - otherwise the whole thing would explode I guess
         {
-            Destroy(memberListGO[i]);
+            Destroy(memberObjectList[i]);
             //addFriendButtons[i] = null;
             //memberNameTexts[i] = null;
         }
@@ -371,7 +398,7 @@ public class LobbyUI : MonoBehaviour
             //memberNameTexts[i].text = fetchedMemberList[i].name;
             //memberNameTexts[i].fontSize = 12;
 
-            memberListGO.Add(newMemberElement);
+            memberObjectList.Add(newMemberElement);
 
             RectTransform rectTransform = newMemberElement.GetComponent<RectTransform>();
 
@@ -386,10 +413,9 @@ public class LobbyUI : MonoBehaviour
             //AddFriendButtonListeners(addFriendButtons[i], memberNameTexts[i].text);
             AddFriendButtonListeners(addFriendButton, memberNameText.text);
 
-            updatingText.text = " ";
+            updatingMembersText.text = "searching for players...";
         }
         
-        Debug.Log("Updating list");
         memberCountInfo.text = "" + fetchedMemberList.Count.ToString() + "/" + maxTeamMembers.ToString();
     }
 
@@ -413,6 +439,7 @@ public class LobbyUI : MonoBehaviour
         }
         return false;
     }
+
     private void CloneToMemberList()
     {
         memberList.Clear();
@@ -425,6 +452,41 @@ public class LobbyUI : MonoBehaviour
         }
 
         memberList = fetchedMemberListClone;
+    }
+
+    private bool TeamListChanged()
+    {
+        if (teamList.Count != fetchedTeamList.Count)
+        {
+            CloneToTeamList();
+            return true;
+        }
+        else
+        {
+            for (int i = 0; i < teamList.Count; i++)
+            {
+                if (!teamList.Exists(x => x.name.Contains(fetchedTeamList[i].name)))
+                {
+                    CloneToTeamList();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void CloneToTeamList()
+    {
+        teamList.Clear();
+
+        List<LobbyData> fetchedTeamListClone = new List<LobbyData>();
+
+        for (int j = 0; j < fetchedTeamList.Count; j++)
+        {
+            fetchedTeamListClone.Add((LobbyData)fetchedTeamList[j].Clone());
+        }
+
+        teamList = fetchedTeamListClone;
     }
 
     public void AddTeamButtonListeners(Button button, string ID)
@@ -457,7 +519,7 @@ public class LobbyUI : MonoBehaviour
         //yield return StartCoroutine(GetMembersInTeam(selectedTeam));
         if (fetchedMemberList.Count < maxTeamMembers)
         {
-            updatingText.text = "searching for players...";
+            updatingMembersText.text = "updating lobby...";
             current_UI = UI_Phase.UI_Lobby;
             teamInfo.text = selectedTeam;
             GoogleMap.groupName = selectedTeam;
