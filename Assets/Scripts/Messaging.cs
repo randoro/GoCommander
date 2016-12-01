@@ -84,11 +84,6 @@ public class Messaging : MonoBehaviour {
         player2Name.text = playerArray[1];
         player3Name.text = playerArray[2];
         player4Name.text = playerArray[3];
-
-        EnablePlayerButtons(player1Button, player1Name);
-        EnablePlayerButtons(player2Button, player2Name);
-        EnablePlayerButtons(player3Button, player3Name);
-        EnablePlayerButtons(player4Button, player4Name);
     }
 
     void CheckAmountOfPlayers()
