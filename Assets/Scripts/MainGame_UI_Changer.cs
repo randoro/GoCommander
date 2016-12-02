@@ -151,6 +151,7 @@ public class MainGame_UI_Changer : MonoBehaviour
     public void ExitbtnClick()
     {
         StartCoroutine(LeaveTeam());
+        GameObject.FindGameObjectWithTag("TreasureSpawner").GetComponent<TreasureSpawner>().StartRemoveUserTreasures();
         SceneManager.LoadScene("login");
     }
 

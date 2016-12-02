@@ -201,7 +201,7 @@ public class TreasureSpawner : MonoBehaviour {
     {
         Destroy(treasure_holder.gameObject);
 
-        string removeChosenTreasure = "http://gocommander.sytes.net/scripts/remove_chosen_treasure.php"; // EJ AKTIV JUST NU
+        string removeChosenTreasure = "http://gocommander.sytes.net/scripts/remove_chosen_treasure.php";
 
         WWWForm form = new WWWForm();
         form.AddField("treasurePost", id); // Här ska det vara treasure id
@@ -234,6 +234,25 @@ public class TreasureSpawner : MonoBehaviour {
                 break;
         }
     }
+
+    public void StartRemoveUserTreasures()
+    {
+        StartCoroutine(RemoveUserTreasures());
+    }
+
+    public IEnumerator RemoveUserTreasures()
+    {
+        string removeChosenTreasure = "http://gocommander.sytes.net/scripts/remove_all_treasure.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("useridPost", GoogleMap.id); // AnvändarID
+
+        WWW www = new WWW(removeChosenTreasure, form);
+
+        yield return www;
+    }
+
+
     bool WithinRadiusLatLng(double treasureLng, double treasureLat, double playerLng, double playerLat)
     {
         Vector2 playerLngLat = new Vector2((float)playerLng / 2, (float)playerLat);
