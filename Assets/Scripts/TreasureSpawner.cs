@@ -115,7 +115,7 @@ public class TreasureSpawner : MonoBehaviour {
         StartCoroutine(GenerateTreasures());
     }
 
-    IEnumerator GetTreasures()
+    IEnumerator GetTreasuresAndGetGroupScore()
     {
         string treasureURL = "http://gocommander.sytes.net/scripts/treasure_locations.php";
 
@@ -147,6 +147,17 @@ public class TreasureSpawner : MonoBehaviour {
             }
         }
         fetched = true;
+
+        // Note(Calle): So this is the score part, right here, starts here
+        string scoreURL = "http://gocommander.sytes.net/scripts/score_get_group.php";
+
+        form = new WWWForm();
+        form.AddField("userGroupPost", GoogleMap.groupName);
+        www = new WWW(scoreURL, form);
+        yield return www;
+        result = www.text;
+
+        GoogleMap.groupScore = int.Parse(result);
     }
 
     IEnumerator GenerateTreasures()
