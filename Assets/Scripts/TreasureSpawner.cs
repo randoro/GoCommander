@@ -47,7 +47,7 @@ public class TreasureSpawner : MonoBehaviour {
     {
         while (true)
         {
-            StartCoroutine(GetTreasures());
+            StartCoroutine(GetTreasuresAndGroupScore());
 
             while (!fetched)
             {
@@ -115,7 +115,7 @@ public class TreasureSpawner : MonoBehaviour {
         StartCoroutine(GenerateTreasures());
     }
 
-    IEnumerator GetTreasuresAndGetGroupScore()
+    IEnumerator GetTreasuresAndGroupScore()
     {
         string treasureURL = "http://gocommander.sytes.net/scripts/treasure_locations.php";
 
