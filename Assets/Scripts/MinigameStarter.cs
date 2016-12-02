@@ -44,32 +44,32 @@ public class MinigameStarter : MonoBehaviour {
                             {
                                 ts = tsG.GetComponent<TreasureSpawner>();
                                 print("DESTROY");
-                                ts.RemoveTreasure(id);
+                                ts.RemoveTreasure(id, type);
                             }
 
-                            switch (type)
-                            {
-                                case 0:
-                                    print("loading new scene");
-                                    SceneManager.LoadScene("MinigameMemory");
-                                    break;
-                                case 1:
-                                    print("loading new scene");
-                                    SceneManager.LoadScene("MinigamePuzzle");
-                                    break;
-                                case 2:
-                                    print("loading new scene");
-                                    SceneManager.LoadScene("MinigameQuiz");
-                                    break;
-                                case 3:
-                                    print("loading new scene");
-                                    SceneManager.LoadScene("MinigameSprint");
-                                    break;
-                                default:
-                                    print("loading new scene");
-                                    SceneManager.LoadScene("MinigameMemory");
-                                    break;
-                            }
+                            //switch (type)
+                            //{
+                            //    case 0:
+                            //        print("loading new scene");
+                            //        SceneManager.LoadScene("MinigameMemory");
+                            //        break;
+                            //    case 1:
+                            //        print("loading new scene");
+                            //        SceneManager.LoadScene("MinigamePuzzle");
+                            //        break;
+                            //    case 2:
+                            //        print("loading new scene");
+                            //        SceneManager.LoadScene("MinigameQuiz");
+                            //        break;
+                            //    case 3:
+                            //        print("loading new scene");
+                            //        SceneManager.LoadScene("MinigameSprint");
+                            //        break;
+                            //    default:
+                            //        print("loading new scene");
+                            //        SceneManager.LoadScene("MinigameMemory");
+                            //        break;
+                            //}
                         }
                     }
                 }

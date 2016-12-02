@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
 public class TreasureSpawner : MonoBehaviour {
 
@@ -182,7 +183,7 @@ public class TreasureSpawner : MonoBehaviour {
     }
 
 
-    public void RemoveTreasure(int id)
+    public void RemoveTreasure(int id, int type)
     {
         for (int i = treasureList.Count; i-- > 0;)
         {
@@ -193,6 +194,30 @@ public class TreasureSpawner : MonoBehaviour {
             {
                 Destroy(tempTres.gameObject);
                 StartCoroutine(RemoveChosenTreasure(id));
+            }
+
+            switch (type)
+            {
+                case 0:
+                    print("loading new scene");
+                    SceneManager.LoadScene("MinigameMemory");
+                    break;
+                case 1:
+                    print("loading new scene");
+                    SceneManager.LoadScene("MinigamePuzzle");
+                    break;
+                case 2:
+                    print("loading new scene");
+                    SceneManager.LoadScene("MinigameQuiz");
+                    break;
+                case 3:
+                    print("loading new scene");
+                    SceneManager.LoadScene("MinigameSprint");
+                    break;
+                default:
+                    print("loading new scene");
+                    SceneManager.LoadScene("MinigameMemory");
+                    break;
             }
 
         }
