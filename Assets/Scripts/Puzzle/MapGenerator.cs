@@ -29,6 +29,7 @@ public class MapGenerator : MonoBehaviour
 	public List<Coordinate> tileCoordinates;
 	Queue<Coordinate> circleCoordinates;
 	List<Tile> usedTiles = new List<Tile>();
+    public List<Transform> allPrefabs = new List<Transform>();
 
 	//StreamReader stream_reader;
 	List<String> map_strings;
@@ -73,8 +74,6 @@ public class MapGenerator : MonoBehaviour
 		timeleft = starttime;
 		score = 1000;
 		countDown = 0f;
-
-
 	}
 	void Update()
 	{
@@ -85,6 +84,7 @@ public class MapGenerator : MonoBehaviour
 
 		if (win)
 		{
+            win = false;
             score = 1000 / (int)countDown;
             StartCoroutine(SendGroupScore(score));
             StartCoroutine(SendHighscore(score));
@@ -196,6 +196,8 @@ public class MapGenerator : MonoBehaviour
 				newTileInstance.localScale = new Vector3(Vector3.one.x * (1 - gridLinePercent), Vector3.one.y * (1 - gridLinePercent), 0.01f);
 				newTileInstance.parent = mapHolder;
 
+                allPrefabs.Add(newTileInstance);
+
 				CreateCircle(x, y, mapHolder);
 			}
 	}
@@ -209,6 +211,7 @@ public class MapGenerator : MonoBehaviour
 			//Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
 			Transform newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
 			newCircle.parent = mapHolder;
+            allPrefabs.Add(newCircle);
 
 			// Every tile with a circle has a gameobject
 			tileArray[x, y].CurrentColor = Tile.CircleColor.Red;
@@ -221,6 +224,7 @@ public class MapGenerator : MonoBehaviour
 			//Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
 			newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
 			newCircle.parent = mapHolder;
+            allPrefabs.Add(newCircle);
 
 			// Every tile with a circle has a gameobject
 			tileArray[x, y].CurrentColor = Tile.CircleColor.Green;
@@ -233,6 +237,7 @@ public class MapGenerator : MonoBehaviour
 			//Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
 			newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
 			newCircle.parent = mapHolder;
+            allPrefabs.Add(newCircle);
 
 			// Every tile with a circle has a gameobject
 			tileArray[x, y].CurrentColor = Tile.CircleColor.Blue;
@@ -245,6 +250,7 @@ public class MapGenerator : MonoBehaviour
 			//Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
 			newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
 			newCircle.parent = mapHolder;
+            allPrefabs.Add(newCircle);
 
 			// Every tile with a circle has a gameobject
 			tileArray[x, y].CurrentColor = Tile.CircleColor.Red;
@@ -257,6 +263,7 @@ public class MapGenerator : MonoBehaviour
 			//Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
 			newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
 			newCircle.parent = mapHolder;
+            allPrefabs.Add(newCircle);
 
 			// Every tile with a circle has a gameobject
 			tileArray[x, y].CurrentColor = Tile.CircleColor.Green;
@@ -269,6 +276,7 @@ public class MapGenerator : MonoBehaviour
 			//Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
 			newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
 			newCircle.parent = mapHolder;
+            allPrefabs.Add(newCircle);
 
 			// Every tile with a circle has a gameobject
 			tileArray[x, y].CurrentColor = Tile.CircleColor.Blue;
@@ -280,6 +288,7 @@ public class MapGenerator : MonoBehaviour
 			//Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
 			newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
 			newCircle.parent = mapHolder;
+            allPrefabs.Add(newCircle);
 
 			// Every tile with a circle has a gameobject
 			tileArray[x, y].CurrentColor = Tile.CircleColor.Red;
@@ -292,6 +301,7 @@ public class MapGenerator : MonoBehaviour
 			//Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
 			newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
 			newCircle.parent = mapHolder;
+            allPrefabs.Add(newCircle);
 
 			// Every tile with a circle has a gameobject
 			tileArray[x, y].CurrentColor = Tile.CircleColor.Green;
@@ -304,6 +314,7 @@ public class MapGenerator : MonoBehaviour
 			//Vector3 circlePos = new Vector3(transform.position.x + transform.localScale.x * j, transform.position.y + transform.localScale.y * i, 0);
 			newCircle = Instantiate(circlePrefab, circlePos, Quaternion.identity) as Transform;
 			newCircle.parent = mapHolder;
+            allPrefabs.Add(newCircle);
 
 			// Every tile with a circle has a gameobject
 			tileArray[x, y].CurrentColor = Tile.CircleColor.Blue;
@@ -330,11 +341,25 @@ public class MapGenerator : MonoBehaviour
 	}
 	public void TestWin()
 	{
-		StartCoroutine(delayTime());
+        //StartCoroutine(delayTime());
 		SceneManager.LoadScene("mainScene");
 	}
+    public void Restart()
+    {
+        for (int i = 0; i < allPrefabs.Count; i++)
+        {
+            if (allPrefabs[i] != null)
+            {
+                GameObject.Destroy(allPrefabs[i].gameObject);
+            }
+        }
 
-
+        SetUpReadFromFile();
+        GenerateMap();
+    }
+    /// <summary>
+    /// Note(Calle): HERE'S ANOTHER FUCKING CLASS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! IT'S AN INNER CLASS!!!!!!!!!!!!!!!!!!!!!! I KNOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! I'M SORRY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /// </summary>
 	public class Tile
 	{
 

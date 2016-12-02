@@ -191,8 +191,8 @@ public class TreasureSpawner : MonoBehaviour {
             int itsId = v.id;
             if (itsId == id)
             {
-                //Destroy(tempTres.gameObject);
-                //StartCoroutine(RemoveChosenTreasure(id));
+                Destroy(tempTres.gameObject);
+                StartCoroutine(RemoveChosenTreasure(id));
             }
 
         }

@@ -115,6 +115,7 @@ public class CircleControl : MonoBehaviour
 			{
 				tilePosition = mapGenerator.CoordToVector(new_x, new_y);
 				mapGenerator.tileArray[new_x, new_y].UpdateTile(mapGenerator.tileArray[x, y].CurrentColor, this, mapGenerator.tileArray[x, y].InitialMoveDecrease);
+                mapGenerator.allPrefabs.Add(circleCopy.transform);
 				//mapGenerator.tileArray[new_x, new_y].InitialMoveDecrease = ;
 
 				x = new_x;

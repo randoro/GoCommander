@@ -43,6 +43,7 @@ public class MinigameStarter : MonoBehaviour {
                             if (tsG != null)
                             {
                                 ts = tsG.GetComponent<TreasureSpawner>();
+                                print("DESTROY");
                                 ts.RemoveTreasure(id);
                             }
 

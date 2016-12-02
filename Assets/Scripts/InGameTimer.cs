@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class InGameTimer : MonoBehaviour {
     
-    public static float timeLeft = 1200;
+    public static float timeLeft = 1260;
     public Text timeLeftText;
     private Text testText;
 
