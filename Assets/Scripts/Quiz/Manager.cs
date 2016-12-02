@@ -23,6 +23,8 @@ public class Manager : MonoBehaviour
 
     public static int randomQuestion = -1;
 
+	public static bool win;
+
     private string line, answerline;
     public static string username = GoogleMap.username;
     
@@ -54,6 +56,13 @@ public class Manager : MonoBehaviour
         SetQuestion();
         QuizSystem();
         LoadMainScene();
+		if (win)
+		{
+			win = false;
+			StartCoroutine(SendGroupScore(score));
+			StartCoroutine(SendHighscore(score));
+			SceneManager.LoadScene("mainScene");
+		}
     }
 
     IEnumerator GetQuizes()
@@ -124,7 +133,7 @@ public class Manager : MonoBehaviour
                 camera.backgroundColor = Color.green;
 
                 StartCoroutine(delayTime());
-                score += 10;
+                score += 230;
             }
             else
             {
@@ -142,7 +151,7 @@ public class Manager : MonoBehaviour
             StartCoroutine(SendCompletedMinigame());
             InformativeMessage.finished = true;
 
-            SceneManager.LoadScene("mainScene");
+			win = true;
         }
     }
 
@@ -159,6 +168,32 @@ public class Manager : MonoBehaviour
 
         yield return www;
     }
+	IEnumerator SendGroupScore(int score)
+	{
+		string scoreURL = "http://gocommander.sytes.net/scripts/score_send_group.php";
+
+		WWWForm form = new WWWForm();
+		form.AddField("userScorePost", score);
+		form.AddField("userGroupPost", GoogleMap.groupName);
+
+		WWW www = new WWW(scoreURL, form);
+
+		yield return www;
+	}
+
+	IEnumerator SendHighscore(int score)
+	{
+		string scoreURL = "http://gocommander.sytes.net/scripts/highscore_send.php";
+
+		WWWForm form = new WWWForm();
+		form.AddField("usernamePost", GoogleMap.username);
+		form.AddField("userScorePost", score);
+		form.AddField("userGamePost", "Quiz");
+
+		WWW www = new WWW(scoreURL, form);
+
+		yield return www;
+	}
 
     void ReadFromServer()
     {
