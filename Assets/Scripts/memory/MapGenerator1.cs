@@ -118,7 +118,7 @@ public class MapGenerator1 : MonoBehaviour
             {
                 win = false;
                 startUpdating = false;
-                score = (1000 / (int)timeTaken) / tries;
+				score = (985 -(int)timeTaken) - (tries*10);
                 StartCoroutine(SendGroupScore(score));
                 StartCoroutine(SendHighscore(score));
                 //StartCoroutine(SendCompletedMinigame());
