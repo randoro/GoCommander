@@ -44,6 +44,7 @@ public class MinigameStarter : MonoBehaviour {
                             {
                                 ts = tsG.GetComponent<TreasureSpawner>();
                                 print("DESTROY");
+                                generated = false;
                                 ts.RemoveTreasure(id, type);
                             }
 
@@ -105,6 +106,7 @@ public class MinigameStarter : MonoBehaviour {
                         if (csG != null)
                         {
                             cs = csG.GetComponent<CommanderSpawner>();
+                            generated = false;
                             cs.RemoveTreasure(id);
                         }
                     }
