@@ -85,7 +85,7 @@ public class MapGenerator : MonoBehaviour
 		if (win)
 		{
             win = false;
-            score = 1000 / (int)countDown;
+            score = 1000 - (int)countDown;
             StartCoroutine(SendGroupScore(score));
             StartCoroutine(SendHighscore(score));
             SceneManager.LoadScene("mainScene");
