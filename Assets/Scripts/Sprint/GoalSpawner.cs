@@ -13,21 +13,22 @@ public class GoalSpawner : MonoBehaviour
     public GameObject prefab;
 
     private GoalHolder goalHolder;
-
-    public static float time = 0;
+    
     public Text timeText;
+    private double scoreDistance;
+    private float timeStarted;
 
     // Use this for initialization
     void Start () {
         map = GameObject.FindGameObjectWithTag("Map");
         gMap = map.GetComponent<GoogleMap>();
-
+        timeStarted = Time.fixedTime;
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        time += Time.fixedDeltaTime;
+        float time = Time.fixedTime - timeStarted;
 
         timeText.text = ((int)time).ToString() + " sec";
 
@@ -38,10 +39,12 @@ public class GoalSpawner : MonoBehaviour
 	            
 	            goalSpawned = true;
 
-                //double xGoal = randomizeAround(GoogleMap.centerLocation.longitude, 0.0030D);
-                //double yGoal = randomizeAround(GoogleMap.centerLocation.latitude, 0.0030D);
-                double xGoal = (GoogleMap.centerLocation.longitude + 0.0030D);
-                double yGoal = (GoogleMap.centerLocation.latitude + 0.0030D);
+                double xGoal = randomizeAround(GoogleMap.centerLocation.longitude, 0.0030D);
+                double yGoal = randomizeAround(GoogleMap.centerLocation.latitude, 0.0030D);
+
+	            scoreDistance = Mathf.Abs((float) (GoogleMap.centerLocation.longitude - xGoal) * (float)(GoogleMap.centerLocation.latitude - yGoal));
+                //double xGoal = (GoogleMap.centerLocation.longitude + 0.0030D);
+                //double yGoal = (GoogleMap.centerLocation.latitude + 0.0030D);
 
                 print("Create goal at: " + yGoal + " ," + xGoal);
 
@@ -72,11 +75,14 @@ public class GoalSpawner : MonoBehaviour
                         print("clicked on goal inside ring");
                         Treasure t = th.treasure;
                         int id = t.id;
-                        //int type = t.type;
                         if (id == 0)
                         {
                             print("game won");
-                            StartCoroutine(SendCompletedMinigame());
+
+                                StartCoroutine(SendCompletedMinigame());
+                                int score = (int)((1000.0f / (Time.fixedTime - timeStarted)) * scoreDistance);
+                                StartCoroutine(SendGroupScore(score));
+                                StartCoroutine(SendHighscore(score));
 
                             Application.LoadLevel("mainScene");
                         }
@@ -93,10 +99,37 @@ public class GoalSpawner : MonoBehaviour
         string loginUserURL = "http://gocommander.sytes.net/scripts/send_minimessage.php";
 
         WWWForm form = new WWWForm();
-        form.AddField("userGroupPost", "Killerbunnies");
+        form.AddField("userGroupPost", GoogleMap.groupName);
         form.AddField("userMiniMessagePost", message);
 
         WWW www = new WWW(loginUserURL, form);
+
+        yield return www;
+    }
+
+    IEnumerator SendGroupScore(int score)
+    {
+        string scoreURL = "http://gocommander.sytes.net/scripts/score_send_group.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("userScorePost", score);
+        form.AddField("userGroupPost", GoogleMap.groupName);
+
+        WWW www = new WWW(scoreURL, form);
+
+        yield return www;
+    }
+
+    IEnumerator SendHighscore(int score)
+    {
+        string scoreURL = "http://gocommander.sytes.net/scripts/highscore_send.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", GoogleMap.username);
+        form.AddField("userScorePost", score);
+        form.AddField("userGamePost", "Sprint");
+
+        WWW www = new WWW(scoreURL, form);
 
         yield return www;
     }
