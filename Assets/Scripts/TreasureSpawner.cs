@@ -191,40 +191,16 @@ public class TreasureSpawner : MonoBehaviour {
             Treasure v = tempTres.treasure;
             int itsId = v.id;
             if (itsId == id)
-            {
-                Destroy(tempTres.gameObject);
-                StartCoroutine(RemoveChosenTreasure(id));
+            {   
+                StartCoroutine(RemoveChosenTreasure(id, type, tempTres));
             }
-
-            switch (type)
-            {
-                case 0:
-                    print("loading new scene");
-                    SceneManager.LoadScene("MinigameMemory");
-                    break;
-                case 1:
-                    print("loading new scene");
-                    SceneManager.LoadScene("MinigamePuzzle");
-                    break;
-                case 2:
-                    print("loading new scene");
-                    SceneManager.LoadScene("MinigameQuiz");
-                    break;
-                case 3:
-                    print("loading new scene");
-                    SceneManager.LoadScene("MinigameSprint");
-                    break;
-                default:
-                    print("loading new scene");
-                    SceneManager.LoadScene("MinigameMemory");
-                    break;
-            }
-
         }
     }
 
-    IEnumerator RemoveChosenTreasure(int id)
+    IEnumerator RemoveChosenTreasure(int id, int type, TreasureHolder treasure_holder)
     {
+        Destroy(treasure_holder.gameObject);
+
         string removeChosenTreasure = "http://gocommander.sytes.net/scripts/remove_chosen_treasure.php"; // EJ AKTIV JUST NU
 
         WWWForm form = new WWWForm();
@@ -233,6 +209,30 @@ public class TreasureSpawner : MonoBehaviour {
         WWW www = new WWW(removeChosenTreasure, form);
 
         yield return www;
+
+        switch (type)
+        {
+            case 0:
+                print("loading new scene");
+                SceneManager.LoadScene("MinigameMemory");
+                break;
+            case 1:
+                print("loading new scene");
+                SceneManager.LoadScene("MinigamePuzzle");
+                break;
+            case 2:
+                print("loading new scene");
+                SceneManager.LoadScene("MinigameQuiz");
+                break;
+            case 3:
+                print("loading new scene");
+                SceneManager.LoadScene("MinigameSprint");
+                break;
+            default:
+                print("loading new scene");
+                SceneManager.LoadScene("MinigameMemory");
+                break;
+        }
     }
     bool WithinRadiusLatLng(double treasureLng, double treasureLat, double playerLng, double playerLat)
     {
