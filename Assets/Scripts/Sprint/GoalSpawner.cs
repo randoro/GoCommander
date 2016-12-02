@@ -13,22 +13,22 @@ public class GoalSpawner : MonoBehaviour
     public GameObject prefab;
 
     private GoalHolder goalHolder;
-
-    public static float time = 0;
+    
     public Text timeText;
     private double scoreDistance;
+    private float timeStarted;
 
     // Use this for initialization
     void Start () {
         map = GameObject.FindGameObjectWithTag("Map");
         gMap = map.GetComponent<GoogleMap>();
-
+        timeStarted = Time.fixedTime;
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        time += Time.fixedDeltaTime;
+        float time = Time.fixedTime - timeStarted;
 
         timeText.text = ((int)time).ToString() + " sec";
 
@@ -80,7 +80,7 @@ public class GoalSpawner : MonoBehaviour
                             print("game won");
 
                                 StartCoroutine(SendCompletedMinigame());
-                                int score = (int)((1000.0f / time) * scoreDistance);
+                                int score = (int)((1000.0f / (Time.fixedTime - timeStarted)) * scoreDistance);
                                 StartCoroutine(SendGroupScore(score));
                                 StartCoroutine(SendHighscore(score));
 
