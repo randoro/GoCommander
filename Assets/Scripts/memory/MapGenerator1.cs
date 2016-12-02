@@ -121,6 +121,7 @@ public class MapGenerator1 : MonoBehaviour
 				score = (985 -(int)timeTaken) - (tries*10);
                 StartCoroutine(SendGroupScore(score));
                 StartCoroutine(SendHighscore(score));
+				tries = 1;
                 //StartCoroutine(SendCompletedMinigame());
                 //StartCoroutine(delayTime());
                 SceneManager.LoadScene("mainScene");
