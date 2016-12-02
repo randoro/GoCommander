@@ -21,14 +21,19 @@ public class Highscoremanger : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         //username = GoogleMap.username;
-        username = "milan";
+        username = GoogleMap.username;
         highscoreList = new List<HighscoreList>();
         StartCoroutine(GetScore(username));
+		//StopCoroutine (Getallusserscore (1));
         AllScore();
     }
 	
 	// Update is called once per frame
 	void Update () {
+		if (username == null) {
+			print ("nåll");
+		}
+			
 	}
 
 	public void Yourscore(){
@@ -92,6 +97,36 @@ public class Highscoremanger : MonoBehaviour {
         }
         hightext.text = result;
     }
+	IEnumerator Getallusserscore(int id_test){
+		
+		string memoryURL = "http://gocommander.sytes.net/scripts/get_highscore.php";
+
+		WWWForm form = new WWWForm();
+		form.AddField("idPost", id_test);
+
+		WWW www = new WWW(memoryURL, form);
+		yield return www;
+		string result = www.text;
+
+		if (result != null)
+		{
+			scoreArray = result.Split(';');
+		}
+
+		for (int i = 0; i < scoreArray.Length - 1; i++)
+		{
+			int id = int.Parse(GetDataValue(scoreArray[i], "ID:"));
+			string game = GetDataValue(scoreArray[i], "Game:");
+			int point = int.Parse(GetDataValue(scoreArray[i], "Score:"));
+			string name = GetDataValue(scoreArray[i], "Username:");
+
+			highscoreList.Add(new HighscoreList(id, name, game, point));
+		}
+		id_test =id_test+ 1;
+	}
+
+
+
 
     IEnumerator GetScore(string in_name)
     {
