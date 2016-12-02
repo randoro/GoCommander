@@ -33,6 +33,8 @@ public class CircleControl : MonoBehaviour
 
 		mapGenerator = FindObjectOfType<MapGenerator>();
 
+        z_depth = GameObject.FindGameObjectWithTag("MainCamera").transform.position.z;
+
 		x = (int)transform.position.x;
 		y = (int)transform.position.y;
 
