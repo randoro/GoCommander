@@ -56,24 +56,24 @@ public class Login : MonoBehaviour
 
         string result = www.text;
 
-        if (result == "Login success")
+        if (result == "User not found")
         {
+            Result.text = "User not Found!";
+        }
+        else if (result == "Wrong password")
+        {
+            Result.text = "Wrong Password!";
+        }
+        else
+        {
+            GoogleMap.id = Int32.Parse(result);
             GoogleMap.username = Username;
             Result.text = "You are Logged in!";
             username.GetComponent<InputField>().text = "";
             password.GetComponent<InputField>().text = "";
             username.GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Username";
             password.GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Password";
-            //SceneManager.LoadScene("mainScene");
             SceneManager.LoadScene("LobbyScene");
-        }
-        if (result == "User not found")
-        {
-            Result.text = "User not Found!";
-        }
-        if (result == "Wrong password")
-        {
-            Result.text = "Wrong Password!";
         }
 
     }

@@ -17,6 +17,7 @@ public class GoogleMap : MonoBehaviour {
     public int zoom = 16;
     public MapType mapType;
     public int size = 640;
+    public static int id;
     public bool doubleResolution = true;
     public Color landscapeColor = Color.green;
     public Color roadColor = Color.white;
