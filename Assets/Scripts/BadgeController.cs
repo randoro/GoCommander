@@ -24,6 +24,7 @@ public class BadgeController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         moveBadge = true;
+        turnItOff = false;
         startPosition = transform.position;
         endPosition = new Vector3(notLocalEndX, transform.position.y, transform.position.z);
         badgePosition = endPosition;
@@ -85,7 +86,7 @@ public class BadgeController : MonoBehaviour {
     private void SnapToGrid()
     {
         float distance_right_now = Vector3.Distance(transform.position, badgePosition);
-        transform.position += moveDirection * (distance_right_now / speedRadius) * 0.3f;
+        transform.position += moveDirection * (distance_right_now / speedRadius) * 0.1f;
     }
     private bool WithinDistance(Vector3 realPos, Vector3 pos, float radius)
     {
