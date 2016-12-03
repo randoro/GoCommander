@@ -2,15 +2,18 @@
 using System.Collections;
 using UnityEngine.UI;
 
+
 public class MinigameHelpMessages : MonoBehaviour {
 
     public GameObject help_UI;
     public Button ok_button;
 
     int timer = 550;
-    
+
+    //static bool stopShowingMessage;
+
     // Use this for initialization
-	void Start ()
+    void Start ()
     {
 	
 	}

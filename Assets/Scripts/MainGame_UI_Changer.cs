@@ -54,6 +54,8 @@ public class MainGame_UI_Changer : MonoBehaviour
                     messageOptionsUI.enabled = false;
                     messagePlayerListUI.enabled = false;
                     treasureOrbsUI.enabled = false;
+
+                    Time.timeScale = 1.0f;
                 }
                 break;
             case ActiveUI.menuUI:
@@ -65,6 +67,8 @@ public class MainGame_UI_Changer : MonoBehaviour
                     messageOptionsUI.enabled = false;
                     messagePlayerListUI.enabled = false;
                     treasureOrbsUI.enabled = false;
+
+                    Time.timeScale = 0.0f;
 
                 }
                 break;
@@ -88,6 +92,7 @@ public class MainGame_UI_Changer : MonoBehaviour
                     messageOptionsUI.enabled = false;
                     messagePlayerListUI.enabled = true;
                     treasureOrbsUI.enabled = false;
+
                 }
                 break;
             case ActiveUI.messageOptionsUI:
@@ -99,6 +104,7 @@ public class MainGame_UI_Changer : MonoBehaviour
                     messageOptionsUI.enabled = true;
                     messagePlayerListUI.enabled = false;
                     treasureOrbsUI.enabled = false;
+
                 }
                 break;
             case ActiveUI.treasureOrbsUI:
@@ -110,6 +116,7 @@ public class MainGame_UI_Changer : MonoBehaviour
                     messageOptionsUI.enabled = false;
                     messagePlayerListUI.enabled = false;
                     treasureOrbsUI.enabled = true;
+
                 }
                 break;
         }
