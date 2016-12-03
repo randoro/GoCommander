@@ -9,11 +9,16 @@ public class SprintHelpMessage : MonoBehaviour {
 
     int timer = 550;
 
-    static bool showMessage = true;
+    static bool showMessage;
 
     //static bool stopShowingMessage;
 
     // Use this for initialization
+    void Awake()
+    {
+        SprintHelpMessage.showMessage = true;
+    }
+
     void Start()
     {
 
@@ -28,7 +33,7 @@ public class SprintHelpMessage : MonoBehaviour {
         {
             help_UI.SetActive(false);
             Destroy(help_UI);
-            showMessage = false;
+            SprintHelpMessage.showMessage = false;
         }
     }
 
@@ -36,6 +41,6 @@ public class SprintHelpMessage : MonoBehaviour {
     {
         help_UI.SetActive(false);
         Destroy(help_UI);
-        showMessage = false;
+        SprintHelpMessage.showMessage = false;
     }
 }

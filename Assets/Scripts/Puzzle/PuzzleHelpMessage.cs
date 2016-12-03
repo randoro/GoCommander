@@ -2,8 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class MemoryHelpMessage : MonoBehaviour
-{
+public class PuzzleHelpMessage : MonoBehaviour {
 
     public GameObject help_UI;
     public Button ok_button;
@@ -17,7 +16,7 @@ public class MemoryHelpMessage : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
-        MemoryHelpMessage.showMessage = true;
+        PuzzleHelpMessage.showMessage = true;
     }
 
     void Start()
@@ -34,7 +33,7 @@ public class MemoryHelpMessage : MonoBehaviour
         {
             help_UI.SetActive(false);
             Destroy(help_UI);
-            MemoryHelpMessage.showMessage = false;
+            PuzzleHelpMessage.showMessage = false;
         }
     }
 
@@ -42,7 +41,6 @@ public class MemoryHelpMessage : MonoBehaviour
     {
         help_UI.SetActive(false);
         Destroy(help_UI);
-        MemoryHelpMessage.showMessage = false;
+        PuzzleHelpMessage.showMessage = false;
     }
 }
-
