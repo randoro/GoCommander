@@ -88,6 +88,11 @@ public class MapGenerator1 : MonoBehaviour
         return value;
     }
 
+    public void CancelBtnClick()
+    {
+        SceneManager.LoadScene("mainScene");
+    }
+
     void Update()
     {
         //if (timeObstacle < 0)
