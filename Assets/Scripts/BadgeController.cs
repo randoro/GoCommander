@@ -23,8 +23,7 @@ public class BadgeController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        moveBadge = true;
-        turnItOff = false;
+        
         startPosition = transform.position;
         endPosition = new Vector3(notLocalEndX, transform.position.y, transform.position.z);
         badgePosition = endPosition;
@@ -35,6 +34,9 @@ public class BadgeController : MonoBehaviour {
 	}
     void SetStartValues()
     {
+        moveBadge = true;
+        turnItOff = false;
+
         timerValue = 10;
         interested = false;
     }
@@ -45,6 +47,22 @@ public class BadgeController : MonoBehaviour {
             if (!WithinDistance(badgePosition, transform.position, 0.01f))
             {
                 SnapToGrid();
+
+                if (turnItOff && WithinDistance(badgePosition, transform.position, 0.01f))
+                {
+                    badgePosition = endPosition;
+
+                    if (interested)
+                    {
+                        //StartCoroutine(SendCommanderRequest());
+                    }
+                    else
+                    {
+                        //StartCoroutine(SendNonInterest());
+                    }
+                    SetStartValues();
+                    enabled = false;
+                }
             }
             else
             {
@@ -60,25 +78,19 @@ public class BadgeController : MonoBehaviour {
                 moveBadge = true;
                 badgePosition = startPosition;
 
-                if (interested)
-                {
-                    //StartCoroutine(SendCommanderRequest());
-                }
-                else
-                {
-                    //StartCoroutine(SendNonInterest());
-                }
-                SetStartValues();
-                enabled = false;
+                turnItOff = true;
+
+                
                 //gameObject.transform.localScale = new Vector3(0, 0, 0);
             }
             else if (interested)
             {
                 moveBadge = true;
+
+                turnItOff = true;
                 badgePosition = startPosition;
                 //StartCoroutine(SendCommanderRequest());
                 SetStartValues();
-                enabled = false;
                 //gameObject.transform.localScale = new Vector3(0, 0, 0);
             }
         }
