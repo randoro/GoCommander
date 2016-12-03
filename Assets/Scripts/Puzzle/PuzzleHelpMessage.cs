@@ -25,7 +25,10 @@ public class PuzzleHelpMessage : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        timer--;
+        if (showMessage)
+        {
+            timer--;
+        }
 
         if (timer < 1 && showMessage)
         {

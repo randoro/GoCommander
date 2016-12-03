@@ -23,7 +23,7 @@ public class Manager : MonoBehaviour
 
     public static int randomQuestion = -1;
 
-	public static bool win;
+    public static bool win = false;
 
     private string line, answerline;
     public static string username = GoogleMap.username;
@@ -37,26 +37,26 @@ public class Manager : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
-        allQuestions = new string[4];
-        allAnswersID = new string[4];
+            allQuestions = new string[4];
+            allAnswersID = new string[4];
 
-        StartCoroutine(GetQuizes());
+            StartCoroutine(GetQuizes());
 
-        defaultBackgroundColor = camera.backgroundColor;
-
-        answeredQuestions = 0;
-
-        alreadyAnsweredQuestions.Clear();
+            
     }
 
     // Update is called once per frame
     private void Update()
     {
-        ReadFromServer();
-        SetQuestion();
-        QuizSystem();
-        LoadMainScene();
-		if (win)
+        if (!win)
+        {
+            ReadFromServer();
+            SetQuestion();
+            QuizSystem();
+            CheckWinCondition(); 
+        }
+
+        if (win)
 		{
 			win = false;
 			StartCoroutine(SendGroupScore(score));
@@ -94,6 +94,11 @@ public class Manager : MonoBehaviour
 
             allQuestionsList.Add(new QuizList(position, question, alt1, alt2, alt3, alt4, answer, image));
         }
+
+        ///////MOVED FROM START////////////
+        defaultBackgroundColor = camera.backgroundColor;
+        answeredQuestions = 0;
+        alreadyAnsweredQuestions.Clear();
     }
 
     string GetDataValue(string data, string index)
@@ -144,7 +149,7 @@ public class Manager : MonoBehaviour
         }
     }
 
-    void LoadMainScene()
+    void CheckWinCondition()
     {
         if (answeredQuestions == 4)
         {
@@ -152,6 +157,7 @@ public class Manager : MonoBehaviour
             InformativeMessage.finished = true;
 
 			win = true;
+
         }
     }
 

@@ -15,26 +15,28 @@ public class MemoryHelpMessage : MonoBehaviour
     //static bool stopShowingMessage;
 
     // Use this for initialization
-    void Awake()
-    {
-        MemoryHelpMessage.showMessage = true;
-    }
 
     void Start()
     {
-
+        if (!showMessage)
+        {
+            help_UI.SetActive(false);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        timer--;
+        if (showMessage)
+        {
+            timer--;
+        }
 
         if (timer < 1 && showMessage)
         {
             help_UI.SetActive(false);
             Destroy(help_UI);
-            MemoryHelpMessage.showMessage = false;
+            showMessage = false;
         }
     }
 
@@ -42,7 +44,7 @@ public class MemoryHelpMessage : MonoBehaviour
     {
         help_UI.SetActive(false);
         Destroy(help_UI);
-        MemoryHelpMessage.showMessage = false;
+        showMessage = false;
     }
 }
 

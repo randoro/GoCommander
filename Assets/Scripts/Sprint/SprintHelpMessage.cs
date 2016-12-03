@@ -9,18 +9,24 @@ public class SprintHelpMessage : MonoBehaviour {
 
     int timer = 550;
 
-    static bool showMessage;
+    static bool showMessage = true;
 
     // Use this for initialization
     void Start()
     {
-
+        if (!showMessage)
+        {
+            help_UI.SetActive(false);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        timer--;
+        if (showMessage)
+        {
+            timer--;
+        }
 
         if (timer < 1 && showMessage)
         {
