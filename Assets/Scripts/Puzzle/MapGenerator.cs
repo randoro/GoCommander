@@ -353,12 +353,13 @@ public class MapGenerator : MonoBehaviour
                 GameObject.Destroy(allPrefabs[i].gameObject);
             }
         }
+        allPrefabs.Clear();
 
         SetUpReadFromFile();
         GenerateMap();
     }
     /// <summary>
-    /// Note(Calle): HERE'S ANOTHER FUCKING CLASS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! IT'S AN INNER CLASS!!!!!!!!!!!!!!!!!!!!!! I KNOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! I'M SORRY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /// Ny klass
     /// </summary>
 	public class Tile
 	{

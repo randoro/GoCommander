@@ -7,6 +7,7 @@ public class InGameTimer : MonoBehaviour {
     
     public static float timeLeft = 1260;
     public Text timeLeftText;
+    public Text scoreText;
     private Text testText;
 
 	// Use this for initialization
@@ -27,6 +28,8 @@ public class InGameTimer : MonoBehaviour {
         //print(timeLeft);
 
         timeLeftText.text = ((int)timeLeft/60).ToString() + " min";
+
+        scoreText.text = GoogleMap.groupScore.ToString();
 
         if (timeLeft <= 0)
         {
