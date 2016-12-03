@@ -40,9 +40,7 @@ public class Manager : MonoBehaviour
             allQuestions = new string[4];
             allAnswersID = new string[4];
 
-            StartCoroutine(GetQuizes());
-
-            
+            StartCoroutine(GetQuizes()); 
     }
 
     // Update is called once per frame
