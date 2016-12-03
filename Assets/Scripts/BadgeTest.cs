@@ -14,13 +14,23 @@ public class BadgeTest : MonoBehaviour {
 	}
     public void OnClick()
     {
-        if (!commanderBadgeButton.activeInHierarchy)
+        //if (!commanderBadgeButton.activeInHierarchy)
+        //{
+        //    commanderBadgeButton.SetActive(true);
+        //}
+        //else
+        //{
+        //    commanderBadgeButton.SetActive(false);
+        //}
+        if (!TreasureSpawner.testIfRadiusCheckWorks)
         {
-            commanderBadgeButton.SetActive(true);
+            print(TreasureSpawner.testIfRadiusCheckWorks);
+            TreasureSpawner.testIfRadiusCheckWorks = true;
         }
-        else
+        else if (TreasureSpawner.testIfRadiusCheckWorks)
         {
-            commanderBadgeButton.SetActive(false);
+            print(TreasureSpawner.testIfRadiusCheckWorks);
+            TreasureSpawner.testIfRadiusCheckWorks = false;
         }
     }
 }

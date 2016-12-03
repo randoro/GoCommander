@@ -23,6 +23,8 @@ public class TreasureSpawner : MonoBehaviour {
 
     private const double radius = 0.003;
 
+    public static bool testIfRadiusCheckWorks = false;
+
     // Use this for initialization
     void Start ()
     {
@@ -137,14 +139,33 @@ public class TreasureSpawner : MonoBehaviour {
             double lat = double.Parse(GetDataValue(nav[i], "Latitude:"));
             double lng = double.Parse(GetDataValue(nav[i], "Longitude:"));
             int visible = int.Parse(GetDataValue(nav[i], "Visible:"));
-            
-            if (WithinRadiusLatLng(lng, lat, GoogleMap.centerLocation.longitude, GoogleMap.centerLocation.latitude) || visible == 1)
+
+            if (!testIfRadiusCheckWorks)
             {
+                //if (WithinRadiusLatLng(lng, lat, GoogleMap.centerLocation.longitude, GoogleMap.centerLocation.latitude) || visible == 1)
+                //{
+                //    int id = int.Parse(GetDataValue(nav[i], "ID:"));
+                //    int type = int.Parse(GetDataValue(nav[i], "Type:"));
+
+                //    fetchedList.Add(new Treasure(id, lat, lng, type, visible));
+                //}
+                if (WithinRadiusLatLng(lng, lat, GoogleMap.centerLocation.longitude, GoogleMap.centerLocation.latitude))
+                {
+                    int id = int.Parse(GetDataValue(nav[i], "ID:"));
+                    int type = int.Parse(GetDataValue(nav[i], "Type:"));
+
+                    fetchedList.Add(new Treasure(id, lat, lng, type, visible));
+                }
+            }
+            else
+            {
+                print("The button is working");
                 int id = int.Parse(GetDataValue(nav[i], "ID:"));
                 int type = int.Parse(GetDataValue(nav[i], "Type:"));
 
                 fetchedList.Add(new Treasure(id, lat, lng, type, visible));
             }
+            
         }
         fetched = true;
 
