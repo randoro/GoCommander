@@ -159,7 +159,6 @@ public class TreasureSpawner : MonoBehaviour {
             }
             else
             {
-                print("The button is working");
                 int id = int.Parse(GetDataValue(nav[i], "ID:"));
                 int type = int.Parse(GetDataValue(nav[i], "Type:"));
 

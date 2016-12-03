@@ -36,30 +36,30 @@ public class BadgeInfoListener : MonoBehaviour {
         string result = www.text;
         //print(result);
 
-        if (result.Contains("PENDING"))
-        {
-            //if (GoogleMap.lastCommander)
-            //{
-            //    GoogleMap.lastCommander = false;
-            //    StartCoroutine(nextCommanderController.startVoting);
-            //    commanderBadgeButton.transform.localScale = originalScale;
-            //    commanderBadgeButton.GetComponent<BadgeController>().enabled = true;
-            //    StopCoroutine(listener);
-            //    StopCoroutine(CheckPending());
-            //}
-            //else
-            //{
-            //    //commanderBadgeButton.SetActive(true);
-            //    commanderBadgeButton.GetComponent<BadgeController>().enabled = true;
-            //    commanderBadgeButton.transform.localScale = originalScale;
-            //    StopCoroutine(listener);
-            //    StopCoroutine(CheckPending());
-            //}
-            commanderBadgeButton.GetComponent<BadgeController>().enabled = true;
-            //commanderBadgeButton.transform.localScale = originalScale;
-            StopCoroutine(listener);
-            StopCoroutine(CheckPending());
-        }
+        //if (result.Contains("PENDING"))
+        //{
+        //    //if (GoogleMap.lastCommander)
+        //    //{
+        //    //    GoogleMap.lastCommander = false;
+        //    //    StartCoroutine(nextCommanderController.startVoting);
+        //    //    commanderBadgeButton.transform.localScale = originalScale;
+        //    //    commanderBadgeButton.GetComponent<BadgeController>().enabled = true;
+        //    //    StopCoroutine(listener);
+        //    //    StopCoroutine(CheckPending());
+        //    //}
+        //    //else
+        //    //{
+        //    //    //commanderBadgeButton.SetActive(true);
+        //    //    commanderBadgeButton.GetComponent<BadgeController>().enabled = true;
+        //    //    commanderBadgeButton.transform.localScale = originalScale;
+        //    //    StopCoroutine(listener);
+        //    //    StopCoroutine(CheckPending());
+        //    //}
+        //    commanderBadgeButton.GetComponent<BadgeController>().enabled = true;
+        //    //commanderBadgeButton.transform.localScale = originalScale;
+        //    StopCoroutine(listener);
+        //    StopCoroutine(CheckPending());
+        //}
     }
     string GetDataValue(string data, string index)
     {

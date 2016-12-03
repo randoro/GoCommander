@@ -165,7 +165,6 @@ public class MainGame_UI_Changer : MonoBehaviour
     public void CommanderBadgeBtnClick()
     {
         BadgeController.interested = true;
-        GameObject.FindGameObjectWithTag("CommanderBadgeBtn").transform.localScale = new Vector3(0, 0, 0);
     }
 
     public void ScoreBtnClick()

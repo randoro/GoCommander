@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class BadgeController : MonoBehaviour {
 
     float timerValue;
+    public float timerSetValue;
     public int refreshDelay = 5;
     public int refreshDelayCommander = 2;
     public static bool interested;
@@ -24,11 +25,10 @@ public class BadgeController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         
-        startPosition = transform.position;
-        endPosition = new Vector3(notLocalEndX, transform.position.y, transform.position.z);
+        startPosition = transform.localPosition;
+        endPosition = new Vector3(notLocalEndX, transform.localPosition.y, transform.localPosition.z);
         badgePosition = endPosition;
-        moveDirection = badgePosition - startPosition;
-        speedRadius = Vector3.Distance(transform.position, badgePosition);
+        speedRadius = Vector3.Distance(transform.localPosition, badgePosition);
 
         SetStartValues();
 	}
@@ -36,32 +36,33 @@ public class BadgeController : MonoBehaviour {
     {
         moveBadge = true;
         turnItOff = false;
+        moveDirection = badgePosition - startPosition;
 
-        timerValue = 10;
+        timerValue = timerSetValue;
         interested = false;
     }
 	// Update is called once per frame
 	void Update () {
         if (moveBadge)
         {
-            if (!WithinDistance(badgePosition, transform.position, 0.01f))
+            if (!WithinDistance(badgePosition, transform.localPosition, 0.01f))
             {
                 SnapToGrid();
 
-                if (turnItOff && WithinDistance(badgePosition, transform.position, 0.01f))
+                if (turnItOff && WithinDistance(badgePosition, transform.localPosition, 0.01f))
                 {
                     badgePosition = endPosition;
 
                     if (interested)
                     {
                         //StartCoroutine(SendCommanderRequest());
+                        enabled = false;
                     }
-                    else
-                    {
-                        //StartCoroutine(SendNonInterest());
-                    }
+                    //else
+                    //{
+                    //StartCoroutine(SendNonInterest());
+                    //}
                     SetStartValues();
-                    enabled = false;
                 }
             }
             else
@@ -74,31 +75,28 @@ public class BadgeController : MonoBehaviour {
             timerValue -= Time.deltaTime;
             if (timerValue <= 0)
             {
-
                 moveBadge = true;
+
                 badgePosition = startPosition;
+                moveDirection = badgePosition - endPosition;
 
                 turnItOff = true;
-
-                
-                //gameObject.transform.localScale = new Vector3(0, 0, 0);
             }
             else if (interested)
             {
                 moveBadge = true;
 
-                turnItOff = true;
                 badgePosition = startPosition;
-                //StartCoroutine(SendCommanderRequest());
-                SetStartValues();
-                //gameObject.transform.localScale = new Vector3(0, 0, 0);
+                moveDirection = badgePosition - endPosition;
+
+                turnItOff = true;
             }
         }
 	}
     private void SnapToGrid()
     {
-        float distance_right_now = Vector3.Distance(transform.position, badgePosition);
-        transform.position += moveDirection * (distance_right_now / speedRadius) * 0.1f;
+        float distance_right_now = Vector3.Distance(transform.localPosition, badgePosition);
+        transform.localPosition += moveDirection * (distance_right_now / speedRadius) * 0.1f;
     }
     private bool WithinDistance(Vector3 realPos, Vector3 pos, float radius)
     {

@@ -24,12 +24,10 @@ public class BadgeTest : MonoBehaviour {
         //}
         if (!TreasureSpawner.testIfRadiusCheckWorks)
         {
-            print(TreasureSpawner.testIfRadiusCheckWorks);
             TreasureSpawner.testIfRadiusCheckWorks = true;
         }
         else if (TreasureSpawner.testIfRadiusCheckWorks)
         {
-            print(TreasureSpawner.testIfRadiusCheckWorks);
             TreasureSpawner.testIfRadiusCheckWorks = false;
         }
     }
