@@ -14,11 +14,6 @@ public class PuzzleHelpMessage : MonoBehaviour {
     //static bool stopShowingMessage;
 
     // Use this for initialization
-    void Awake()
-    {
-        PuzzleHelpMessage.showMessage = true;
-    }
-
     void Start()
     {
 
@@ -33,7 +28,7 @@ public class PuzzleHelpMessage : MonoBehaviour {
         {
             help_UI.SetActive(false);
             Destroy(help_UI);
-            PuzzleHelpMessage.showMessage = false;
+            showMessage = false;
         }
     }
 
@@ -41,6 +36,6 @@ public class PuzzleHelpMessage : MonoBehaviour {
     {
         help_UI.SetActive(false);
         Destroy(help_UI);
-        PuzzleHelpMessage.showMessage = false;
+        showMessage = false;
     }
 }

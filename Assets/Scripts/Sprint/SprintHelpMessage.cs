@@ -11,14 +11,7 @@ public class SprintHelpMessage : MonoBehaviour {
 
     static bool showMessage;
 
-    //static bool stopShowingMessage;
-
     // Use this for initialization
-    void Awake()
-    {
-        SprintHelpMessage.showMessage = true;
-    }
-
     void Start()
     {
 
@@ -33,7 +26,7 @@ public class SprintHelpMessage : MonoBehaviour {
         {
             help_UI.SetActive(false);
             Destroy(help_UI);
-            SprintHelpMessage.showMessage = false;
+            showMessage = false;
         }
     }
 
@@ -41,6 +34,6 @@ public class SprintHelpMessage : MonoBehaviour {
     {
         help_UI.SetActive(false);
         Destroy(help_UI);
-        SprintHelpMessage.showMessage = false;
+        showMessage = false;
     }
 }
