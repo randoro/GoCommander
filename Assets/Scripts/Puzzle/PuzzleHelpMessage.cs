@@ -16,7 +16,10 @@ public class PuzzleHelpMessage : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-
+        if (!showMessage)
+        {
+            help_UI.SetActive(false);
+        }
     }
 
     // Update is called once per frame
