@@ -121,6 +121,7 @@ public class MapGenerator1 : MonoBehaviour
 
             if (win)
             {
+                GoogleMap.completedMinigames++;
                 win = false;
                 startUpdating = false;
 				score = (750 -(int)timeTaken) - (tries*20);
@@ -128,7 +129,7 @@ public class MapGenerator1 : MonoBehaviour
                 StartCoroutine(SendHighscore(score));
 				print (score);
 				tries = 1;
-                //StartCoroutine(SendCompletedMinigame());
+                StartCoroutine(SendCompletedMinigame());
                 //StartCoroutine(delayTime());
                 SceneManager.LoadScene("mainScene");
             }
@@ -172,7 +173,7 @@ public class MapGenerator1 : MonoBehaviour
         string loginUserURL = "http://gocommander.sytes.net/scripts/send_minimessage.php";
 
         WWWForm form = new WWWForm();
-        form.AddField("userGroupPost", "Killerbunnies");
+        form.AddField("userGroupPost", GoogleMap.groupName);
         form.AddField("userMiniMessagePost", message);
 
         WWW www = new WWW(loginUserURL, form);

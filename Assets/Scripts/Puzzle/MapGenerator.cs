@@ -86,11 +86,26 @@ public class MapGenerator : MonoBehaviour
 		{
             win = false;
             score = 1000 - (int)countDown;
+            StartCoroutine(SendCompletedMinigame());
             StartCoroutine(SendGroupScore(score));
             StartCoroutine(SendHighscore(score));
+            GoogleMap.completedMinigames++;
             SceneManager.LoadScene("mainScene");
 		}
 	}
+    IEnumerator SendCompletedMinigame()
+    {
+        string message = GoogleMap.username + " completed a Puzzle!";
+        string loginUserURL = "http://gocommander.sytes.net/scripts/send_minimessage.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("userGroupPost", GoogleMap.groupName);
+        form.AddField("userMiniMessagePost", message);
+
+        WWW www = new WWW(loginUserURL, form);
+
+        yield return www;
+    }
     IEnumerator SendGroupScore(int score)
     {
         string scoreURL = "http://gocommander.sytes.net/scripts/score_send_group.php";

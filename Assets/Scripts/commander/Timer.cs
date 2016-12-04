@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class Timer : MonoBehaviour {
 
-    float timer = 30;
+    public float timer;
     int showTime;
 
 	// Use this for initialization

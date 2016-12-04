@@ -84,6 +84,8 @@ public class GoalSpawner : MonoBehaviour
                                 StartCoroutine(SendGroupScore(score));
                                 StartCoroutine(SendHighscore(score));
 
+                                GoogleMap.completedMinigames++;
+
                             Application.LoadLevel("mainScene");
                         }
                     }

@@ -11,20 +11,29 @@ public class BadgeInfoListener : MonoBehaviour {
     public IEnumerator listener;
 	// Use this for initialization
 	public void Start () {
-        listener = Listen();
-        StartCoroutine(listener);
+        //listener = Listen();
+        //StartCoroutine(listener);
         //originalScale = commanderBadgeButton.transform.localScale;
         //commanderBadgeButton.transform.localScale = new Vector3(0, 0, 0);
 	}
 	
 	// Update is called once per frame
-	public IEnumerator Listen() {
-        while (true)
+    void Update()
+    {
+        if (GoogleMap.completedMinigames == 3)
         {
-            StartCoroutine(CheckPending());
-            yield return new WaitForSeconds(refreshDelay);
+            GoogleMap.completedMinigames = 0;
+            commanderBadgeButton.GetComponent<BadgeController>().enabled = true;
+            enabled = false;
         }
-	}
+    }
+    //public IEnumerator Listen() {
+    //    while (true)
+    //    {
+    //        StartCoroutine(CheckPending());
+    //        yield return new WaitForSeconds(refreshDelay);
+    //    }
+    //}
     IEnumerator CheckPending()
     {
         string votersURL = "http://gocommander.sytes.net/scripts/commander_check.php";

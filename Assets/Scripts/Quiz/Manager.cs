@@ -59,6 +59,7 @@ public class Manager : MonoBehaviour
 			win = false;
 			StartCoroutine(SendGroupScore(score));
 			StartCoroutine(SendHighscore(score));
+            GoogleMap.completedMinigames++;
 			SceneManager.LoadScene("mainScene");
 		}
     }

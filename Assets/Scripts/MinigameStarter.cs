@@ -98,7 +98,7 @@ public class MinigameStarter : MonoBehaviour {
                         int type = t.type;
                         int id = t.id;
 
-                        //StartCoroutine(MakeTheTreasureVisible(id));
+                        StartCoroutine(MakeTheTreasureVisible(id));
 
                         GameObject csG = GameObject.FindGameObjectWithTag("CommanderSpawner");
                         CommanderSpawner cs = null;

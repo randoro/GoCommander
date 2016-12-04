@@ -34,7 +34,7 @@ public class BadgeController : MonoBehaviour {
 	}
     void SetStartValues()
     {
-        moveBadge = false; ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        moveBadge = true;
         turnItOff = false;
         moveDirection = badgePosition - startPosition;
 
@@ -57,12 +57,16 @@ public class BadgeController : MonoBehaviour {
                     {
                         //StartCoroutine(SendCommanderRequest());
                         enabled = false;
+                        badgeInfoListener.enabled = true;
+                        SceneManager.LoadScene("CommanderScene");
+                        SetStartValues();
                     }
-                    //else
-                    //{
-                    //StartCoroutine(SendNonInterest());
-                    //}
-                    SetStartValues();
+                    else
+                    {
+                        enabled = false;
+                        badgeInfoListener.enabled = true;
+                        SetStartValues();
+                    }
                 }
             }
             else
@@ -131,16 +135,16 @@ public class BadgeController : MonoBehaviour {
     //    WWW www = new WWW(votersURL, form);
     //    yield return www;
     //}
-    IEnumerator SendNonInterest()
-    {
-        string votersURL = "http://gocommander.sytes.net/scripts/commander_vote.php";
-        WWWForm form = new WWWForm();
-        form.AddField("usernamePost", GoogleMap.username);
-        form.AddField("userVotePost", "NOT");
-        WWW www = new WWW(votersURL, form);
-        yield return www;
-        badgeInfoListener.StartCoroutine(badgeInfoListener.listener);
-    }
+    //IEnumerator SendNonInterest()
+    //{
+    //    string votersURL = "http://gocommander.sytes.net/scripts/commander_vote.php";
+    //    WWWForm form = new WWWForm();
+    //    form.AddField("usernamePost", GoogleMap.username);
+    //    form.AddField("userVotePost", "NOT");
+    //    WWW www = new WWW(votersURL, form);
+    //    yield return www;
+    //    badgeInfoListener.StartCoroutine(badgeInfoListener.listener);
+    //}
     //IEnumerator WaitForCommanderDecision()
     //{
     //    while (true)
