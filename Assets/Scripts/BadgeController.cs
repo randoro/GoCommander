@@ -34,7 +34,7 @@ public class BadgeController : MonoBehaviour {
 	}
     void SetStartValues()
     {
-        moveBadge = true;
+        moveBadge = false; ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         turnItOff = false;
         moveDirection = badgePosition - startPosition;
 
