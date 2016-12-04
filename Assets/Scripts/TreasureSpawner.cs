@@ -116,7 +116,6 @@ public class TreasureSpawner : MonoBehaviour {
     {
         StartCoroutine(GenerateTreasures());
     }
-
     IEnumerator GetTreasuresAndGroupScore()
     {
         string treasureURL = "http://gocommander.sytes.net/scripts/treasure_locations.php";
@@ -140,30 +139,31 @@ public class TreasureSpawner : MonoBehaviour {
             double lng = double.Parse(GetDataValue(nav[i], "Longitude:"));
             int visible = int.Parse(GetDataValue(nav[i], "Visible:"));
 
-            if (!testIfRadiusCheckWorks)
-            {
-                //if (WithinRadiusLatLng(lng, lat, GoogleMap.centerLocation.longitude, GoogleMap.centerLocation.latitude) || visible == 1)
-                //{
-                //    int id = int.Parse(GetDataValue(nav[i], "ID:"));
-                //    int type = int.Parse(GetDataValue(nav[i], "Type:"));
-
-                //    fetchedList.Add(new Treasure(id, lat, lng, type, visible));
-                //}
-                if (WithinRadiusLatLng(lng, lat, GoogleMap.centerLocation.longitude, GoogleMap.centerLocation.latitude))
-                {
-                    int id = int.Parse(GetDataValue(nav[i], "ID:"));
-                    int type = int.Parse(GetDataValue(nav[i], "Type:"));
-
-                    fetchedList.Add(new Treasure(id, lat, lng, type, visible));
-                }
-            }
-            else
+            if (WithinRadiusLatLng(lng, lat, GoogleMap.centerLocation.longitude, GoogleMap.centerLocation.latitude) || visible == 1)
             {
                 int id = int.Parse(GetDataValue(nav[i], "ID:"));
                 int type = int.Parse(GetDataValue(nav[i], "Type:"));
 
                 fetchedList.Add(new Treasure(id, lat, lng, type, visible));
             }
+            //if (!testIfRadiusCheckWorks)
+            //{
+                
+            //    if (WithinRadiusLatLng(lng, lat, GoogleMap.centerLocation.longitude, GoogleMap.centerLocation.latitude))
+            //    {
+            //        int id = int.Parse(GetDataValue(nav[i], "ID:"));
+            //        int type = int.Parse(GetDataValue(nav[i], "Type:"));
+
+            //        fetchedList.Add(new Treasure(id, lat, lng, type, visible));
+            //    }
+            //}
+            //else
+            //{
+            //    int id = int.Parse(GetDataValue(nav[i], "ID:"));
+            //    int type = int.Parse(GetDataValue(nav[i], "Type:"));
+
+            //    fetchedList.Add(new Treasure(id, lat, lng, type, visible));
+            //}
             
         }
         fetched = true;
