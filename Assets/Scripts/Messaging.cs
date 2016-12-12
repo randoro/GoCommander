@@ -23,9 +23,9 @@ public class Messaging : MonoBehaviour {
     public Button player3Button;
     public Button player4Button;
 
-    private string[] messageArray = new string[4];
-    private string[] playerArray = new string[4];
-    private string[] playerArrayTest = new string[4];
+    private string[] messageArray = new string[10];
+    private string[] playerArray = new string[10];
+    private string[] playerArrayTest = new string[10];
     private string[] teamArray = new string[10];
 
     LobbyData memberData;

@@ -10,7 +10,7 @@ public class Highscoremanger : MonoBehaviour {
 	public int qwizscore;
 	public int puzzelscore;
 	public int memoryscore;
-	int totalscore;
+	public static int totalscore;
 
     List<HighscoreList> highscoreList;
 	public string[] scoreArray;
