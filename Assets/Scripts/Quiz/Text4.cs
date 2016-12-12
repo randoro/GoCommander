@@ -20,7 +20,7 @@ public class Text4 : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        fourthChoices = new string[4];
+        fourthChoices = new string[100];
     }
 
     // Update is called once per frame

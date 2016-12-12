@@ -10,7 +10,7 @@ public class LoadImage : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        loadImage = false;
+        loadImage = true;
     }
 	
 	// Update is called once per frame

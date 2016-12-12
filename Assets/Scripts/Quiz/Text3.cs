@@ -21,7 +21,7 @@ public class Text3 : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        thirdChoices = new string[4];
+        thirdChoices = new string[100];
     }
 
     // Update is called once per frame

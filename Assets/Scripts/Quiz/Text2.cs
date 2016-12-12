@@ -19,7 +19,7 @@ public class Text2 : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        secondChoices = new string[4];
+        secondChoices = new string[100];
     }
 
     // Update is called once per frame

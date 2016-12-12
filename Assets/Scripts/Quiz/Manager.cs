@@ -37,8 +37,6 @@ public class Manager : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
-            allQuestions = new string[4];
-            allAnswersID = new string[4];
 
             StartCoroutine(GetQuizes()); 
     }
@@ -60,7 +58,7 @@ public class Manager : MonoBehaviour
 			StartCoroutine(SendGroupScore(score));
 			StartCoroutine(SendHighscore(score));
             GoogleMap.completedMinigames++;
-			SceneManager.LoadScene("mainScene");
+            SceneManager.LoadScene("mainScene");
 		}
     }
 
