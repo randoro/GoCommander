@@ -37,6 +37,8 @@ public class Manager : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
+            allQuestions = new string[100];
+            allAnswersID = new string[100];
 
             StartCoroutine(GetQuizes()); 
     }
