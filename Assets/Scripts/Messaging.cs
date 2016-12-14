@@ -5,10 +5,25 @@ using System.Collections.Generic;
 
 public class Messaging : MonoBehaviour {
 
-    public Text message1Text;
-    public Text message2Text;
-    public Text message3Text;
-    public Text message4Text;
+    public Text socialMessage1Text;
+    public Text socialMessage2Text;
+    public Text socialMessage3Text;
+    public Text socialMessage4Text;
+
+    public Text tacticalMessage1Text;
+    public Text tacticalMessage2Text;
+    public Text tacticalMessage3Text;
+    public Text tacticalMessage4Text;
+
+    public Text helpfulMessage1Text;
+    public Text helpfulMessage2Text;
+    public Text helpfulMessage3Text;
+    public Text helpfulMessage4Text;
+
+    public Text additionalMessage1Text;
+    public Text additionalMessage2Text;
+    public Text additionalMessage3Text;
+    public Text additionalMessage4Text;
 
     public Text player1Name;
     public Text player2Name;
@@ -23,7 +38,7 @@ public class Messaging : MonoBehaviour {
     public Button player3Button;
     public Button player4Button;
 
-    private string[] messageArray = new string[10];
+    private string[] messageArray = new string[16];
     private string[] playerArray = new string[10];
     private string[] playerArrayTest = new string[10];
     private string[] teamArray = new string[10];
@@ -57,15 +72,53 @@ public class Messaging : MonoBehaviour {
 
     private void SetMessages()
     {
-        messageArray[0] = "Great work!";
-        messageArray[1] = "Thank you!";
-        messageArray[2] = "Hello!";
-        messageArray[3] = "Hurry up!";
+        //Social
+        messageArray[0] = "Hello!";
+        messageArray[1] = "Yes";
+        messageArray[2] = "No";
+        messageArray[3] = "Have a nice day!";
 
-        message1Text.text = messageArray[0];
-        message2Text.text = messageArray[1];
-        message3Text.text = messageArray[2];
-        message4Text.text = messageArray[3];
+        //Tactical
+        messageArray[4] = "I need guidance!";
+        messageArray[5] = "Take the Commander Badge!";
+        messageArray[6] = "Do you need help?";
+        messageArray[7] = "Hurry up!";
+
+
+        //Helpful
+        messageArray[8] = "Go North!";
+        messageArray[9] = "Go East!";
+        messageArray[10] = "Go West!";
+        messageArray[11] = "Go South!";
+
+        //Additonal
+        messageArray[12] = "I am the best!";
+        messageArray[13] = "You are the best!";
+        messageArray[14] = "Well played!";
+        messageArray[15] = "Good game!";
+
+        
+
+        socialMessage1Text.text = messageArray[0];
+        socialMessage2Text.text = messageArray[1];
+        socialMessage3Text.text = messageArray[2];
+        socialMessage4Text.text = messageArray[3];
+
+        tacticalMessage1Text.text = messageArray[4];
+        tacticalMessage2Text.text = messageArray[5];
+        tacticalMessage3Text.text = messageArray[6];
+        tacticalMessage4Text.text = messageArray[7];
+
+        helpfulMessage1Text.text = messageArray[8];
+        helpfulMessage2Text.text = messageArray[9];
+        helpfulMessage3Text.text = messageArray[10];
+        helpfulMessage4Text.text = messageArray[11];
+
+        additionalMessage1Text.text = messageArray[12];
+        additionalMessage2Text.text = messageArray[13];
+        additionalMessage3Text.text = messageArray[14];
+        additionalMessage4Text.text = messageArray[15];
+
     }
 
     public void SetPlayers()

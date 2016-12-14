@@ -28,9 +28,24 @@ public class Message_UI : MonoBehaviour
         MainGame_UI_Changer.activeUI = MainGame_UI_Changer.ActiveUI.messagePlayerListUI;
     }
 
-    public void ToMessagesOptionsClick()
+    public void ToSocialMessagesClick()
     {
-            MainGame_UI_Changer.activeUI = MainGame_UI_Changer.ActiveUI.messageOptionsUI;
+            MainGame_UI_Changer.activeUI = MainGame_UI_Changer.ActiveUI.socialMessageOptionsUI;
+    }
+
+    public void ToTacticalMessagesClick()
+    {
+        MainGame_UI_Changer.activeUI = MainGame_UI_Changer.ActiveUI.tacticalMessageOptionsUI;
+    }
+
+    public void ToHelpfulMessagesClick()
+    {
+        MainGame_UI_Changer.activeUI = MainGame_UI_Changer.ActiveUI.helpfulMessageOptionsUI;
+    }
+
+    public void ToAdditionalMessagesClick()
+    {
+        MainGame_UI_Changer.activeUI = MainGame_UI_Changer.ActiveUI.additionalMessageOptionsUI;
     }
 
     public void BackToGameClick()
@@ -41,6 +56,16 @@ public class Message_UI : MonoBehaviour
     public void BackToPlayerListClick()
     {
         MainGame_UI_Changer.activeUI = MainGame_UI_Changer.ActiveUI.messagePlayerListUI;
+    }
+
+    public void BackToCategoriesClick()
+    {
+        MainGame_UI_Changer.activeUI = MainGame_UI_Changer.ActiveUI.messageCategoryListUI;
+    }
+
+    public void ToMessageCategories()
+    {
+        MainGame_UI_Changer.activeUI = MainGame_UI_Changer.ActiveUI.messageCategoryListUI;
     }
 
 

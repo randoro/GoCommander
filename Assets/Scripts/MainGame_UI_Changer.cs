@@ -14,7 +14,11 @@ public class MainGame_UI_Changer : MonoBehaviour
         menuUI,
         helpUI,
         messagePlayerListUI,
-        messageOptionsUI,
+        messageCategoryListUI,
+        socialMessageOptionsUI,
+        tacticalMessageOptionsUI,
+        helpfulMessageOptionsUI,
+        additionalMessageOptionsUI,
         treasureOrbsUI,
     }
     public static ActiveUI activeUI;
@@ -23,7 +27,11 @@ public class MainGame_UI_Changer : MonoBehaviour
     public Canvas menuUI;
     public Canvas helpUI;
     public Canvas messagePlayerListUI;
-    public Canvas messageOptionsUI;
+    public Canvas messageCategoryListUI;
+    public Canvas socialMessageOptionsUI;
+    public Canvas tacticalMessageOptionsUI;
+    public Canvas helpfulMessagesOptionsUI;
+    public Canvas additionalMessageOptionsUI;
     public Canvas treasureOrbsUI;
 
     public GameObject menu_btn;
@@ -51,9 +59,13 @@ public class MainGame_UI_Changer : MonoBehaviour
                     menuUI.enabled = false;
                     helpUI.enabled = false;
 
-                    messageOptionsUI.enabled = false;
+                    socialMessageOptionsUI.enabled = false;
+                    tacticalMessageOptionsUI.enabled = false;
+                    helpfulMessagesOptionsUI.enabled = false;
+                    additionalMessageOptionsUI.enabled = false;
                     messagePlayerListUI.enabled = false;
                     treasureOrbsUI.enabled = false;
+                    messageCategoryListUI.enabled = false;
 
                     Time.timeScale = 1.0f;
                 }
@@ -64,9 +76,13 @@ public class MainGame_UI_Changer : MonoBehaviour
                     menuUI.enabled = true;
                     helpUI.enabled = false;
 
-                    messageOptionsUI.enabled = false;
+                    socialMessageOptionsUI.enabled = false;
+                    tacticalMessageOptionsUI.enabled = false;
+                    helpfulMessagesOptionsUI.enabled = false;
+                    additionalMessageOptionsUI.enabled = false;
                     messagePlayerListUI.enabled = false;
                     treasureOrbsUI.enabled = false;
+                    messageCategoryListUI.enabled = false;
 
                     Time.timeScale = 0.0f;
 
@@ -78,9 +94,13 @@ public class MainGame_UI_Changer : MonoBehaviour
                     menuUI.enabled = false;
                     helpUI.enabled = true;
 
-                    messageOptionsUI.enabled = false;
+                    socialMessageOptionsUI.enabled = false;
+                    tacticalMessageOptionsUI.enabled = false;
+                    helpfulMessagesOptionsUI.enabled = false;
+                    additionalMessageOptionsUI.enabled = false;
                     messagePlayerListUI.enabled = false;
                     treasureOrbsUI.enabled = false;
+                    messageCategoryListUI.enabled = false;
                 }
                 break;
             case ActiveUI.messagePlayerListUI:
@@ -89,21 +109,92 @@ public class MainGame_UI_Changer : MonoBehaviour
                     menuUI.enabled = false;
                     helpUI.enabled = false;
 
-                    messageOptionsUI.enabled = false;
+                    socialMessageOptionsUI.enabled = false;
+                    tacticalMessageOptionsUI.enabled = false;
+                    helpfulMessagesOptionsUI.enabled = false;
+                    additionalMessageOptionsUI.enabled = false;
                     messagePlayerListUI.enabled = true;
                     treasureOrbsUI.enabled = false;
+                    messageCategoryListUI.enabled = false;
 
                 }
                 break;
-            case ActiveUI.messageOptionsUI:
+            case ActiveUI.messageCategoryListUI:
                 {
                     inGameUI.enabled = false;
                     menuUI.enabled = false;
                     helpUI.enabled = false;
 
-                    messageOptionsUI.enabled = true;
+                    messageCategoryListUI.enabled = true;
                     messagePlayerListUI.enabled = false;
                     treasureOrbsUI.enabled = false;
+                    socialMessageOptionsUI.enabled = false;
+                    tacticalMessageOptionsUI.enabled = false;
+                    helpfulMessagesOptionsUI.enabled = false;
+                    additionalMessageOptionsUI.enabled = false;
+                }
+                break;
+            case ActiveUI.socialMessageOptionsUI:
+                {
+                    inGameUI.enabled = false;
+                    menuUI.enabled = false;
+                    helpUI.enabled = false;
+
+                    socialMessageOptionsUI.enabled = true;
+                    tacticalMessageOptionsUI.enabled = false;
+                    helpfulMessagesOptionsUI.enabled = false;
+                    additionalMessageOptionsUI.enabled = false;
+                    messagePlayerListUI.enabled = false;
+                    treasureOrbsUI.enabled = false;
+                    messageCategoryListUI.enabled = false;
+
+                }
+                break;
+            case ActiveUI.tacticalMessageOptionsUI:
+                {
+                    inGameUI.enabled = false;
+                    menuUI.enabled = false;
+                    helpUI.enabled = false;
+
+                    socialMessageOptionsUI.enabled = false;
+                    tacticalMessageOptionsUI.enabled = true;
+                    helpfulMessagesOptionsUI.enabled = false;
+                    additionalMessageOptionsUI.enabled = false;
+                    messagePlayerListUI.enabled = false;
+                    treasureOrbsUI.enabled = false;
+                    messageCategoryListUI.enabled = false;
+
+                }
+                break;
+            case ActiveUI.helpfulMessageOptionsUI:
+                {
+                    inGameUI.enabled = false;
+                    menuUI.enabled = false;
+                    helpUI.enabled = false;
+
+                    socialMessageOptionsUI.enabled = false;
+                    tacticalMessageOptionsUI.enabled = false;
+                    helpfulMessagesOptionsUI.enabled = true;
+                    additionalMessageOptionsUI.enabled = false;
+                    messagePlayerListUI.enabled = false;
+                    treasureOrbsUI.enabled = false;
+                    messageCategoryListUI.enabled = false;
+
+                }
+                break;
+            case ActiveUI.additionalMessageOptionsUI:
+                {
+                    inGameUI.enabled = false;
+                    menuUI.enabled = false;
+                    helpUI.enabled = false;
+
+                    socialMessageOptionsUI.enabled = false;
+                    tacticalMessageOptionsUI.enabled = false;
+                    helpfulMessagesOptionsUI.enabled = false;
+                    additionalMessageOptionsUI.enabled = true;
+                    messagePlayerListUI.enabled = false;
+                    treasureOrbsUI.enabled = false;
+                    messageCategoryListUI.enabled = false;
 
                 }
                 break;
@@ -113,9 +204,10 @@ public class MainGame_UI_Changer : MonoBehaviour
                     menuUI.enabled = false;
                     helpUI.enabled = false;
 
-                    messageOptionsUI.enabled = false;
+                    socialMessageOptionsUI.enabled = false;
                     messagePlayerListUI.enabled = false;
                     treasureOrbsUI.enabled = true;
+                    messageCategoryListUI.enabled = false;
 
                 }
                 break;
