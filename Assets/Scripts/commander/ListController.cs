@@ -35,7 +35,7 @@ public class ListController : MonoBehaviour {
         for (int i = 0; i < playerList.Count; i++)
         {
             currPH = playerList[i].GetComponent<PlayerHolder>();
-            listObjects.Add(new ListItem(contentRT, currPH, gMap, new Vector2(0, contentRT.position.y + 100 * i), listGameObjects, this));
+            listObjects.Add(new ListItem(contentRT, currPH, gMap, new Vector2(0, -300 + contentRT.position.y + 70 * i), listGameObjects, this));
             Debug.Log(currPH.Name);
         }
     }
@@ -98,8 +98,8 @@ public class ListController : MonoBehaviour {
             Vector2 canvasScale = new Vector2(contentRT.lossyScale.x, contentRT.lossyScale.y);
 
             buttonRT.sizeDelta = Vector2.Scale(new Vector2(500.0f, 75.0f), canvasScale);
-            buttonRT.position = Vector2.Scale(pos, canvasScale);
-            buttonRT.pivot = contentRT.pivot;
+            buttonRT.position = pos;
+            //buttonRT.pivot = contentRT.pivot;
 
             contentRT.sizeDelta -= new Vector2(0, buttonRT.sizeDelta.y);
 
@@ -110,7 +110,7 @@ public class ListController : MonoBehaviour {
             Text text = clickItem.AddComponent<Text>();
             text.text = player.Name;
             text.color = Color.black;
-            text.fontSize = 20 * (int)canvasScale.x * 2;
+            text.fontSize = 30 * (int)canvasScale.x * 2;
             text.alignment = TextAnchor.MiddleCenter;
             text.font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
 
@@ -131,7 +131,6 @@ public class ListController : MonoBehaviour {
 
             GoogleMap.centerLocation.address = "";
             GoogleMap.centerLocation.latitude = (float)player.lat;
-            Debug.Log(player.lat);
             GoogleMap.centerLocation.longitude = (float)player.lng;
             Debug.Log(player.lng);
 
