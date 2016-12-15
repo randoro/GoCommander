@@ -103,12 +103,12 @@ public class MinigameStarter : MonoBehaviour {
                         GameObject csG = GameObject.FindGameObjectWithTag("CommanderSpawner");
                         CommanderSpawner cs = null;
 
-                        if (csG != null)
-                        {
-                            cs = csG.GetComponent<CommanderSpawner>();
-                            generated = false;
-                            cs.RemoveTreasure(id);
-                        }
+                        //if (csG != null)
+                        //{
+                        //    cs = csG.GetComponent<CommanderSpawner>();
+                        //    generated = false;
+                        //    cs.RemoveTreasure(id);
+                        //}
                     }
                 }
             }
