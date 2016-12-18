@@ -37,10 +37,12 @@ public class Manager : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
-            allQuestions = new string[100];
-            allAnswersID = new string[100];
+        ClearData();
 
-            StartCoroutine(GetQuizes()); 
+        allQuestions = new string[100];
+        allAnswersID = new string[100];
+        
+        StartCoroutine(GetQuizes()); 
     }
 
     // Update is called once per frame
@@ -98,6 +100,19 @@ public class Manager : MonoBehaviour
         defaultBackgroundColor = camera.backgroundColor;
         answeredQuestions = 0;
         alreadyAnsweredQuestions.Clear();
+    }
+
+    void ClearData()
+    {
+        if(allQuestionsList.Count < 0)
+        {
+            allQuestionsList.Clear();
+        }
+
+        if(alreadyAnsweredQuestions.Count < 0)
+        {
+            alreadyAnsweredQuestions.Clear();
+        }
     }
 
     string GetDataValue(string data, string index)
@@ -219,7 +234,8 @@ public class Manager : MonoBehaviour
 
     void RandomizeQuestion()
     {
-        randomQuestion = Random.Range(0, 3);
+        print("QUIZLENGTH: " + allQuestionsList.Count);
+        randomQuestion = Random.Range(0, allQuestionsList.Count);
         alreadyAnsweredQuestions.Add(randomQuestion);
 
         for (int i = 0; i < alreadyAnsweredQuestions.Count; i++)
@@ -232,7 +248,7 @@ public class Manager : MonoBehaviour
             {
                 print("Question already answered");
 
-                randomQuestion = Random.Range(0, 3);
+                randomQuestion = Random.Range(0, allQuestionsList.Count);
 
                 //RandomizeQuestion();
             }
