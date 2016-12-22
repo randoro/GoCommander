@@ -176,6 +176,8 @@ public class MapGenerator : MonoBehaviour
 	{
 		map_strings = new List<String>();
 
+        print(level);
+
 		String[] linesInFile = level.Split('\n');
 
 		for (int i = 0; i < linesInFile.Length; i++)

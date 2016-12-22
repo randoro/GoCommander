@@ -11,10 +11,7 @@ public class BadgeInfoListener : MonoBehaviour {
     public IEnumerator listener;
 	// Use this for initialization
 	public void Start () {
-        //listener = Listen();
-        //StartCoroutine(listener);
-        //originalScale = commanderBadgeButton.transform.localScale;
-        //commanderBadgeButton.transform.localScale = new Vector3(0, 0, 0);
+        GoogleMap.completedMinigames = 3;
 	}
 	
 	// Update is called once per frame

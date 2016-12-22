@@ -24,12 +24,6 @@ public class Timer : MonoBehaviour {
             StartCoroutine(BackToMainScene());
             enabled = false;
         }
-        else if (Input.GetKey(KeyCode.Escape))
-        {
-            print("Blabla");
-            StartCoroutine(BackToMainScene());
-            enabled = false;            
-        }
 	}
     IEnumerator BackToMainScene()
     {

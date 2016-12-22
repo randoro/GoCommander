@@ -13,7 +13,7 @@ public class InGameTimer : MonoBehaviour {
 	// Use this for initialization
     void Start()
     {
-
+        DontDestroyOnLoad(this);
     }
 
     void Awake()
@@ -39,7 +39,9 @@ public class InGameTimer : MonoBehaviour {
 
             timeLeft = 1200.0f;
 
-            SceneManager.LoadScene("LobbyScene");
+            SceneManager.LoadScene("EndScene");
+
+            Destroy(this);
         }
 
 	}
