@@ -24,7 +24,7 @@ public class GoogleMap : MonoBehaviour {
     public Color waterColor = Color.blue;
     public static string username;
     public static string groupName;
-    public static int completedMinigames = 0;
+    public static int completedMinigames = 3;
     public static int groupScore = 0;
     //public static bool lastCommander = true;
     bool settled;

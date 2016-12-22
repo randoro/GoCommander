@@ -11,7 +11,6 @@ public class BadgeInfoListener : MonoBehaviour {
     public IEnumerator listener;
 	// Use this for initialization
 	public void Start () {
-        GoogleMap.completedMinigames = 3;
 	}
 	
 	// Update is called once per frame
