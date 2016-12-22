@@ -17,6 +17,7 @@ public class CommandsLeft : MonoBehaviour {
         if (commandsLeft == 0)
         {
             StartCoroutine(BackToMainScene());
+            commandsLeft = 7;
             enabled = false;
         }
 	}

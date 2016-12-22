@@ -15,6 +15,8 @@ public class ListController : MonoBehaviour {
     private GoogleMap gMap;
     public int refreshDelay = 10;
 
+    public static string currCommanded;
+
 	void Start () {
         contentRT = GetComponent<RectTransform>();
 
@@ -35,7 +37,7 @@ public class ListController : MonoBehaviour {
         for (int i = 0; i < playerList.Count; i++)
         {
             currPH = playerList[i].GetComponent<PlayerHolder>();
-            listObjects.Add(new ListItem(contentRT, currPH, gMap, new Vector2(0, -300 + contentRT.position.y + 70 * i), listGameObjects, this));
+            listObjects.Add(new ListItem(contentRT, currPH, gMap, new Vector2(0, 20 * i * contentRT.sizeDelta.x), listGameObjects, this));
             Debug.Log(currPH.Name);
         }
     }
@@ -133,6 +135,8 @@ public class ListController : MonoBehaviour {
             GoogleMap.centerLocation.latitude = (float)player.lat;
             GoogleMap.centerLocation.longitude = (float)player.lng;
             Debug.Log(player.lng);
+
+            ListController.currCommanded = player.name;
 
             gMap.Refresh();
 

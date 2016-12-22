@@ -18,7 +18,6 @@ public class MinigameStarter : MonoBehaviour {
 
         if (s.name == "mainScene")
         {
-
             if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
             {
                 print("found0");
@@ -80,7 +79,6 @@ public class MinigameStarter : MonoBehaviour {
         {
             if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
             {
-                print("found0");
                 RaycastHit hit;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -99,9 +97,10 @@ public class MinigameStarter : MonoBehaviour {
                         int id = t.id;
 
                         StartCoroutine(MakeTheTreasureVisible(id));
+                        StartCoroutine(SendMessage());
 
-                        GameObject csG = GameObject.FindGameObjectWithTag("CommanderSpawner");
-                        CommanderSpawner cs = null;
+                        //GameObject csG = GameObject.FindGameObjectWithTag("CommanderSpawner");
+                        //CommanderSpawner cs = null;
 
                         //if (csG != null)
                         //{
@@ -131,5 +130,24 @@ public class MinigameStarter : MonoBehaviour {
         WWW www = new WWW(IDsendURL, form);
 
         yield return www;
+    }
+    IEnumerator SendMessage()
+    {
+        string message = GoogleMap.username + " gave you a command!";
+        string player = ListController.currCommanded;
+
+        //print("Sent: " + message + "To player: " + player);
+
+        string loginUserURL = "http://gocommander.sytes.net/scripts/send_game_message.php";
+
+        WWWForm form = new WWWForm();
+        form.AddField("userRecPost", player);
+        form.AddField("userMessagePost", message);
+
+        WWW www = new WWW(loginUserURL, form);
+
+        yield return www;
+
+        //print("Message is sent");
     }
 }
