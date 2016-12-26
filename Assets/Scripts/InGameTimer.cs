@@ -36,12 +36,6 @@ public class InGameTimer : MonoBehaviour {
             print("GAME IS OVER!!!!");
 
             LeaveTeam();
-
-            timeLeft = 1200.0f;
-
-            SceneManager.LoadScene("EndScene");
-
-            Destroy(this);
         }
 
 	}
@@ -68,5 +62,11 @@ public class InGameTimer : MonoBehaviour {
         yield return www;
 
         string result = www.text;
+
+        timeLeft = 1200.0f;
+
+        SceneManager.LoadScene("EndScene");
+
+        Destroy(this);
     }
 }

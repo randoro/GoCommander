@@ -47,7 +47,6 @@ public class LobbyUI : MonoBehaviour
     public Text updatingMembersText;
     public Text updatingTeamsText;
 
-
     Text[] teamNameTexts;
     Text[] memberNameTexts;
    
@@ -77,12 +76,13 @@ public class LobbyUI : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        InGameTimer.timeLeft = 1200.0f;
+        InGameTimer.timeLeft = 1260.0f;
         PlayerPrefs.SetFloat("Player Time", InGameTimer.timeLeft);
 
         current_UI = UI_Phase.UI_Join_Create;
         startMatchBtn.onClick.AddListener(delegate { StartButtonClick(); });
 
+        StopAllCoroutines();
         StartCoroutine(StartLoop());
     }
 
@@ -204,29 +204,6 @@ public class LobbyUI : MonoBehaviour
     {
         fetchedMemberList.Clear();
 
-        //if (addFriendButtons != null && memberNameTexts != null)
-        //{
-        //    for (int i = 0; i < maxTeamMembers; i++)
-        //    {
-        //        Destroy(newMemberElement);
-        //        Destroy(newMemberElement.GetComponent<Button>());
-        //        Destroy(newMemberElement.GetComponentInChildren<Button>());
-        //        Destroy(addFriendButtons[i]);
-        //        Destroy(memberNameTexts[i]);
-        //        Destroy(addFriendButtons[i].GetComponent<Button>());
-        //        Destroy(memberNameTexts[i].GetComponent<Text>());
-        //        Array.Clear(memberNameTexts, i, maxTeamMembers);
-        //        Array.Clear(addFriendButtons, i, maxTeamMembers);
-        //        addFriendButtons = null;
-        //        memberNameTexts = null;
-        //    }
-        //}
-
-        //addFriendButtons = new Button[maxTeamMembers];
-        //memberNameTexts = new Text[maxTeamMembers];
-
-        //this.selectedTeam = selectedTeam;
-
         string getMembersURL = "http://gocommander.sytes.net/scripts/show_group_members.php";
 
         WWWForm form = new WWWForm();
@@ -283,6 +260,8 @@ public class LobbyUI : MonoBehaviour
 
         string result = www.text;
 
+        SceneManager.LoadScene("LobbyScene");
+
         //StartCoroutine(GetMembersInTeam(selectedTeam));
     }
 
@@ -314,6 +293,7 @@ public class LobbyUI : MonoBehaviour
         {
             j++;
 
+            //newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform.position, Quaternion.identity) as GameObject;
             newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform) as GameObject;
             newTeamElement.transform.SetParent(teamScrollTransform, false);
             //teamJoinButtons[i] = newTeamElement.GetComponentInChildren<Button>();
@@ -345,26 +325,6 @@ public class LobbyUI : MonoBehaviour
 
     public void PopulateMemberList()
     {
-        //if (addFriendButtons != null && memberNameTexts != null)
-        //{
-        //    for (int i = 0; i < maxTeamMembers; i++)
-        //    {
-        //        Destroy(memberList[i]);
-
-        //        //Destroy(newMemberElement);
-        //        //Destroy(newMemberElement.GetComponent<Button>());
-        //        //Destroy(newMemberElement.GetComponentInChildren<Button>());
-        //        //Destroy(addFriendButtons[i]);
-        //        //Destroy(memberNameTexts[i]);
-        //        //Destroy(addFriendButtons[i].GetComponent<Button>());
-        //        //Destroy(memberNameTexts[i].GetComponent<Text>());
-        //        //Array.Clear(memberNameTexts, i, maxTeamMembers);
-        //        //Array.Clear(addFriendButtons, i, maxTeamMembers);
-        //        //addFriendButtons = null;
-        //        //memberNameTexts = null;
-        //    }
-        //}
-
         for (int i = 0; i < memberObjectList.Count; i++) // Note (Calle): This will not run the first loop - otherwise the whole thing would explode I guess
         {
             Destroy(memberObjectList[i]);
@@ -383,6 +343,7 @@ public class LobbyUI : MonoBehaviour
         {
             j++;
 
+            //newMemberElement = Instantiate(teamElementPrefab, memberScrollTransform.position, Quaternion.identity) as GameObject;
             newMemberElement = Instantiate(memberElementPrefab, memberScrollTransform) as GameObject;
             newMemberElement.transform.SetParent(memberScrollTransform, false);
             Button addFriendButton = newMemberElement.GetComponentInChildren<Button>();
@@ -545,8 +506,7 @@ public class LobbyUI : MonoBehaviour
 
     public void LeaveLobbyButtonClick()
     {
-        StartCoroutine(LeaveTeam());
-        SceneManager.LoadScene("LobbyScene");
+        StartCoroutine(LeaveTeam()); 
     }
 
     public void StartButtonClick()

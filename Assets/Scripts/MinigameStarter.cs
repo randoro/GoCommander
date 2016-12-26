@@ -7,9 +7,9 @@ public class MinigameStarter : MonoBehaviour {
     public static bool generated;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
         DontDestroyOnLoad(this);
-	
 	}
 	
 	// Update is called once per frame

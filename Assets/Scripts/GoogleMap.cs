@@ -71,13 +71,13 @@ public class GoogleMap : MonoBehaviour {
 
         string result = www.text;
 
-        //if (result != null)
-        //{
-        //    if (result.Contains("INACTIVE"))
-        //    {
-        //        SceneManager.LoadScene("login");
-        //    }
-        //}
+        if (result != null)
+        {
+            if (result.Contains("INACTIVE"))
+            {
+                SceneManager.LoadScene("login");
+            }
+        }
 
 
     }

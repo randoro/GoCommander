@@ -53,8 +53,11 @@ public class MainGame_UI_Changer : MonoBehaviour
     {
 	  switch(activeUI)
         {
+            //NO MENUS ACTIVE, ONLY ACTUAL GAME AND SCORE/TIME PANEL
             case ActiveUI.inGameUI:
                 {
+                    ResumeGame();
+
                     inGameUI.enabled = true;
                     menuUI.enabled = false;
                     helpUI.enabled = false;
@@ -67,11 +70,12 @@ public class MainGame_UI_Changer : MonoBehaviour
                     treasureOrbsUI.enabled = false;
                     messageCategoryListUI.enabled = false;
 
-                    Time.timeScale = 1.0f;
                 }
                 break;
             case ActiveUI.menuUI:
                 {
+                    PauseGame();
+
                     inGameUI.enabled = false;
                     menuUI.enabled = true;
                     helpUI.enabled = false;
@@ -83,8 +87,6 @@ public class MainGame_UI_Changer : MonoBehaviour
                     messagePlayerListUI.enabled = false;
                     treasureOrbsUI.enabled = false;
                     messageCategoryListUI.enabled = false;
-
-                    Time.timeScale = 0.0f;
 
                 }
                 break;
@@ -105,6 +107,9 @@ public class MainGame_UI_Changer : MonoBehaviour
                 break;
             case ActiveUI.messagePlayerListUI:
                 {
+
+                    PauseGame();
+
                     inGameUI.enabled = false;
                     menuUI.enabled = false;
                     helpUI.enabled = false;
@@ -213,6 +218,28 @@ public class MainGame_UI_Changer : MonoBehaviour
                 break;
         }
 	}
+
+    ////////////////////////
+    //PAUSE GAME TEST
+    ///////////////////////
+
+    void PauseGame()
+    {
+        GoogleMap gm = FindObjectOfType<GoogleMap>();
+        GPSController gps = FindObjectOfType<GPSController>();
+        gps.enabled = false;
+        gm.enabled = false;
+    }
+
+    void ResumeGame()
+    {
+        GoogleMap gm = FindObjectOfType<GoogleMap>();
+        GPSController gps = FindObjectOfType<GPSController>();
+        gps.enabled = true;
+        gm.enabled = true;
+    }
+
+    ///////////////////
 
     IEnumerator LeaveTeam()
     {

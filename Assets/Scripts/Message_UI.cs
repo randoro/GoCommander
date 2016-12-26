@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class Message_UI : MonoBehaviour
 {
-
     private string[] messageList = new string[4];
 
     public Button backToGameBtn;
@@ -63,10 +62,9 @@ public class Message_UI : MonoBehaviour
         MainGame_UI_Changer.activeUI = MainGame_UI_Changer.ActiveUI.messageCategoryListUI;
     }
 
-    public void ToMessageCategories()
+    public void ToCategories(string ID)
     {
+        if(ID != " ")
         MainGame_UI_Changer.activeUI = MainGame_UI_Changer.ActiveUI.messageCategoryListUI;
     }
-
-
 }

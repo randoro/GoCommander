@@ -44,14 +44,18 @@ public class Messaging : MonoBehaviour {
     private string[] teamArray = new string[10];
 
     LobbyData memberData;
-    
+
+    Message_UI ui;
+       
     List<LobbyData> memberList = new List<LobbyData>();
 
     private int amountOfPlayers = 0;
 
     // Use this for initialization
     void Start () {
-        
+
+        ui = new Message_UI();
+
         StartCoroutine(GetMembersInTeam());
 
         SetMessages();
@@ -69,6 +73,33 @@ public class Messaging : MonoBehaviour {
         EnablePlayerButtons(player3Button, player3Name);
         EnablePlayerButtons(player4Button, player4Name);
     }
+
+    //public void CheckMemberButtonClick()
+    //{
+    //    if(player1Name.text != " ")
+    //    {
+    //        AddMemberButtonListeners(player1Button, player1Name.text);
+    //    }
+    //    if (player2Name.text != " ")
+    //    {
+    //        AddMemberButtonListeners(player2Button, player2Name.text);
+    //    }
+    //    if (player3Name.text != " ")
+    //    {
+    //        AddMemberButtonListeners(player3Button, player3Name.text);
+    //    }
+    //    if (player4Name.text != " ")
+    //    {
+    //        AddMemberButtonListeners(player4Button, player4Name.text);
+    //    }
+
+
+    //}
+
+    //public void AddMemberButtonListeners(Button button, string ID)
+    //{
+    //    button.onClick.AddListener(delegate { ui.ToCategories(ID); });
+    //}
 
     private void SetMessages()
     {
@@ -151,6 +182,11 @@ public class Messaging : MonoBehaviour {
             _b.interactable = false;
         }
         _b.interactable = true;
+        
+        if(_b.interactable)
+        {
+            _b.onClick.AddListener(delegate { ui.ToCategories(_t.text); }); 
+        }
     }
 
     public void SetPlayerToMessage(Text _playerToMessage)
