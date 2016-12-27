@@ -225,18 +225,14 @@ public class MainGame_UI_Changer : MonoBehaviour
 
     void PauseGame()
     {
-        GoogleMap gm = FindObjectOfType<GoogleMap>();
-        GPSController gps = FindObjectOfType<GPSController>();
-        gps.enabled = false;
-        gm.enabled = false;
+        Orbit orbit = FindObjectOfType<Orbit>();
+        orbit.enabled = false;
     }
 
     void ResumeGame()
     {
-        GoogleMap gm = FindObjectOfType<GoogleMap>();
-        GPSController gps = FindObjectOfType<GPSController>();
-        gps.enabled = true;
-        gm.enabled = true;
+        Orbit orbit = FindObjectOfType<Orbit>();
+        orbit.enabled = true;
     }
 
     ///////////////////
