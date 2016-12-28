@@ -42,7 +42,7 @@ public class Manager : MonoBehaviour
         allQuestions = new string[100];
         allAnswersID = new string[100];
         
-        StartCoroutine(GetQuizes()); 
+        StartCoroutine(GetQuizes());
     }
 
     // Update is called once per frame
@@ -93,13 +93,14 @@ public class Manager : MonoBehaviour
             string answer = GetDataValue(Quiz[i], "Answer:");
             string image = GetDataValue(Quiz[i], "Image");
 
-            allQuestionsList.Add(new QuizList(position, question, alt1, alt2, alt3, alt4, answer, image));
+            allQuestionsList.Add(new QuizList(position, question, alt1, alt2, alt3, alt4, answer, image, false));
         }
 
         ///////MOVED FROM START////////////
         defaultBackgroundColor = camera.backgroundColor;
         answeredQuestions = 0;
         alreadyAnsweredQuestions.Clear();
+        randomQuestion = Random.Range(0, allQuestionsList.Count);
     }
 
     void ClearData()
@@ -234,27 +235,19 @@ public class Manager : MonoBehaviour
 
     void RandomizeQuestion()
     {
-        print("QUIZLENGTH: " + allQuestionsList.Count);
         randomQuestion = Random.Range(0, allQuestionsList.Count);
-        alreadyAnsweredQuestions.Add(randomQuestion);
 
-        for (int i = 0; i < alreadyAnsweredQuestions.Count; i++)
+        for (int i = 0; i < allQuestionsList.Count; i++)
         {
-            print(randomQuestion);
-            print("ALREADYANSWEREDQUESTIONS: " + alreadyAnsweredQuestions[i]);
-            print(alreadyAnsweredQuestions.Count);
 
-            if (randomQuestion == alreadyAnsweredQuestions[i])
+            if (allQuestionsList[randomQuestion].isAlreadyAnswered)
             {
-                print("Question already answered");
-
                 randomQuestion = Random.Range(0, allQuestionsList.Count);
-
-                //RandomizeQuestion();
             }
+            
+            allQuestionsList[randomQuestion].isAlreadyAnswered = true;
+            LoadImage.loadImage = true;
         }
-        print("new question generated");
-        LoadImage.loadImage = true;
     }
     
 }
