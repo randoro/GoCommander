@@ -3,7 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class Messaging : MonoBehaviour {
+public class Messaging : MonoBehaviour
+{
 
     public Text socialMessage1Text;
     public Text socialMessage2Text;
@@ -56,49 +57,60 @@ public class Messaging : MonoBehaviour {
 
         ui = new Message_UI();
 
+        DeactivateButton(player1Button);
+        DeactivateButton(player2Button);
+        DeactivateButton(player3Button);
+        DeactivateButton(player4Button);
+
         StartCoroutine(GetMembersInTeam());
 
         SetMessages();
     }
 	
 	// Update is called once per frame
-	void Update () {
-
+	void Update ()
+    {
         CheckAmountOfPlayers();
-
         SetPlayers();
 
-        EnablePlayerButtons(player1Button, player1Name);
-        EnablePlayerButtons(player2Button, player2Name);
-        EnablePlayerButtons(player3Button, player3Name);
-        EnablePlayerButtons(player4Button, player4Name);
+        ActivateButton(player1Button, player1Name);
+        ActivateButton(player2Button, player2Name);
+        ActivateButton(player3Button, player3Name);
+        ActivateButton(player4Button, player4Name);
+
+        //EnablePlayerButtons(player1Button, player1Name);
+        //EnablePlayerButtons(player2Button, player2Name);
+        //EnablePlayerButtons(player3Button, player3Name);
+        //EnablePlayerButtons(player4Button, player4Name);
     }
 
-    //public void CheckMemberButtonClick()
+    public void ActivateButton(Button button, Text playerName)
+    {
+        if (playerName == null || playerName.text.Equals(""))
+        {
+            button.onClick.AddListener(delegate { ui.ToCategories(playerName.text); });
+            button.interactable = true;
+        }
+    }
+
+    public void DeactivateButton(Button button)
+    {
+        button.interactable = false;
+        button.onClick.RemoveAllListeners();
+    }
+
+    //public void EnablePlayerButtons(Button _b , Text _t)
     //{
-    //    if(player1Name.text != " ")
+    //    if(_t.text.Equals(""))
     //    {
-    //        AddMemberButtonListeners(player1Button, player1Name.text);
+    //        _b.interactable = false;
     //    }
-    //    if (player2Name.text != " ")
-    //    {
-    //        AddMemberButtonListeners(player2Button, player2Name.text);
-    //    }
-    //    if (player3Name.text != " ")
-    //    {
-    //        AddMemberButtonListeners(player3Button, player3Name.text);
-    //    }
-    //    if (player4Name.text != " ")
-    //    {
-    //        AddMemberButtonListeners(player4Button, player4Name.text);
-    //    }
+    //    _b.interactable = true;
 
-
-    //}
-
-    //public void AddMemberButtonListeners(Button button, string ID)
-    //{
-    //    button.onClick.AddListener(delegate { ui.ToCategories(ID); });
+    //    if(_b.interactable)
+    //    {
+    //        _b.onClick.AddListener(delegate { ui.ToCategories(_t.text); }); 
+    //    }
     //}
 
     private void SetMessages()
@@ -115,7 +127,6 @@ public class Messaging : MonoBehaviour {
         messageArray[6] = "Do you need help?";
         messageArray[7] = "Hurry up!";
 
-
         //Helpful
         messageArray[8] = "Go North!";
         messageArray[9] = "Go East!";
@@ -127,8 +138,6 @@ public class Messaging : MonoBehaviour {
         messageArray[13] = "You are the best!";
         messageArray[14] = "Well played!";
         messageArray[15] = "Good game!";
-
-        
 
         socialMessage1Text.text = messageArray[0];
         socialMessage2Text.text = messageArray[1];
@@ -173,20 +182,6 @@ public class Messaging : MonoBehaviour {
     void CheckAmountOfPlayers()
     {
         amountOfPlayers = memberList.Count;
-    }
-
-    public void EnablePlayerButtons(Button _b , Text _t)
-    {
-        if(_t.text.Equals(""))
-        {
-            _b.interactable = false;
-        }
-        _b.interactable = true;
-        
-        if(_b.interactable)
-        {
-            _b.onClick.AddListener(delegate { ui.ToCategories(_t.text); }); 
-        }
     }
 
     public void SetPlayerToMessage(Text _playerToMessage)

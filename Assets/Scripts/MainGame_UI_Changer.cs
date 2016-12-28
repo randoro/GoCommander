@@ -225,14 +225,14 @@ public class MainGame_UI_Changer : MonoBehaviour
 
     void PauseGame()
     {
-        Orbit orbit = FindObjectOfType<Orbit>();
-        orbit.enabled = false;
+        //Orbit orbit = FindObjectOfType<Orbit>();
+        //orbit.enabled = false;
     }
 
     void ResumeGame()
     {
-        Orbit orbit = FindObjectOfType<Orbit>();
-        orbit.enabled = true;
+        //Orbit orbit = FindObjectOfType<Orbit>();
+        //orbit.enabled = true;
     }
 
     ///////////////////
