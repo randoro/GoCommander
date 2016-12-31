@@ -56,7 +56,7 @@ public class MainGame_UI_Changer : MonoBehaviour
             //NO MENUS ACTIVE, ONLY ACTUAL GAME AND SCORE/TIME PANEL
             case ActiveUI.inGameUI:
                 {
-                    ResumeGame();
+                    //ResumeGame();
 
                     inGameUI.enabled = true;
                     menuUI.enabled = false;
@@ -74,7 +74,7 @@ public class MainGame_UI_Changer : MonoBehaviour
                 break;
             case ActiveUI.menuUI:
                 {
-                    PauseGame();
+                    //PauseGame();
 
                     inGameUI.enabled = false;
                     menuUI.enabled = true;
@@ -108,7 +108,7 @@ public class MainGame_UI_Changer : MonoBehaviour
             case ActiveUI.messagePlayerListUI:
                 {
 
-                    PauseGame();
+                    //PauseGame();
 
                     inGameUI.enabled = false;
                     menuUI.enabled = false;

@@ -293,8 +293,8 @@ public class LobbyUI : MonoBehaviour
         {
             j++;
 
-            //newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform.position, Quaternion.identity) as GameObject;
-            newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform) as GameObject;
+            newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform.position, Quaternion.identity) as GameObject;
+            //newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform) as GameObject;
             newTeamElement.transform.SetParent(teamScrollTransform, false);
             //teamJoinButtons[i] = newTeamElement.GetComponentInChildren<Button>();
             Button teamJoinButton = newTeamElement.GetComponentInChildren<Button>();
@@ -343,8 +343,8 @@ public class LobbyUI : MonoBehaviour
         {
             j++;
 
-            //newMemberElement = Instantiate(teamElementPrefab, memberScrollTransform.position, Quaternion.identity) as GameObject;
-            newMemberElement = Instantiate(memberElementPrefab, memberScrollTransform) as GameObject;
+            newMemberElement = Instantiate(teamElementPrefab, memberScrollTransform.position, Quaternion.identity) as GameObject;
+            //newMemberElement = Instantiate(memberElementPrefab, memberScrollTransform) as GameObject;
             newMemberElement.transform.SetParent(memberScrollTransform, false);
             Button addFriendButton = newMemberElement.GetComponentInChildren<Button>();
             addFriendButton.enabled = true;

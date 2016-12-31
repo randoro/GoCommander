@@ -86,7 +86,7 @@ public class Messaging : MonoBehaviour
 
     public void ActivateButton(Button button, Text playerName)
     {
-        if (playerName == null || playerName.text.Equals(""))
+        if (playerName != null || !playerName.text.Equals(""))
         {
             button.onClick.AddListener(delegate { ui.ToCategories(playerName.text); });
             button.interactable = true;
