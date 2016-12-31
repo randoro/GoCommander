@@ -13,7 +13,6 @@ public class Manager : MonoBehaviour
     private List<int> alreadyAnsweredQuestions = new List<int>();
     private string[] allQuestions, allAnswersID, Quiz;
     
-
     public int score = 0;
     int answeredQuestions = 0;
 
@@ -22,6 +21,7 @@ public class Manager : MonoBehaviour
     public static string choiceSelected = "n";
 
     public static int randomQuestion = -1;
+    public static int randomVal;
 
     public static bool win = false;
 
@@ -100,7 +100,8 @@ public class Manager : MonoBehaviour
         defaultBackgroundColor = camera.backgroundColor;
         answeredQuestions = 0;
         alreadyAnsweredQuestions.Clear();
-        randomQuestion = Random.Range(0, allQuestionsList.Count);
+        //randomQuestion = Random.Range(0, allQuestionsList.Count);
+        randomQuestion = RandomizeQuestion();
     }
 
     void ClearData()
@@ -153,6 +154,9 @@ public class Manager : MonoBehaviour
                 camera.backgroundColor = Color.green;
 
                 StartCoroutine(delayTime());
+                alreadyAnsweredQuestions.Add(randomQuestion);
+                allQuestionsList[randomQuestion].isAlreadyAnswered = true;
+                LoadImage.loadImage = true;
                 score += 230;
             }
             else
@@ -233,21 +237,24 @@ public class Manager : MonoBehaviour
         answeredQuestions++;
     }
 
-    void RandomizeQuestion()
+    int RandomizeQuestion()
     {
         randomQuestion = Random.Range(0, allQuestionsList.Count);
 
         for (int i = 0; i < allQuestionsList.Count; i++)
         {
-
             if (allQuestionsList[randomQuestion].isAlreadyAnswered)
             {
                 randomQuestion = Random.Range(0, allQuestionsList.Count);
             }
-            
-            allQuestionsList[randomQuestion].isAlreadyAnswered = true;
-            LoadImage.loadImage = true;
+            else
+            {
+                allQuestionsList[randomQuestion].isAlreadyAnswered = true;
+                LoadImage.loadImage = true;
+            }   
         }
+        randomVal = randomQuestion;
+        return randomVal;
     }
     
 }
