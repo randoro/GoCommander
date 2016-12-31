@@ -128,6 +128,7 @@ public class Manager : MonoBehaviour
     IEnumerator delayTime()
     {
         yield return new WaitForSeconds(1);
+
         GenerateNewQuestion();
     }
 
@@ -152,12 +153,13 @@ public class Manager : MonoBehaviour
             if (allAnswersID[randomQuestion].Contains(selectedAnswer))
             {
                 camera.backgroundColor = Color.green;
-
-                StartCoroutine(delayTime());
                 alreadyAnsweredQuestions.Add(randomQuestion);
                 allQuestionsList[randomQuestion].isAlreadyAnswered = true;
                 LoadImage.loadImage = true;
                 score += 230;
+
+                StartCoroutine(delayTime());
+               
             }
             else
             {
@@ -231,10 +233,12 @@ public class Manager : MonoBehaviour
 
     void GenerateNewQuestion()
     {
-        randomQuestion = -1;
+        
         camera.backgroundColor = defaultBackgroundColor;
 
         answeredQuestions++;
+
+        RandomizeQuestion();
     }
 
     int RandomizeQuestion()
@@ -243,7 +247,7 @@ public class Manager : MonoBehaviour
 
         for (int i = 0; i < allQuestionsList.Count; i++)
         {
-            if (allQuestionsList[randomQuestion].isAlreadyAnswered)
+            if (allQuestionsList[randomQuestion].isAlreadyAnswered || alreadyAnsweredQuestions.Contains(randomQuestion))
             {
                 randomQuestion = Random.Range(0, allQuestionsList.Count);
             }
@@ -251,10 +255,10 @@ public class Manager : MonoBehaviour
             {
                 allQuestionsList[randomQuestion].isAlreadyAnswered = true;
                 LoadImage.loadImage = true;
-            }   
+            }
         }
-        randomVal = randomQuestion;
-        return randomVal;
+        //randomVal = randomQuestion;
+        return randomQuestion;
     }
     
 }
