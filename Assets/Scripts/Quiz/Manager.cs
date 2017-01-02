@@ -53,7 +53,7 @@ public class Manager : MonoBehaviour
             ReadFromServer();
             SetQuestion();
             QuizSystem();
-            CheckWinCondition(); 
+            CheckWinCondition();
         }
 
         if (win)
@@ -101,7 +101,7 @@ public class Manager : MonoBehaviour
         answeredQuestions = 0;
         alreadyAnsweredQuestions.Clear();
         //randomQuestion = Random.Range(0, allQuestionsList.Count);
-        randomQuestion = RandomizeQuestion();
+        RandomizeQuestion();
     }
 
     void ClearData()
@@ -129,7 +129,7 @@ public class Manager : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
 
-        GenerateNewQuestion();
+        RandomizeQuestion();
     }
 
     void SetQuestion()
@@ -154,8 +154,10 @@ public class Manager : MonoBehaviour
             {
                 camera.backgroundColor = Color.green;
                 alreadyAnsweredQuestions.Add(randomQuestion);
-                allQuestionsList[randomQuestion].isAlreadyAnswered = true;
-                LoadImage.loadImage = true;
+                answeredQuestions++;
+                //allQuestionsList.RemoveAt(randomQuestion);
+                //allQuestionsList[randomQuestion].isAlreadyAnswered = true;
+                //LoadImage.loadImage = true;
                 score += 230;
 
                 StartCoroutine(delayTime());
@@ -164,7 +166,7 @@ public class Manager : MonoBehaviour
             else
             {
                 camera.backgroundColor = Color.red;
-
+                alreadyAnsweredQuestions.Add(randomQuestion);
                 StartCoroutine(delayTime());
             }
         }
@@ -178,7 +180,6 @@ public class Manager : MonoBehaviour
             InformativeMessage.finished = true;
 
 			win = true;
-
         }
     }
 
@@ -233,7 +234,6 @@ public class Manager : MonoBehaviour
 
     void GenerateNewQuestion()
     {
-        
         camera.backgroundColor = defaultBackgroundColor;
 
         answeredQuestions++;
@@ -241,24 +241,23 @@ public class Manager : MonoBehaviour
         RandomizeQuestion();
     }
 
-    int RandomizeQuestion()
+    public void RandomizeQuestion()
     {
+        camera.backgroundColor = defaultBackgroundColor;
+
         randomQuestion = Random.Range(0, allQuestionsList.Count);
 
         for (int i = 0; i < allQuestionsList.Count; i++)
         {
-            if (allQuestionsList[randomQuestion].isAlreadyAnswered || alreadyAnsweredQuestions.Contains(randomQuestion))
+            while (alreadyAnsweredQuestions.Contains(randomQuestion))
             {
                 randomQuestion = Random.Range(0, allQuestionsList.Count);
             }
-            else
-            {
                 allQuestionsList[randomQuestion].isAlreadyAnswered = true;
                 LoadImage.loadImage = true;
-            }
         }
+        //QuizSystem();
         //randomVal = randomQuestion;
-        return randomQuestion;
     }
     
 }

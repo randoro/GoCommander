@@ -3,7 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using Image = UnityEngine.UI.Image;
 
-public class LoadImage : MonoBehaviour {
+public class LoadImage : MonoBehaviour
+{
 
     public Image background;
     public static bool loadImage;
@@ -14,7 +15,8 @@ public class LoadImage : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
         if (loadImage)
         {
             LoadBackgroundImage();
