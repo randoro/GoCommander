@@ -64,7 +64,6 @@ public class Manager : MonoBehaviour
 			StartCoroutine(SendHighscore(score));
             GoogleMap.completedMinigames++;
             SceneManager.LoadScene("mainScene");
-           
         }
     }
 
@@ -162,7 +161,7 @@ public class Manager : MonoBehaviour
             if (allAnswersID[randomQuestion].Contains(selectedAnswer))
             {
                 camera.backgroundColor = Color.green;
-                alreadyAnsweredQuestions.Add(randomQuestion);
+                //alreadyAnsweredQuestions.Add(randomQuestion);
                 answeredQuestions++;
                 //allQuestionsList.RemoveAt(randomQuestion);
                 //allQuestionsList[randomQuestion].isAlreadyAnswered = true;
@@ -174,7 +173,7 @@ public class Manager : MonoBehaviour
             else
             {
                 camera.backgroundColor = Color.red;
-                alreadyAnsweredQuestions.Add(randomQuestion);
+                //alreadyAnsweredQuestions.Add(randomQuestion);
                 StartCoroutine(delayTime());
             }
         }
@@ -262,6 +261,7 @@ public class Manager : MonoBehaviour
                 randomQuestion = Random.Range(0, allQuestionsList.Count);
             }
                 allQuestionsList[randomQuestion].isAlreadyAnswered = true;
+                alreadyAnsweredQuestions.Add(randomQuestion);
                 LoadImage.loadImage = true;
         }
         //QuizSystem();
