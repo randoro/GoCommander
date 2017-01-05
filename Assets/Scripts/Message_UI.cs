@@ -64,7 +64,7 @@ public class Message_UI : MonoBehaviour
 
     public void ToCategories(string ID)
     {
-        if(ID != " ")
+        if(ID != null)
         MainGame_UI_Changer.activeUI = MainGame_UI_Changer.ActiveUI.messageCategoryListUI;
     }
 }
