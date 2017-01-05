@@ -58,12 +58,14 @@ public class Manager : MonoBehaviour
 
         if (win)
 		{
-			win = false;
-			StartCoroutine(SendGroupScore(score));
+            win = false;
+            CheckWinCondition();
+            StartCoroutine(SendGroupScore(score));
 			StartCoroutine(SendHighscore(score));
             GoogleMap.completedMinigames++;
             SceneManager.LoadScene("mainScene");
-		}
+           
+        }
     }
 
     IEnumerator GetQuizes()
@@ -129,7 +131,14 @@ public class Manager : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
 
-        RandomizeQuestion();
+        if (!win)
+        {
+            RandomizeQuestion();
+        }
+        else
+        {
+            CheckWinCondition();
+        }
     }
 
     void SetQuestion()
@@ -161,7 +170,6 @@ public class Manager : MonoBehaviour
                 score += 230;
 
                 StartCoroutine(delayTime());
-               
             }
             else
             {
@@ -189,7 +197,7 @@ public class Manager : MonoBehaviour
         string loginUserURL = "http://gocommander.sytes.net/scripts/send_minimessage.php";
 
         WWWForm form = new WWWForm();
-        form.AddField("userGroupPost", "Killerbunnies");
+        form.AddField("userGroupPost", GoogleMap.groupName);
         form.AddField("userMiniMessagePost", message);
 
         WWW www = new WWW(loginUserURL, form);
