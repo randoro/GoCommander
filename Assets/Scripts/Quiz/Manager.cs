@@ -158,11 +158,12 @@ public class Manager : MonoBehaviour
         {
             choiceSelected = "n";
 
+            answeredQuestions++;
             if (allAnswersID[randomQuestion].Contains(selectedAnswer))
             {
                 camera.backgroundColor = Color.green;
                 //alreadyAnsweredQuestions.Add(randomQuestion);
-                answeredQuestions++;
+                //answeredQuestions++;
                 //allQuestionsList.RemoveAt(randomQuestion);
                 //allQuestionsList[randomQuestion].isAlreadyAnswered = true;
                 //LoadImage.loadImage = true;
@@ -254,16 +255,17 @@ public class Manager : MonoBehaviour
 
         randomQuestion = Random.Range(0, allQuestionsList.Count);
 
-        for (int i = 0; i < allQuestionsList.Count; i++)
+        while (alreadyAnsweredQuestions.Contains(randomQuestion))
         {
-            while (alreadyAnsweredQuestions.Contains(randomQuestion))
-            {
-                randomQuestion = Random.Range(0, allQuestionsList.Count);
-            }
-                allQuestionsList[randomQuestion].isAlreadyAnswered = true;
-                alreadyAnsweredQuestions.Add(randomQuestion);
-                LoadImage.loadImage = true;
+            allQuestionsList.RemoveAt(randomQuestion);
+            alreadyAnsweredQuestions.Remove(randomQuestion);
+
+            randomQuestion = Random.Range(0, allQuestionsList.Count);
         }
+
+        allQuestionsList[randomQuestion].isAlreadyAnswered = true;
+        alreadyAnsweredQuestions.Add(randomQuestion);
+        LoadImage.loadImage = true;
         //QuizSystem();
         //randomVal = randomQuestion;
     }
