@@ -69,7 +69,7 @@ public class LobbyUI : MonoBehaviour
     string newTeamName;
     string selectedTeam;
 
-    int maxTeamMembers = 5;
+    int maxTeamMembers = 6;
 
     bool canPopulate = true; 
 
@@ -228,7 +228,6 @@ public class LobbyUI : MonoBehaviour
             memberData = new LobbyData(id, member);
             fetchedMemberList.Add(memberData);
         }
-        //CheckMemberListChanged();
     }
 
     IEnumerator CreateNewTeam(string newTeamName)
@@ -381,7 +380,7 @@ public class LobbyUI : MonoBehaviour
 
     private bool MemberListChanged()
     {
-        if (memberList.Count != fetchedMemberList.Count && fetchedMemberList.Count <= maxTeamMembers)
+        if (memberList.Count != fetchedMemberList.Count)
         {
             //if(fetchedMemberList.Count < 5)
             //{
@@ -490,19 +489,17 @@ public class LobbyUI : MonoBehaviour
     }
     IEnumerator TeamButtonOperations(string selectedTeam)
     {
-        //yield return StartCoroutine(GetMembersInTeam(selectedTeam));
+        GoogleMap.groupName = selectedTeam;
+        this.selectedTeam = selectedTeam;
+        yield return StartCoroutine(GetMembersInTeam());
+
         if (fetchedMemberList.Count < maxTeamMembers)
         {
             updatingMembersText.text = "updating lobby...";
             current_UI = UI_Phase.UI_Lobby;
             teamInfo.text = selectedTeam;
-            GoogleMap.groupName = selectedTeam;
-            this.selectedTeam = selectedTeam;
-            yield return StartCoroutine(JoinSelectedTeam());
-            //if (MemberListChanged())
-            //{
-            //    PopulateMemberList(selectedTeam);
-            //}
+        
+            yield return StartCoroutine(JoinSelectedTeam());          
         }
     }
 
