@@ -69,7 +69,7 @@ public class LobbyUI : MonoBehaviour
     string newTeamName;
     string selectedTeam;
 
-    int maxTeamMembers = 6;
+    int maxTeamMembers = 5;
 
     bool canPopulate = true; 
 
