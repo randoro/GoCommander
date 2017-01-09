@@ -54,6 +54,8 @@ public class Manager : MonoBehaviour
             SetQuestion();
             QuizSystem();
             CheckWinCondition();
+
+            InGameTimer.timeLeft -= Time.fixedDeltaTime;
         }
 
         if (win)

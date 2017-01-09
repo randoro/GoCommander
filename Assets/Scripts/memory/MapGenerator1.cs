@@ -119,6 +119,8 @@ public class MapGenerator1 : MonoBehaviour
             theTimeText.text = "time: " + showtime.ToString();
             theTriesText.text = "tries taken: " + tries.ToString();
 
+            InGameTimer.timeLeft -= Time.fixedDeltaTime;
+
             if (win)
             {
                 GoogleMap.completedMinigames++;

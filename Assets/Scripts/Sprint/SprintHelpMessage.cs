@@ -23,6 +23,8 @@ public class SprintHelpMessage : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        InGameTimer.timeLeft -= Time.fixedDeltaTime;
+
         if (showMessage)
         {
             timer--;

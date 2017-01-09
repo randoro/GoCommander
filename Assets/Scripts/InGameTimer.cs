@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class InGameTimer : MonoBehaviour {
-    
+
     public static float timeLeft = 1260;
     public Text timeLeftText;
     public Text scoreText;
@@ -13,19 +13,13 @@ public class InGameTimer : MonoBehaviour {
 	// Use this for initialization
     void Start()
     {
-        DontDestroyOnLoad(this);
-    }
-
-    void Awake()
-    {
-        timeLeft = PlayerPrefs.GetFloat("Player Time");
     }
 
 	// Update is called once per frame
 	void Update () {
 
         timeLeft -= Time.fixedDeltaTime;
-        //print(timeLeft);
+        print(timeLeft);
 
         timeLeftText.text = ((int)timeLeft/60).ToString() + " min";
 
@@ -39,17 +33,6 @@ public class InGameTimer : MonoBehaviour {
         }
 
 	}
-
-    void OnDestroy()
-    {
-        PlayerPrefs.SetFloat("Player Time", timeLeft);
-    }
-
-    void OnApplicationQuit()
-    {
-        timeLeft = 1200.0f;
-        PlayerPrefs.SetFloat("Player Time", timeLeft);
-    }
 
     IEnumerator LeaveTeam()
     {
