@@ -228,7 +228,6 @@ public class LobbyUI : MonoBehaviour
             memberData = new LobbyData(id, member);
             fetchedMemberList.Add(memberData);
         }
-        
         //CheckMemberListChanged();
     }
 
@@ -293,8 +292,8 @@ public class LobbyUI : MonoBehaviour
         {
             j++;
 
-            //newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform.position, Quaternion.identity) as GameObject;
-            newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform) as GameObject;
+            newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform.position, Quaternion.identity) as GameObject;
+            //newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform) as GameObject;
             newTeamElement.transform.SetParent(teamScrollTransform, false);
             //teamJoinButtons[i] = newTeamElement.GetComponentInChildren<Button>();
             Button teamJoinButton = newTeamElement.GetComponentInChildren<Button>();
@@ -343,8 +342,8 @@ public class LobbyUI : MonoBehaviour
         {
             j++;
 
-            //newMemberElement = Instantiate(teamElementPrefab, memberScrollTransform.position, Quaternion.identity) as GameObject;
-            newMemberElement = Instantiate(memberElementPrefab, memberScrollTransform) as GameObject;
+            newMemberElement = Instantiate(teamElementPrefab, memberScrollTransform.position, Quaternion.identity) as GameObject;
+            //newMemberElement = Instantiate(memberElementPrefab, memberScrollTransform) as GameObject;
             newMemberElement.transform.SetParent(memberScrollTransform, false);
             Button addFriendButton = newMemberElement.GetComponentInChildren<Button>();
             addFriendButton.enabled = true;
@@ -382,10 +381,21 @@ public class LobbyUI : MonoBehaviour
 
     private bool MemberListChanged()
     {
-        if (memberList.Count != fetchedMemberList.Count)
+        if (memberList.Count != fetchedMemberList.Count && fetchedMemberList.Count <= maxTeamMembers)
         {
-            CloneToMemberList();
-            return true;
+            //if(fetchedMemberList.Count < 5)
+            //{
+                CloneToMemberList();
+                return true;
+            //}
+            //if (memberObjectList.Count == 0)
+            //{
+            //    for (int i = 0; i < teamObjectList.Count; i++)
+            //    {
+            //        Destroy(teamObjectList[i]);
+            //    }
+            //    return true;
+            //}
         }
         else
         {
@@ -419,8 +429,11 @@ public class LobbyUI : MonoBehaviour
     {
         if (teamList.Count != fetchedTeamList.Count)
         {
-            CloneToTeamList();
-            return true;
+            //if (fetchedMemberList.Count < maxTeamMembers)
+            //{
+                CloneToTeamList();
+                return true;
+            //}
         }
         else
         {
