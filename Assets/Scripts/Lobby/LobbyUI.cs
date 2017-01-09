@@ -291,8 +291,8 @@ public class LobbyUI : MonoBehaviour
         {
             j++;
 
-            newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform.position, Quaternion.identity) as GameObject;
-            //newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform) as GameObject;
+            //newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform.position, Quaternion.identity) as GameObject;
+            newTeamElement = Instantiate(teamElementPrefab, teamScrollTransform) as GameObject;
             newTeamElement.transform.SetParent(teamScrollTransform, false);
             //teamJoinButtons[i] = newTeamElement.GetComponentInChildren<Button>();
             Button teamJoinButton = newTeamElement.GetComponentInChildren<Button>();
@@ -341,8 +341,8 @@ public class LobbyUI : MonoBehaviour
         {
             j++;
 
-            newMemberElement = Instantiate(teamElementPrefab, memberScrollTransform.position, Quaternion.identity) as GameObject;
-            //newMemberElement = Instantiate(memberElementPrefab, memberScrollTransform) as GameObject;
+            //newMemberElement = Instantiate(teamElementPrefab, memberScrollTransform.position, Quaternion.identity) as GameObject;
+            newMemberElement = Instantiate(memberElementPrefab, memberScrollTransform) as GameObject;
             newMemberElement.transform.SetParent(memberScrollTransform, false);
             Button addFriendButton = newMemberElement.GetComponentInChildren<Button>();
             addFriendButton.enabled = true;
@@ -482,7 +482,6 @@ public class LobbyUI : MonoBehaviour
         newTeamName = teamInputField.GetComponent<InputField>().text;
         StartCoroutine(CreateNewTeam(newTeamName));
     }
-
     public void TeamButtonClick(string selectedTeam)
     {
         StartCoroutine(TeamButtonOperations(selectedTeam));
@@ -493,13 +492,17 @@ public class LobbyUI : MonoBehaviour
         this.selectedTeam = selectedTeam;
         yield return StartCoroutine(GetMembersInTeam());
 
-        if (fetchedMemberList.Count < maxTeamMembers)
+        if (fetchedMemberList.Count < maxTeamMembers && !fetchedMemberList.Exists(x => x.name.Contains(GoogleMap.username)))
         {
             updatingMembersText.text = "updating lobby...";
             current_UI = UI_Phase.UI_Lobby;
             teamInfo.text = selectedTeam;
         
             yield return StartCoroutine(JoinSelectedTeam());          
+        }
+        else
+        {
+            updatingTeamsText.text = "Team is full!";
         }
     }
 
