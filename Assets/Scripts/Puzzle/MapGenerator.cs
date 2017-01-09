@@ -78,6 +78,7 @@ public class MapGenerator : MonoBehaviour
 	void Update()
 	{
 		timeleft = timeleft + Time.deltaTime;
+        InGameTimer.timeLeft -= Time.fixedDeltaTime;
 		showtime = (int)timeleft;
 		countDown += Time.deltaTime;
 		Thetext.text = "time: "+ showtime.ToString();
