@@ -128,14 +128,14 @@ public class Messaging : MonoBehaviour
         //Tactical
         messageArray[4] = "I need guidance!";
         messageArray[5] = "Take the Commander Badge!";
-        messageArray[6] = "Do you need help?";
+        messageArray[6] = "I cant find any chests!";
         messageArray[7] = "Hurry up!";
 
         //Helpful
-        messageArray[8] = "Go North!";
-        messageArray[9] = "Go East!";
-        messageArray[10] = "Go West!";
-        messageArray[11] = "Go South!";
+        messageArray[8] = "Click on a chest to start a minigame";
+        messageArray[9] = "Use the Commander Badge to help others";
+        messageArray[10] = "Do you need help?";
+        messageArray[11] = "Move around to find chests";
 
         //Additonal
         messageArray[12] = "I am the best!";
